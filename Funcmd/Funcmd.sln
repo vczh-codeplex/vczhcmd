@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funcmd", "Funcmd\Funcmd.csproj", "{FDB7698C-1176-4411-A6C6-B7E89A7CF435}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs02.codeplex.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Funcmd\\Funcmd.csproj
+		SccProjectName1 = Funcmd
+		SccLocalPath1 = Funcmd
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDB7698C-1176-4411-A6C6-B7E89A7CF435}.Debug|x86.ActiveCfg = Debug|x86
+		{FDB7698C-1176-4411-A6C6-B7E89A7CF435}.Debug|x86.Build.0 = Debug|x86
+		{FDB7698C-1176-4411-A6C6-B7E89A7CF435}.Release|x86.ActiveCfg = Release|x86
+		{FDB7698C-1176-4411-A6C6-B7E89A7CF435}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
