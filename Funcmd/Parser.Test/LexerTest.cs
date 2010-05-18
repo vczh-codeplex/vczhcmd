@@ -54,7 +54,7 @@ namespace Parser.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ParserException<TokenType>))]
+        [ExpectedException(typeof(LexerException<TokenType>))]
         public void TestFailInput()
         {
             lexer.Parse("(11+22) * (33+44)").ToArray();

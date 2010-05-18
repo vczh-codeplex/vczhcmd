@@ -69,7 +69,7 @@ namespace Funcmd.Parser
                 }
                 else
                 {
-                    throw new ParserException<T>("遇到无法解析的字符串。", new Token()
+                    throw new LexerException<T>("遇到无法解析的字符串。", new Token()
                     {
                         Position = position
                     });
@@ -78,11 +78,11 @@ namespace Funcmd.Parser
         }
     }
 
-    public class ParserException<T> : Exception
+    public class LexerException<T> : Exception
     {
         public Lexer<T>.Token Token { get; private set; }
 
-        public ParserException(string message, Lexer<T>.Token token)
+        public LexerException(string message, Lexer<T>.Token token)
             : base(message)
         {
             this.Token = token;
