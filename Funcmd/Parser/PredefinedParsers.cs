@@ -3,8 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Funcmd.Parser.PredefinedParsers
+namespace Funcmd.Parser
 {
+    public class UnitParser<I, O, C> : IParser<I, O, C>
+    {
+        private O value;
+
+        public UnitParser(O value)
+        {
+            this.value = value;
+        }
+
+        public ParserResult<O, C> Parse(ref ICloneableEnumerator<I> input, C context)
+        {
+            return new ParserResult<O, C>(value, context);
+        }
+    }
+
     public class SeqParser<I, A, B, C> : IParser<I, Pair<A, B>, C>
     {
         private IParser<I, A, C> a = null;

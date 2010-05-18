@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="LexerTest.cs" />
     <Compile Include="ListEnumeratorTest.cs" />
+    <Compile Include="ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
