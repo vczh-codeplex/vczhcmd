@@ -46,6 +46,7 @@
     <Compile Include="IClonableEnumerator.cs" />
     <Compile Include="IParser.cs" />
     <Compile Include="Lexer.cs" />
+    <Compile Include="ParserBase.cs" />
     <Compile Include="PredefinedParsers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
