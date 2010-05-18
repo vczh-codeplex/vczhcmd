@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Funcmd.Parser
 {
-    public interface ICloneableEnumerator<T> : IEnumerator<T>, ICloneable
+    public interface ICloneableEnumerator<T> : IEnumerator<T>, ICloneable, IComparable<ICloneableEnumerator<T>>
     {
-        ICloneableEnumerator<T> CloneEnumerable();
+        ICloneableEnumerator<T> CloneEnumerator();
     }
 
     public interface ICloneableEnumerable<T> : IEnumerable<T>
@@ -27,7 +27,7 @@ namespace Funcmd.Parser
                 this.list = list;
             }
 
-            public ICloneableEnumerator<T> CloneEnumerable()
+            public ICloneableEnumerator<T> CloneEnumerator()
             {
                 return new ListEnumerator<T>(list)
                 {
@@ -68,7 +68,12 @@ namespace Funcmd.Parser
 
             public object Clone()
             {
-                return CloneEnumerable();
+                return CloneEnumerator();
+            }
+
+            public int CompareTo(ICloneableEnumerator<T> other)
+            {
+                return index.CompareTo(((ListEnumerator<T>)other).index);
             }
         }
 
