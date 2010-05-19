@@ -8,6 +8,7 @@ namespace Funcmd.Parser
     public interface ICloneableEnumerator<T> : IEnumerator<T>, ICloneable, IComparable<ICloneableEnumerator<T>>
     {
         ICloneableEnumerator<T> CloneEnumerator();
+        bool Available { get; }
     }
 
     public interface ICloneableEnumerable<T> : IEnumerable<T>
@@ -33,6 +34,14 @@ namespace Funcmd.Parser
                 {
                     index = index
                 };
+            }
+
+            public bool Available
+            {
+                get
+                {
+                    return index >= 0 && index < list.Count;
+                }
             }
 
             public T Current
