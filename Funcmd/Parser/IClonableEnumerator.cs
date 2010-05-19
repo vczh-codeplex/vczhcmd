@@ -102,12 +102,12 @@ namespace Funcmd.Parser
             }
         }
 
-        public static ICloneableEnumerable<T> GetClonableEnumerable<T>(this IList<T> list)
+        public static ICloneableEnumerable<T> GetCloneableEnumerable<T>(this IList<T> list)
         {
             return new ListEnumerable<T>(list);
         }
 
-        public static ICloneableEnumerable<T> GetClonableEnumerable<T>(this IEnumerable<T> enumerable)
+        public static ICloneableEnumerable<T> GetCloneableEnumerable<T>(this IEnumerable<T> enumerable)
         {
             return new ListEnumerable<T>(enumerable.ToList());
         }

@@ -14,8 +14,8 @@ namespace Parser.Test
         public void CompareList()
         {
             List<int> numbers = Enumerable.Range(0, 10).ToList();
-            Assert.IsTrue(Enumerable.Range(0, 10).SequenceEqual(numbers.GetClonableEnumerable()));
-            Assert.IsTrue(Enumerable.Range(0, 10).SequenceEqual(Enumerable.Range(0, 10).GetClonableEnumerable()));
+            Assert.IsTrue(Enumerable.Range(0, 10).SequenceEqual(numbers.GetCloneableEnumerable()));
+            Assert.IsTrue(Enumerable.Range(0, 10).SequenceEqual(Enumerable.Range(0, 10).GetCloneableEnumerable()));
         }
     }
 }

@@ -146,4 +146,46 @@ namespace Funcmd.Parser
             }
         }
     }
+
+    public class RuleParser<I, O, C> : IParser<I, O, C>
+    {
+        private IParser<I, O, C> parser = null;
+
+        public void Imply(IParser<I, O, C> parser)
+        {
+            this.parser = parser;
+        }
+
+        public ParserResult<O, C> Parse(ref ICloneableEnumerator<I> input, C context)
+        {
+            return parser.Parse(ref input, context);
+        }
+    }
+
+    public class TokenParser<I, C> : IParser<Lexer<I>.Token, Lexer<I>.Token, C>
+        where I : IComparable
+    {
+        private I value;
+        private string name = "";
+
+        public TokenParser(I value, string name)
+        {
+            this.value = value;
+            this.name = name;
+        }
+
+        public ParserResult<Lexer<I>.Token, C> Parse(ref ICloneableEnumerator<Lexer<I>.Token> input, C context)
+        {
+            if (input.Current.Tag.CompareTo(value) == 0)
+            {
+                Lexer<I>.Token token = input.Current;
+                input.MoveNext();
+                return new ParserResult<Lexer<I>.Token, C>(token, context);
+            }
+            else
+            {
+                throw new ParserException<Lexer<I>.Token>("此处需要" + name + "。", input);
+            }
+        }
+    }
 }
