@@ -176,7 +176,7 @@ namespace Funcmd.Parser
 
         public ParserResult<Lexer<I>.Token, C> Parse(ref ICloneableEnumerator<Lexer<I>.Token> input, C context)
         {
-            if (input.Current.Tag.CompareTo(value) == 0)
+            if (input.Available && input.Current.Tag.CompareTo(value) == 0)
             {
                 Lexer<I>.Token token = input.Current;
                 input.MoveNext();

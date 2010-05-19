@@ -9,67 +9,58 @@ namespace Funcmd.Parser
     {
         protected IParser<I, O, C> Alt<O>(params IParser<I, O, C>[] ps)
         {
-            IParser<I, O, C> result = ps.First();
-            foreach (IParser<I, O, C> p in ps.Skip(1))
-            {
-                result = result.Alt(p);
-            }
-            return result;
+            return ps.Aggregate((a, b) => a.Alt(b));
         }
 
-        protected IParser<I, Tuple<T1, T2>, C> Seq<T1, T2>(
+        protected IParser<I, Pair<T1, T2>, C> Seq<T1, T2>(
             IParser<I, T1, C> p1,
             IParser<I, T2, C> p2)
         {
-            return p1.Join(p2).Convert(p => new Tuple<T1, T2>
-                {
-                    Value1 = p.First,
-                    Value2 = p.Second
-                });
+            return p1.Join(p2);
         }
 
-        protected IParser<I, Tuple<T1, T2, T3>, C> Seq<T1, T2, T3>(
+        protected IParser<I, Pair<T1, T2, T3>, C> Seq<T1, T2, T3>(
             IParser<I, T1, C> p1,
             IParser<I, T2, C> p2,
             IParser<I, T3, C> p3)
         {
-            return p1.Join(p2).Join(p3).Convert(p => new Tuple<T1, T2, T3>
+            return p1.Join(p2).Join(p3).Convert(p => new Pair<T1, T2, T3>
             {
-                Value1 = p.First.First,
-                Value2 = p.First.Second,
-                Value3 = p.Second
+                Value1 = p.Value1.Value1,
+                Value2 = p.Value1.Value2,
+                Value3 = p.Value2
             });
         }
 
-        protected IParser<I, Tuple<T1, T2, T3, T4>, C> Seq<T1, T2, T3, T4>(
+        protected IParser<I, Pair<T1, T2, T3, T4>, C> Seq<T1, T2, T3, T4>(
             IParser<I, T1, C> p1,
             IParser<I, T2, C> p2,
             IParser<I, T3, C> p3,
             IParser<I, T4, C> p4)
         {
-            return p1.Join(p2).Join(p3).Join(p4).Convert(p => new Tuple<T1, T2, T3, T4>
+            return p1.Join(p2).Join(p3).Join(p4).Convert(p => new Pair<T1, T2, T3, T4>
             {
-                Value1 = p.First.First.First,
-                Value2 = p.First.First.Second,
-                Value3 = p.First.Second,
-                Value4 = p.Second
+                Value1 = p.Value1.Value1.Value1,
+                Value2 = p.Value1.Value1.Value2,
+                Value3 = p.Value1.Value2,
+                Value4 = p.Value2
             });
         }
 
-        protected IParser<I, Tuple<T1, T2, T3, T4, T5>, C> Seq<T1, T2, T3, T4, T5>(
+        protected IParser<I, Pair<T1, T2, T3, T4, T5>, C> Seq<T1, T2, T3, T4, T5>(
             IParser<I, T1, C> p1,
             IParser<I, T2, C> p2,
             IParser<I, T3, C> p3,
             IParser<I, T4, C> p4,
             IParser<I, T5, C> p5)
         {
-            return p1.Join(p2).Join(p3).Join(p4).Join(p5).Convert(p => new Tuple<T1, T2, T3, T4, T5>
+            return p1.Join(p2).Join(p3).Join(p4).Join(p5).Convert(p => new Pair<T1, T2, T3, T4, T5>
             {
-                Value1 = p.First.First.First.First,
-                Value2 = p.First.First.First.Second,
-                Value3 = p.First.First.Second,
-                Value4 = p.First.Second,
-                Value5 = p.Second
+                Value1 = p.Value1.Value1.Value1.Value1,
+                Value2 = p.Value1.Value1.Value1.Value2,
+                Value3 = p.Value1.Value1.Value2,
+                Value4 = p.Value1.Value2,
+                Value5 = p.Value2
             });
         }
     }
@@ -109,9 +100,15 @@ namespace Funcmd.Parser
                 Initialize(out lexer, out parser);
             }
             ICloneableEnumerator<Lexer<I>.Token> tokens = lexer.Parse(input).Where(TokenFilter).GetCloneableEnumerable().CreateCloneableEnumerator();
+            tokens.MoveNext();
             ParserResult<O, C> result = parser.Parse(ref tokens, CreateContext());
             return result.Result;
         }
+    }
+
+    public abstract class LexerParserBase<I, O> : LexerParserBase<I, O, object>
+            where I : IComparable
+    {
     }
 
     public static class ParserExtensions
@@ -123,12 +120,12 @@ namespace Funcmd.Parser
 
         public static IParser<I, A, C> Left<I, A, B, C>(this IParser<I, A, C> a, IParser<I, B, C> b)
         {
-            return a.Join(b).Convert(p => p.First);
+            return a.Join(b).Convert(p => p.Value1);
         }
 
         public static IParser<I, B, C> Right<I, A, B, C>(this IParser<I, A, C> a, IParser<I, B, C> b)
         {
-            return a.Join(b).Convert(p => p.Second);
+            return a.Join(b).Convert(p => p.Value2);
         }
 
         public static IParser<I, O, C> Alt<I, O, C>(this IParser<I, O, C> a, IParser<I, O, C> b)

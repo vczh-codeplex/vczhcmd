@@ -22,18 +22,6 @@ namespace Funcmd.Parser
         ParserResult<O, C> Parse(ref ICloneableEnumerator<I> input, C context);
     }
 
-    public class Pair<A, B>
-    {
-        public A First { get; set; }
-        public B Second { get; set; }
-
-        public Pair(A first, B second)
-        {
-            this.First = first;
-            this.Second = second;
-        }
-    }
-
     public class ParserException<T> : Exception
     {
         public ICloneableEnumerator<T> Input { get; private set; }
@@ -45,20 +33,30 @@ namespace Funcmd.Parser
         }
     }
 
-    public class Tuple<T1, T2>
+    public class Pair<A, B>
     {
-        public T1 Value1 { get; set; }
-        public T2 Value2 { get; set; }
+        public A Value1 { get; set; }
+        public B Value2 { get; set; }
+
+        public Pair()
+        {
+        }
+
+        public Pair(A value1, B value2)
+        {
+            this.Value1 = value1;
+            this.Value2 = value2;
+        }
     }
 
-    public class Tuple<T1, T2, T3>
+    public class Pair<T1, T2, T3>
     {
         public T1 Value1 { get; set; }
         public T2 Value2 { get; set; }
         public T3 Value3 { get; set; }
     }
 
-    public class Tuple<T1, T2, T3, T4>
+    public class Pair<T1, T2, T3, T4>
     {
         public T1 Value1 { get; set; }
         public T2 Value2 { get; set; }
@@ -66,7 +64,7 @@ namespace Funcmd.Parser
         public T4 Value4 { get; set; }
     }
 
-    public class Tuple<T1, T2, T3, T4, T5>
+    public class Pair<T1, T2, T3, T4, T5>
     {
         public T1 Value1 { get; set; }
         public T2 Value2 { get; set; }
@@ -75,7 +73,7 @@ namespace Funcmd.Parser
         public T5 Value5 { get; set; }
     }
 
-    public class Tuple<T1, T2, T3, T4, T5, T6>
+    public class Pair<T1, T2, T3, T4, T5, T6>
     {
         public T1 Value1 { get; set; }
         public T2 Value2 { get; set; }
@@ -85,7 +83,7 @@ namespace Funcmd.Parser
         public T6 Value6 { get; set; }
     }
 
-    public class Tuple<T1, T2, T3, T4, T5, T6, T7>
+    public class Pair<T1, T2, T3, T4, T5, T6, T7>
     {
         public T1 Value1 { get; set; }
         public T2 Value2 { get; set; }
@@ -96,7 +94,7 @@ namespace Funcmd.Parser
         public T7 Value7 { get; set; }
     }
 
-    public class Tuple<T1, T2, T3, T4, T5, T6, T7, T8>
+    public class Pair<T1, T2, T3, T4, T5, T6, T7, T8>
     {
         public T1 Value1 { get; set; }
         public T2 Value2 { get; set; }
