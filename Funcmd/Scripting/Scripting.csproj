@@ -8,7 +8,7 @@
     <ProjectGuid>{0B7997AE-A9FF-4F38-BADA-9A84C2BFE68E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Scripting</RootNamespace>
+    <RootNamespace>Funcmd.Scripting</RootNamespace>
     <AssemblyName>Scripting</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compiler.cs" />
+    <Compile Include="Expression.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
