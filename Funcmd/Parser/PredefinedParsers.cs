@@ -188,4 +188,30 @@ namespace Funcmd.Parser
             }
         }
     }
+
+    public class StringParser<I, C> : IParser<Lexer<I>.Token, Lexer<I>.Token, C>
+    {
+        private string value;
+        private string name = "";
+
+        public StringParser(string value, string name)
+        {
+            this.value = value;
+            this.name = name;
+        }
+
+        public ParserResult<Lexer<I>.Token, C> Parse(ref ICloneableEnumerator<Lexer<I>.Token> input, C context)
+        {
+            if (input.Available && input.Current.Value == value)
+            {
+                Lexer<I>.Token token = input.Current;
+                input.MoveNext();
+                return new ParserResult<Lexer<I>.Token, C>(token, context);
+            }
+            else
+            {
+                throw new ParserException<Lexer<I>.Token>("此处需要" + name + "。", input);
+            }
+        }
+    }
 }
