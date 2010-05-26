@@ -88,6 +88,11 @@ namespace Funcmd.Parser
             return new TokenParser<I, C>(value, name);
         }
 
+        protected IParser<Lexer<I>.Token, Lexer<I>.Token, C> tk(string value, string name = "")
+        {
+            return new StringParser<I, C>(value, (name == "" ? value : name));
+        }
+
         protected RuleParser<Lexer<I>.Token, int, object> CreateRule()
         {
             return new RuleParser<Lexer<I>.Token, int, object>();

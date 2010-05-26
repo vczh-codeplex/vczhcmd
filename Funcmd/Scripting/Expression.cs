@@ -17,12 +17,7 @@ namespace Funcmd.Scripting
 
     class Program
     {
-        public List<Expression> Definitions { get; private set; }
-
-        public Program()
-        {
-            Definitions = new List<Expression>();
-        }
+        public List<Expression> Definitions { get; set; }
     }
 
     class PrimitiveExpression : Expression
@@ -42,22 +37,12 @@ namespace Funcmd.Scripting
 
     class ArrayExpression : Expression
     {
-        public List<Expression> Elements { get; private set; }
-
-        public ArrayExpression()
-        {
-            Elements = new List<Expression>();
-        }
+        public List<Expression> Elements { get; set; }
     }
 
     class ListExpression : Expression
     {
-        public List<Expression> Elements { get; private set; }
-
-        public ListExpression()
-        {
-            Elements = new List<Expression>();
-        }
+        public List<Expression> Elements { get; set; }
     }
 
     class InvokeExpression : Expression
@@ -75,45 +60,25 @@ namespace Funcmd.Scripting
         }
 
         public Expression Source { get; set; }
-        public List<CasePair> Pairs { get; private set; }
-
-        public CaseExpression()
-        {
-            Pairs = new List<CasePair>();
-        }
+        public List<CasePair> Pairs { get; set; }
     }
 
     class DoExpression : Expression
     {
         public Expression MonadProvider { get; set; }
-        public List<Expression> Expressions { get; private set; }
-
-        public DoExpression()
-        {
-            Expressions = new List<Expression>();
-        }
+        public List<Expression> Expressions { get; set; }
     }
 
     class LambdaExpression : Expression
     {
-        public List<string> Parameters { get; private set; }
+        public List<string> Parameters { get; set; }
         public Expression Expression { get; set; }
-
-        public LambdaExpression()
-        {
-            Parameters = new List<string>();
-        }
     }
 
     class DefinitionExpression : Expression
     {
         public string Name { get; set; }
-        public List<Expression> Patterns { get; private set; }
+        public List<Expression> Patterns { get; set; }
         public Expression Expression { get; set; }
-
-        public DefinitionExpression()
-        {
-            Patterns = new List<Expression>();
-        }
     }
 }
