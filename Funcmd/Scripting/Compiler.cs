@@ -17,14 +17,16 @@ namespace Funcmd.Scripting
      * v1:v2:v3
      * func p1 p2
      * case exp
-     *   pattern1->v1
-     *   pattern2->v2
-     * do
-     *   name patterns = expression
-     *   expression
+     *   pattern1->v1;
+     *   pattern2->v2;
+     * end
+     * do(MONAD_PROVIDER)//default = IO state monad provider
+     *   name patterns = expression;
+     *   expression;
+     * end
      * (x,y)=>(x+y)
      * [DECLARATION]
-     * name patterns = expression
+     * name patterns = expression;
      */
 
     enum TokenType
