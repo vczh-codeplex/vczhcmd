@@ -107,7 +107,14 @@ namespace Funcmd.Parser
             ICloneableEnumerator<Lexer<I>.Token> tokens = lexer.Parse(input).Where(TokenFilter).GetCloneableEnumerable().CreateCloneableEnumerator();
             tokens.MoveNext();
             ParserResult<O, C> result = parser.Parse(ref tokens, CreateContext());
-            return result.Result;
+            if (tokens.Available)
+            {
+                throw new ParserException<Lexer<I>.Token>("存在没分析完的字符串。", tokens);
+            }
+            else
+            {
+                return result.Result;
+            }
         }
     }
 
@@ -145,7 +152,12 @@ namespace Funcmd.Parser
 
         public static IParser<I, IEnumerable<O>, C> Loop<I, O, C>(this IParser<I, O, C> a)
         {
-            return new LoopParser<I, O, C>(a);
+            return new LoopParser<I, O, C>(a, false);
+        }
+
+        public static IParser<I, IEnumerable<O>, C> LoopToEnd<I, O, C>(this IParser<I, O, C> a)
+        {
+            return new LoopParser<I, O, C>(a, true);
         }
 
         public static IParser<I, B, C> Convert<I, A, B, C>(this IParser<I, A, C> a, Func<A, B> converter)

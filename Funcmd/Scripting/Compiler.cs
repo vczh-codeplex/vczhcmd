@@ -29,7 +29,7 @@ namespace Funcmd.Scripting
      * let name patterns = expression;
      */
 
-    enum TokenType
+    public enum TokenType
     {
         Integer,
         Float,
@@ -47,10 +47,16 @@ namespace Funcmd.Scripting
         Equal,
         Semicolon,
         Lambda,
+        Blank,
     }
 
-    class Compiler : LexerParserBase<TokenType, Program>
+    public class ScriptingParser : LexerParserBase<TokenType, Program>
     {
+        protected override bool TokenFilter(Lexer<TokenType>.Token token)
+        {
+            return token.Tag != TokenType.Blank;
+        }
+
         protected override void Initialize(out Lexer<TokenType> lexer, out IParser<Lexer<TokenType>.Token, Program, object> parser)
         {
             lexer = new Lexer<TokenType>();
@@ -70,6 +76,7 @@ namespace Funcmd.Scripting
             lexer.AddToken(@"=", TokenType.Equal);
             lexer.AddToken(@";", TokenType.Semicolon);
             lexer.AddToken(@"\\", TokenType.Lambda);
+            lexer.AddToken(@"\s+", TokenType.Blank);
 
             var expression = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
             var simple = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
@@ -133,7 +140,7 @@ namespace Funcmd.Scripting
                     }
                 });
 
-            var list = tk("(").Right(Seq(simple, tk(":").Right(simple).Loop())).Left(tk(")")).Convert(p =>
+            var list = tk("(").Right(Seq(expression, tk(":").Right(expression).Loop())).Left(tk(")")).Convert(p =>
             {
                 if (p.Value2.Count() == 0)
                 {
@@ -201,7 +208,7 @@ namespace Funcmd.Scripting
 
             var def = Seq(
                 tk("let").Right(id),
-                primitive.Loop(),
+                simple.Loop(),
                 tk("=").Right(expression)
                 )
                 .Convert(p =>
@@ -216,7 +223,7 @@ namespace Funcmd.Scripting
                 });
 
             primitive.Imply(Alt(
-                simple, match, monad, lambda, def));
+                match, monad, lambda, def, simple));
 
             expression.Imply(Seq(primitive, primitive.Loop()).Convert(p =>
             {
@@ -233,7 +240,7 @@ namespace Funcmd.Scripting
                 return t;
             }));
 
-            program.Imply(expression.Left(tk(";")).Loop().Convert(es => new Program() { Definitions = es.ToList() }));
+            program.Imply(expression.Left(tk(";")).LoopToEnd().Convert(es => new Program() { Definitions = es.ToList() }));
 
             parser = program;
         }

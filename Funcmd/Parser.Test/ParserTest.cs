@@ -27,12 +27,12 @@ namespace Parser.Test
             Assert.AreEqual(3, Parse("1+2"));
             Assert.AreEqual(1, Parse("(1)"));
             Assert.AreEqual(3, Parse("(1+2)"));
-            Assert.AreEqual(21, Parse("(1+2)*(3+4))"));
+            Assert.AreEqual(21, Parse("(1+2)*(3+4)"));
             Assert.AreEqual(1, Parse(" 1 "));
             Assert.AreEqual(3, Parse("1 + 2"));
             Assert.AreEqual(1, Parse("( 1 )"));
             Assert.AreEqual(3, Parse("( 1 + 2 )"));
-            Assert.AreEqual(21, Parse("( 1 + 2 ) * ( 3 + 4 ) )"));
+            Assert.AreEqual(21, Parse("( 1 + 2 ) * ( 3 + 4 )"));
         }
 
         private int Op2(Pair<int, string, int> input)
