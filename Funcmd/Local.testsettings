@@ -25,8 +25,8 @@
           <Configuration>
             <CodeCoverage xmlns="">
               <Regular>
-                <CodeCoverageItem binaryFile="Parser\bin\Debug\Parser.dll" pdbFile="Parser\bin\Debug\Parser.pdb" instrumentInPlace="true" />
                 <CodeCoverageItem binaryFile="Funcmd\bin\Debug\Funcmd.exe" pdbFile="Funcmd\bin\Debug\Funcmd.pdb" instrumentInPlace="true" />
+                <CodeCoverageItem binaryFile="Parser\bin\Debug\Parser.dll" pdbFile="Parser\bin\Debug\Parser.pdb" instrumentInPlace="true" />
                 <CodeCoverageItem binaryFile="Parser.Test\bin\Debug\Parser.Test.dll" pdbFile="Parser.Test\bin\Debug\Parser.Test.pdb" instrumentInPlace="true" />
                 <CodeCoverageItem binaryFile="Scripting\bin\Debug\Scripting.dll" pdbFile="Scripting\bin\Debug\Scripting.pdb" instrumentInPlace="true" />
               </Regular>

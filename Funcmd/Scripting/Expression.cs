@@ -69,6 +69,12 @@ namespace Funcmd.Scripting
         public List<Expression> Expressions { get; set; }
     }
 
+    public class VarExpression : Expression
+    {
+        public Expression Pattern { get; set; }
+        public Expression Expression { get; set; }
+    }
+
     public class LambdaExpression : Expression
     {
         public List<string> Parameters { get; set; }

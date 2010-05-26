@@ -20,7 +20,7 @@ namespace Funcmd.Scripting
      *   pattern1->v1;
      *   pattern2->v2;
      * end
-     * do(MONAD_PROVIDER)//default = IO state monad provider
+     * do(MONAD_PROVIDER)//default = pure expression monad
      *   let name patterns = expression;
      *   expression;
      * end
@@ -42,12 +42,12 @@ namespace Funcmd.Scripting
         CloseBracket,
         Colon,
         Comma,
-        Case,
         Infer,
         Equal,
         Semicolon,
         Lambda,
         Blank,
+        Keyword,
     }
 
     public class ScriptingParser : LexerParserBase<TokenType, Program>
@@ -60,6 +60,7 @@ namespace Funcmd.Scripting
         protected override void Initialize(out Lexer<TokenType> lexer, out IParser<Lexer<TokenType>.Token, Program, object> parser)
         {
             lexer = new Lexer<TokenType>();
+            lexer.AddToken(@"case|of|end|let|do|var", TokenType.Keyword);
             lexer.AddToken(@"\d+\.\d+", TokenType.Float);
             lexer.AddToken(@"\d+", TokenType.Integer);
             lexer.AddToken(@"""([^""]|\.)*""", TokenType.String);
@@ -71,7 +72,6 @@ namespace Funcmd.Scripting
             lexer.AddToken(@"\]", TokenType.CloseSquare);
             lexer.AddToken(@":", TokenType.Colon);
             lexer.AddToken(@",", TokenType.Comma);
-            lexer.AddToken(@"->", TokenType.Case);
             lexer.AddToken(@"=>", TokenType.Infer);
             lexer.AddToken(@"=", TokenType.Equal);
             lexer.AddToken(@";", TokenType.Semicolon);
@@ -161,7 +161,7 @@ namespace Funcmd.Scripting
 
             var match = Seq(
                 tk("case").Right(expression).Left(tk("of")),
-                Seq(expression, tk("->").Right(expression)).Left(tk(";")).Opt().Left(tk("end"))
+                Seq(expression, tk("=>").Right(expression)).Left(tk(";")).Loop().Left(tk("end"))
                 )
                 .Convert(p =>
                 {
@@ -185,8 +185,18 @@ namespace Funcmd.Scripting
                     return (Expression)new DoExpression()
                     {
                         TokenPosition = p.Value1.Value1,
-                        MonadProvider = p.Value1.Value2.Count() == 0 ? p.Value1.Value2.First() : null,
+                        MonadProvider = p.Value1.Value2.Count() == 0 ? null : p.Value1.Value2.First(),
                         Expressions = p.Value2.ToList()
+                    };
+                });
+
+            var monadvar = Seq(tk("var"), expression, tk("="), expression).Convert(p =>
+                {
+                    return (Expression)new VarExpression()
+                    {
+                        TokenPosition = p.Value1,
+                        Pattern = p.Value2,
+                        Expression = p.Value4
                     };
                 });
 
@@ -223,7 +233,7 @@ namespace Funcmd.Scripting
                 });
 
             primitive.Imply(Alt(
-                match, monad, lambda, def, simple));
+                match, monad, monadvar, lambda, def, simple));
 
             expression.Imply(Seq(primitive, primitive.Loop()).Convert(p =>
             {
