@@ -57,11 +57,16 @@
     <Compile Include="ListEnumeratorTest.cs" />
     <Compile Include="ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScriptingTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Parser\Parser.csproj">
       <Project>{71D2F5AD-2213-4E48-B956-89E82516F0D4}</Project>
       <Name>Parser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Scripting\Scripting.csproj">
+      <Project>{0B7997AE-A9FF-4F38-BADA-9A84C2BFE68E}</Project>
+      <Name>Scripting</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

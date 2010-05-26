@@ -6,52 +6,52 @@ using Funcmd.Parser;
 
 namespace Funcmd.Scripting
 {
-    abstract class Element
+    public abstract class Element
     {
         public Lexer<TokenType>.Token TokenPosition { get; set; }
     }
 
-    abstract class Expression : Element
+    public abstract class Expression : Element
     {
     }
 
-    class Program
+    public class Program
     {
         public List<Expression> Definitions { get; set; }
     }
 
-    class PrimitiveExpression : Expression
+    public class PrimitiveExpression : Expression
     {
         public object Value { get; set; }
     }
 
-    class IdentifierExpression : Expression
+    public class IdentifierExpression : Expression
     {
         public string Name { get; set; }
     }
 
-    class FlagExpression : Expression
+    public class FlagExpression : Expression
     {
         public string Name { get; set; }
     }
 
-    class ArrayExpression : Expression
+    public class ArrayExpression : Expression
     {
         public List<Expression> Elements { get; set; }
     }
 
-    class ListExpression : Expression
+    public class ListExpression : Expression
     {
         public List<Expression> Elements { get; set; }
     }
 
-    class InvokeExpression : Expression
+    public class InvokeExpression : Expression
     {
         public Expression Function { get; set; }
         public Expression Argument { get; set; }
     }
 
-    class CaseExpression : Expression
+    public class CaseExpression : Expression
     {
         public class CasePair : Element
         {
@@ -63,19 +63,19 @@ namespace Funcmd.Scripting
         public List<CasePair> Pairs { get; set; }
     }
 
-    class DoExpression : Expression
+    public class DoExpression : Expression
     {
         public Expression MonadProvider { get; set; }
         public List<Expression> Expressions { get; set; }
     }
 
-    class LambdaExpression : Expression
+    public class LambdaExpression : Expression
     {
         public List<string> Parameters { get; set; }
         public Expression Expression { get; set; }
     }
 
-    class DefinitionExpression : Expression
+    public class DefinitionExpression : Expression
     {
         public string Name { get; set; }
         public List<Expression> Patterns { get; set; }

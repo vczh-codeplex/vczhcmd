@@ -79,10 +79,12 @@ namespace Funcmd.Parser
     public class LoopParser<I, O, C> : IParser<I, IEnumerable<O>, C>
     {
         private IParser<I, O, C> parser = null;
+        private bool loopToEnd = false;
 
-        public LoopParser(IParser<I, O, C> parser)
+        public LoopParser(IParser<I, O, C> parser, bool loopToEnd)
         {
             this.parser = parser;
+            this.loopToEnd = loopToEnd;
         }
 
         public ParserResult<IEnumerable<O>, C> Parse(ref ICloneableEnumerator<I> input, C context)
@@ -92,13 +94,27 @@ namespace Funcmd.Parser
             {
                 try
                 {
-                    ParserResult<O, C> result = parser.Parse(ref input, context);
-                    list.Add(result.Result);
-                    context = result.Context;
+                    if (input.Available)
+                    {
+                        ParserResult<O, C> result = parser.Parse(ref input, context);
+                        list.Add(result.Result);
+                        context = result.Context;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-                catch (ParserException<I>)
+                catch (ParserException<I> e)
                 {
-                    break;
+                    if (loopToEnd)
+                    {
+                        throw;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
             return new ParserResult<IEnumerable<O>, C>(list, context);
