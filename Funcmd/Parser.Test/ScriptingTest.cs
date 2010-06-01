@@ -52,9 +52,9 @@ namespace Parser.Test
                 "let count (x:xs) = add 1 (count xs);\r\n" +
                 "let main = count [1,2.2,\"3\",true,false];\r\n"
                 );
-            var sum = context["count"];
+            var count = context["count"];
             var array = ScriptingValue.CreateArray(1, 2, 3, 4, 5);
-            var result = sum.Invoke(array);
+            var result = count.Invoke(array);
             Assert.AreEqual(5, (int)result.Value);
             Assert.AreEqual(5, context["main"].Value);
         }
