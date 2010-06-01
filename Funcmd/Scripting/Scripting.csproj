@@ -45,7 +45,10 @@
   <ItemGroup>
     <Compile Include="Compiler.cs" />
     <Compile Include="Expression.cs" />
+    <Compile Include="PredefinedExpressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Runtime.cs" />
+    <Compile Include="RuntimeValues.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Parser\Parser.csproj">

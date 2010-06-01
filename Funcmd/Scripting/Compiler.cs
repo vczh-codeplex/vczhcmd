@@ -29,7 +29,7 @@ namespace Funcmd.Scripting
      * let name patterns = expression;
      */
 
-    public enum TokenType
+    internal enum TokenType
     {
         Integer,
         Float,
@@ -50,7 +50,7 @@ namespace Funcmd.Scripting
         Keyword,
     }
 
-    public class ScriptingParser : LexerParserBase<TokenType, Program>
+    internal class ScriptingParser : LexerParserBase<TokenType, Program>
     {
         protected override bool TokenFilter(Lexer<TokenType>.Token token)
         {
