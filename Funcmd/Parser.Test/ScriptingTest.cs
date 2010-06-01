@@ -149,12 +149,18 @@ namespace Parser.Test
         [TestMethod]
         public void ParseMonad2()
         {
+            /* counter start next return
+             * let start i s = [[], i];
+             * let next s = [s, add s 1];
+             * let return x s = [x, s];
+             * let counter [x, s] = s;
+             */ 
             Parse(
-                "let main = do(io)\r\n" +
-                "  var a = readline;\r\n" +
-                "  var b = readline;\r\n" +
-                "  var c = return (add a b);\r\n" +
-                "  writeline c;\r\n" +
+                "let main = do(counter)\r\n" +
+                "  start 1;\r\n" +
+                "  var a = next;\r\n" +
+                "  var b = next;\r\n" +
+                "  return (add a b);\r\n" +
                 "end;\r\n"
                 );
         }
