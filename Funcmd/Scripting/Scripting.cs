@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Funcmd.Scripting
 {
-    public class ScriptingValue
+    public class ScriptingValue : IEnumerable<ScriptingValue>
     {
         internal RuntimeValueWrapper ValueWrapper { get; set; }
 
@@ -14,11 +14,21 @@ namespace Funcmd.Scripting
             this.ValueWrapper = valueWrapper;
         }
 
+        #region Primitive
+
         public bool IsInvokable
         {
             get
             {
                 return ValueWrapper.IsInvokable;
+            }
+        }
+
+        public bool IsArray
+        {
+            get
+            {
+                return !ValueWrapper.IsInvokable && ValueWrapper.RuntimeObject is RuntimeValueWrapper[];
             }
         }
 
@@ -40,6 +50,40 @@ namespace Funcmd.Scripting
             return new ScriptingValue(result);
         }
 
+        #endregion
+
+        #region Array
+
+        public int Length
+        {
+            get
+            {
+                return (ValueWrapper.RuntimeObject as RuntimeValueWrapper[]).Length;
+            }
+        }
+
+        public ScriptingValue this[int index]
+        {
+            get
+            {
+                return new ScriptingValue((ValueWrapper.RuntimeObject as RuntimeValueWrapper[])[index]);
+            }
+        }
+
+        IEnumerator<ScriptingValue> IEnumerable<ScriptingValue>.GetEnumerator()
+        {
+            return (ValueWrapper.RuntimeObject as RuntimeValueWrapper[]).Select(w => new ScriptingValue(w)).GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return (this as IEnumerable<ScriptingValue>).GetEnumerator();
+        }
+
+        #endregion
+
+        #region Builder
+
         public static ScriptingValue CreateValue(object o)
         {
             return new ScriptingValue(RuntimeValueWrapper.CreateValue(o));
@@ -55,6 +99,16 @@ namespace Funcmd.Scripting
             return new ScriptingValue(RuntimeValueWrapper.CreateFunction(
                 (xs) => externalFunction(xs.Select(w => new ScriptingValue(w)).ToArray()).ValueWrapper
                 , parameterCount));
+        }
+
+        #endregion
+    }
+
+    public static class ScriptingValueExtension
+    {
+        public static IEnumerable<T> ScriptingCast<T>(this IEnumerable<ScriptingValue> values)
+        {
+            return values.Select(s => s.Value).Cast<T>();
         }
     }
 
