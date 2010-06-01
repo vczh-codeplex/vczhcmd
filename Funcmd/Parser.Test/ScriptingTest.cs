@@ -10,7 +10,7 @@ namespace Parser.Test
     [TestClass]
     public class ScriptingTest
     {
-        private Dictionary<string, ScriptingValue> Parse(string code)
+        private ScriptingEnvironment Parse(string code)
         {
             return new Scripting().Parse(code);
         }
