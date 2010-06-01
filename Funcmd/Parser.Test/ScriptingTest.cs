@@ -135,14 +135,15 @@ namespace Parser.Test
         [TestMethod]
         public void ParseMonad1()
         {
-            Parse(
+            var context = Parse(
                 "let main = do\r\n" +
-                "  var a = readline;\r\n" +
-                "  var b = readline;\r\n" +
-                "  var c = return (add a b);\r\n" +
-                "  writeline c;\r\n" +
+                "  var a = 1;\r\n" +
+                "  var b = 2;\r\n" +
+                "  var c = add a b;\r\n" +
+                "  c;\r\n" +
                 "end;\r\n"
                 );
+            Assert.AreEqual(3, context["main"].Value);
         }
 
         [TestMethod]
