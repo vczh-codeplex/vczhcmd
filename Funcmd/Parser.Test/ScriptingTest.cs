@@ -10,9 +10,9 @@ namespace Parser.Test
     [TestClass]
     public class ScriptingTest
     {
-        private object Add(object[] arguments)
+        private ScriptingValue Add(ScriptingValue[] arguments)
         {
-            return (int)arguments[0] + (int)arguments[1];
+            return ScriptingValue.CreateValue((int)arguments[0].Value + (int)arguments[1].Value);
         }
 
         private ScriptingEnvironment Parse(string code)

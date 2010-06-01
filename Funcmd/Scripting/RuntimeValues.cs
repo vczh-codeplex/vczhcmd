@@ -179,8 +179,8 @@ namespace Funcmd.Scripting
 
     class RuntimeExternalValue : RuntimeValue
     {
-        public Func<object[], object> ExternalFunction { get; set; }
-        public object[] Arguments { get; set; }
+        public Func<RuntimeValueWrapper[], RuntimeValueWrapper> ExternalFunction { get; set; }
+        public RuntimeValueWrapper[] Arguments { get; set; }
         public int ParameterCount { get; set; }
 
         public override bool IsReady
@@ -208,10 +208,10 @@ namespace Funcmd.Scripting
         {
             if (ParameterCount > 0)
             {
-                object[] newArguments = Arguments.Concat(new object[] { argument.RuntimeObject }).ToArray();
+                RuntimeValueWrapper[] newArguments = Arguments.Concat(new RuntimeValueWrapper[] { argument }).ToArray();
                 if (ParameterCount == 1)
                 {
-                    return new RuntimeValueWrapper(new RuntimeEvaluatedValue(ExternalFunction(newArguments)), context);
+                    return ExternalFunction(newArguments);
                 }
                 else
                 {
