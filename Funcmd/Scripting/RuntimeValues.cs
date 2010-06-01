@@ -54,7 +54,7 @@ namespace Funcmd.Scripting
         public class IncompletedExpression
         {
             public List<Expression> Patterns { get; set; }
-            public RuntimeContext context { get; set; }
+            public RuntimeContext Context { get; set; }
             public Expression Expression { get; set; }
         }
 
@@ -88,7 +88,40 @@ namespace Funcmd.Scripting
 
         public override RuntimeValueWrapper Invoke(RuntimeContext context, RuntimeValueWrapper argument)
         {
-            throw new NotSupportedException();
+            List<IncompletedExpression> newIncompletedExpressions = new List<IncompletedExpression>();
+            foreach (IncompletedExpression incompletedExpression in IncompletedExpressions)
+            {
+                RuntimeContext newContext = new RuntimeContext();
+                newContext.PreviousContext = incompletedExpression.Context.PreviousContext;
+                foreach (var pair in incompletedExpression.Context.Values)
+                {
+                    newContext.Values.Add(pair.Key, pair.Value);
+                }
+                if (incompletedExpression.Patterns.First().Match(newContext, argument))
+                {
+                    if (incompletedExpression.Patterns.Count == 1)
+                    {
+                        return incompletedExpression.Expression.Execute(newContext);
+                    }
+                    else
+                    {
+                        IncompletedExpression newIncompletedExpression = new IncompletedExpression();
+                        newIncompletedExpression.Context = newContext;
+                        newIncompletedExpression.Expression = incompletedExpression.Expression;
+                        newIncompletedExpression.Patterns = incompletedExpression.Patterns.Skip(1).ToList();
+                    }
+                }
+            }
+            if (newIncompletedExpressions.Count == 0)
+            {
+                throw new Exception("模式匹配不成功。");
+            }
+            else
+            {
+                RuntimeInvokableValue value = new RuntimeInvokableValue();
+                value.IncompletedExpressions.AddRange(newIncompletedExpressions);
+                return new RuntimeValueWrapper(value, context);
+            }
         }
 
         public override object RuntimeObject
@@ -127,7 +160,7 @@ namespace Funcmd.Scripting
 
         public override RuntimeValueWrapper Execute(RuntimeContext context)
         {
-            throw new NotImplementedException();
+            return UnevaluatedValue.Execute(context);
         }
 
         public override RuntimeValueWrapper Invoke(RuntimeContext context, RuntimeValueWrapper argument)
