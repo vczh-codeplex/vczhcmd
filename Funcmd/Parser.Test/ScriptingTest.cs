@@ -18,10 +18,14 @@ namespace Parser.Test
         [TestMethod]
         public void ParseSumArray()
         {
-            Parse(
+            var context = Parse(
                 "let sum [] = [];\r\n" +
                 "let sum (x:xs) = add x (sum xs);\r\n"
                 );
+            var sum = context.Values["sum"];
+            var array = RuntimeValueWrapper.CreateArray(1, 2, 3, 4, 5);
+            var result = sum.Invoke(array);
+            Assert.AreEqual(15, (int)result.RuntimeObject);
         }
 
         [TestMethod]
