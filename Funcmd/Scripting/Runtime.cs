@@ -35,6 +35,15 @@ namespace Funcmd.Scripting
             this.context = context;
         }
 
+        public bool IsInvokable
+        {
+            get
+            {
+                EnsureValueExecuted();
+                return Value.IsInvokable;
+            }
+        }
+
         public object RuntimeObject
         {
             get

@@ -24,7 +24,7 @@ namespace Funcmd.Scripting
 
         public virtual bool Match(RuntimeContext context, RuntimeValueWrapper valueWrapper)
         {
-            throw new NotSupportedException();
+            return false;
         }
     }
 
