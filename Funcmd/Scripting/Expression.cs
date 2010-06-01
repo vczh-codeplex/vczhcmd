@@ -19,7 +19,7 @@ namespace Funcmd.Scripting
 
         public virtual RuntimeValueWrapper Execute(RuntimeContext context)
         {
-            throw new NotSupportedException();
+            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(new object()), context);
         }
 
         public virtual bool Match(RuntimeContext context, RuntimeValueWrapper valueWrapper)

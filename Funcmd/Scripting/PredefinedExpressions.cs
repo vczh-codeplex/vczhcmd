@@ -232,18 +232,6 @@ namespace Funcmd.Scripting
                 throw new Exception("模式匹配不成功。");
             }
         }
-
-        public override RuntimeValueWrapper Execute(RuntimeContext context)
-        {
-            if (Pattern.Match(context, Expression.Execute(context)))
-            {
-                return new RuntimeValueWrapper(new RuntimeEvaluatedValue(new object()), context);
-            }
-            else
-            {
-                throw new Exception("模式匹配不成功。");
-            }
-        }
     }
 
     class LambdaExpression : Expression
@@ -309,12 +297,6 @@ namespace Funcmd.Scripting
                 };
                 invokableValue.IncompletedExpressions.Add(incompletedExpression);
             }
-        }
-
-        public override RuntimeValueWrapper Execute(RuntimeContext context)
-        {
-            BuildContext(context);
-            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(new object()), context);
         }
     }
 }
