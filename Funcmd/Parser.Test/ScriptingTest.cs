@@ -15,10 +15,16 @@ namespace Parser.Test
             return ScriptingValue.CreateValue((int)arguments[0].Value + (int)arguments[1].Value);
         }
 
+        private ScriptingValue Sub(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateValue((int)arguments[0].Value - (int)arguments[1].Value);
+        }
+
         private ScriptingEnvironment Parse(string code)
         {
             ScriptingEnvironment environment = new Scripting().Parse(code);
             environment.DefineValue("add", ScriptingValue.CreateFunction(Add, 2));
+            environment.DefineValue("sub", ScriptingValue.CreateFunction(Sub, 2));
             return environment;
         }
 
@@ -93,7 +99,7 @@ namespace Parser.Test
             var context = Parse(
                 "let agg f i [] = i;\r\n" +
                 "let agg f i (x:xs) = agg f (f i x) xs;\r\n" +
-                "let main = agg (\\a,b=>add a b) 0 [1,2,3,4,5];\r\n"
+                "let main = agg (\\a,b=>add a b) 0 (1:2:3:4:5:[]);\r\n"
                 );
             Assert.AreEqual(15, context["main"].Value);
         }
@@ -108,36 +114,22 @@ namespace Parser.Test
                 "  'tree => case xs of\r\n" +
                 "    [a,b]=>add (sum a) (sum b);\r\n" +
                 "  end;\r\n" +
-                "end;\r\n"
+                "end;\r\n" +
+                "let main = sum ['tree, ['tree, ['leaf, 1], ['leaf, 2]], ['tree, ['leaf, 3], ['leaf, 4]]];"
                 );
-            var sum = context["sum"];
-            var tree = ScriptingValue.CreateArray(
-                    new Flag("tree"),
-                    ScriptingValue.CreateArray(
-                        new Flag("tree"),
-                        ScriptingValue.CreateArray(
-                            new Flag("leaf"),
-                            1
-                        ),
-                        ScriptingValue.CreateArray(
-                            new Flag("leaf"),
-                            2
-                        )
-                    ),
-                    ScriptingValue.CreateArray(
-                        new Flag("tree"),
-                        ScriptingValue.CreateArray(
-                            new Flag("leaf"),
-                            3
-                        ),
-                        ScriptingValue.CreateArray(
-                            new Flag("leaf"),
-                            4
-                        )
-                    )
+            Assert.AreEqual(10, (int)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void ParseFab()
+        {
+            var context = Parse(
+                "let fab 0 = 1;\r\n" +
+                "let fab 1 = 1;\r\n" +
+                "let fab n = add (fab (sub n 2)) (fab (sub n 1));\r\n" +
+                "let main = fab 9;\r\n"
                 );
-            var result = sum.Invoke(tree);
-            Assert.AreEqual(10, (int)result.Value);
+            Assert.AreEqual(55, context["main"].Value);
         }
 
         [TestMethod]
