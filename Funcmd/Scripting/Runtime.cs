@@ -74,6 +74,16 @@ namespace Funcmd.Scripting
             }
         }
 
+        public static RuntimeValueWrapper CreateFunction(Func<object[], object> externalFunction, int parameterCount)
+        {
+            return new RuntimeValueWrapper(new RuntimeExternalValue()
+                {
+                    ExternalFunction = externalFunction,
+                    Arguments = new object[] { },
+                    ParameterCount = parameterCount
+                }, new RuntimeContext());
+        }
+
         public static RuntimeValueWrapper CreateArray(params object[] o)
         {
             return CreateValue(o);

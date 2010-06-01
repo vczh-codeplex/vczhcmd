@@ -7,7 +7,7 @@ namespace Funcmd.Scripting
 {
     public class ScriptingValue
     {
-        private RuntimeValueWrapper ValueWrapper { get; set; }
+        internal RuntimeValueWrapper ValueWrapper { get; set; }
 
         internal ScriptingValue(RuntimeValueWrapper valueWrapper)
         {
@@ -49,15 +49,44 @@ namespace Funcmd.Scripting
         {
             return new ScriptingValue(RuntimeValueWrapper.CreateArray(o));
         }
+
+        public static ScriptingValue CreateFunction(Func<object[], object> externalFunction, int parameterCount)
+        {
+            return new ScriptingValue(RuntimeValueWrapper.CreateFunction(externalFunction, parameterCount));
+        }
     }
 
     public class Scripting
     {
         private static ScriptingParser parser = new ScriptingParser();
 
-        public Dictionary<string, ScriptingValue> Parse(string code)
+        public ScriptingEnvironment Parse(string code)
         {
-            return parser.Parse(code).BuildContext().Values.ToDictionary(p => p.Key, p => new ScriptingValue(p.Value));
+            return new ScriptingEnvironment(parser.Parse(code).BuildContext());
+        }
+    }
+
+    public class ScriptingEnvironment
+    {
+        private RuntimeContext context = new RuntimeContext();
+
+        internal ScriptingEnvironment(RuntimeContext context)
+        {
+            this.context = context;
+            this.context.PreviousContext = new RuntimeContext();
+        }
+
+        public ScriptingValue this[string index]
+        {
+            get
+            {
+                return new ScriptingValue(this.context.Values[index]);
+            }
+        }
+
+        public void DefineValue(string name, ScriptingValue value)
+        {
+            context.PreviousContext.Values.Add(name, value.ValueWrapper);
         }
     }
 }

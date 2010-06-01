@@ -176,4 +176,65 @@ namespace Funcmd.Scripting
             }
         }
     }
+
+    class RuntimeExternalValue : RuntimeValue
+    {
+        public Func<object[], object> ExternalFunction { get; set; }
+        public object[] Arguments { get; set; }
+        public int ParameterCount { get; set; }
+
+        public override bool IsReady
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool IsInvokable
+        {
+            get
+            {
+                return ParameterCount > 0;
+            }
+        }
+
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
+        {
+            return new RuntimeValueWrapper(this, context);
+        }
+
+        public override RuntimeValueWrapper Invoke(RuntimeContext context, RuntimeValueWrapper argument)
+        {
+            if (ParameterCount > 0)
+            {
+                object[] newArguments = Arguments.Concat(new object[] { argument.RuntimeObject }).ToArray();
+                if (ParameterCount == 1)
+                {
+                    return new RuntimeValueWrapper(new RuntimeEvaluatedValue(ExternalFunction(newArguments)), context);
+                }
+                else
+                {
+                    return new RuntimeValueWrapper(new RuntimeExternalValue()
+                        {
+                            ExternalFunction = ExternalFunction,
+                            Arguments = newArguments,
+                            ParameterCount = ParameterCount - 1
+                        }, context);
+                }
+            }
+            else
+            {
+                throw new Exception("外界函数参数数量不能为0。");
+            }
+        }
+
+        public override object RuntimeObject
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+    }
 }
