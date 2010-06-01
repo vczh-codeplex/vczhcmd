@@ -10,16 +10,23 @@ namespace Parser.Test
     [TestClass]
     public class ScriptingTest
     {
+        private object Add(object[] arguments)
+        {
+            return (int)arguments[0] + (int)arguments[1];
+        }
+
         private ScriptingEnvironment Parse(string code)
         {
-            return new Scripting().Parse(code);
+            ScriptingEnvironment environment = new Scripting().Parse(code);
+            environment.DefineValue("add", ScriptingValue.CreateFunction(Add, 2));
+            return environment;
         }
 
         [TestMethod]
         public void ParseSumArray()
         {
             var context = Parse(
-                "let sum [] = [];\r\n" +
+                "let sum [] = 0;\r\n" +
                 "let sum (x:xs) = add x (sum xs);\r\n"
                 );
             var sum = context["sum"];
@@ -40,11 +47,16 @@ namespace Parser.Test
         [TestMethod]
         public void ParseCountArray()
         {
-            Parse(
-                "let count [] = [];\r\n" +
-                "let count (x:xs) = add x (count xs);\r\n" +
+            var context = Parse(
+                "let count [] = 0;\r\n" +
+                "let count (x:xs) = add 1 (count xs);\r\n" +
                 "let main = count [1,2.2,\"3\",true,false];\r\n"
                 );
+            var sum = context["count"];
+            var array = ScriptingValue.CreateArray(1, 2, 3, 4, 5);
+            var result = sum.Invoke(array);
+            Assert.AreEqual(5, (int)result.Value);
+            Assert.AreEqual(5, context["main"].Value);
         }
 
         [TestMethod]
