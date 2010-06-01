@@ -109,6 +109,7 @@ namespace Funcmd.Scripting
                         newIncompletedExpression.Context = newContext;
                         newIncompletedExpression.Expression = incompletedExpression.Expression;
                         newIncompletedExpression.Patterns = incompletedExpression.Patterns.Skip(1).ToList();
+                        newIncompletedExpressions.Add(newIncompletedExpression);
                     }
                 }
             }

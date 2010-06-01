@@ -38,10 +38,38 @@ namespace Parser.Test
         [TestMethod]
         public void ParseSumTree()
         {
-            Parse(
+            var context = Parse(
                 "let sum ['leaf, n] = n;\r\n" +
                 "let sum ['tree, m, n] = add (sum m) (sum n);\r\n"
                 );
+            var sum = context["sum"];
+            var tree = ScriptingValue.CreateArray(
+                    new Flag("tree"),
+                    ScriptingValue.CreateArray(
+                        new Flag("tree"),
+                        ScriptingValue.CreateArray(
+                            new Flag("leaf"),
+                            1
+                        ),
+                        ScriptingValue.CreateArray(
+                            new Flag("leaf"),
+                            2
+                        )
+                    ),
+                    ScriptingValue.CreateArray(
+                        new Flag("tree"),
+                        ScriptingValue.CreateArray(
+                            new Flag("leaf"),
+                            3
+                        ),
+                        ScriptingValue.CreateArray(
+                            new Flag("leaf"),
+                            4
+                        )
+                    )
+                );
+            var result = sum.Invoke(tree);
+            Assert.AreEqual(10, (int)result.Value);
         }
 
         [TestMethod]
@@ -62,11 +90,12 @@ namespace Parser.Test
         [TestMethod]
         public void ParseAggregate()
         {
-            Parse(
+            var context = Parse(
                 "let agg f i [] = i;\r\n" +
                 "let agg f i (x:xs) = agg f (f i x) xs;\r\n" +
                 "let main = agg (\\a,b=>add a b) 0 [1,2,3,4,5];\r\n"
                 );
+            Assert.AreEqual(15, context["main"].Value);
         }
 
         [TestMethod]

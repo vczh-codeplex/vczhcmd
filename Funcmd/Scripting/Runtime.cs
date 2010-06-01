@@ -13,11 +13,15 @@ namespace Funcmd.Scripting
         public Flag(string name)
         {
             this.Name = name;
+            if (!this.Name.StartsWith("'"))
+            {
+                this.Name = "'" + this.Name;
+            }
         }
 
         public override bool Equals(object obj)
         {
-            return obj is FlagExpression && Name == (obj as FlagExpression).Name;
+            return obj is Flag && Name == (obj as Flag).Name;
         }
 
         public override int GetHashCode()
@@ -89,9 +93,13 @@ namespace Funcmd.Scripting
 
         public static RuntimeValueWrapper CreateValue(object o)
         {
-            if (o.GetType() == typeof(RuntimeValueWrapper))
+            if (o is RuntimeValueWrapper)
             {
                 return (RuntimeValueWrapper)o;
+            }
+            else if (o is ScriptingValue)
+            {
+                return ((ScriptingValue)o).ValueWrapper;
             }
             else if (o.GetType().IsArray)
             {
