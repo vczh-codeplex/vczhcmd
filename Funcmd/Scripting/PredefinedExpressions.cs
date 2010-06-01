@@ -156,7 +156,7 @@ namespace Funcmd.Scripting
                         context,
                         new RuntimeValueWrapper(
                             new RuntimeEvaluatedValue(
-                                valueWrappers.Skip(Elements.Count - 2).ToArray()),
+                                valueWrappers.Skip(Elements.Count - 1).ToArray()),
                                 context
                             )
                         );
@@ -218,6 +218,10 @@ namespace Funcmd.Scripting
             {
                 PreviousContext = context
             };
+            foreach (Expression e in Expressions)
+            {
+                e.BuildContext(newContext);
+            }
             foreach (Expression e in Expressions)
             {
                 result = e.Execute(newContext);
@@ -282,7 +286,7 @@ namespace Funcmd.Scripting
 
         public override void BuildContext(RuntimeContext context)
         {
-            RuntimeInvokableValue invokableValue = new RuntimeInvokableValue();
+            RuntimeInvokableValue invokableValue = null;
             if (context.Values.ContainsKey(Name))
             {
                 RuntimeValueWrapper valueWrapper = context.Values[Name];

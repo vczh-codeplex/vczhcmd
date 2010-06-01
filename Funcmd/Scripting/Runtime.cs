@@ -60,6 +60,24 @@ namespace Funcmd.Scripting
             EnsureValueExecuted();
             return Value.Invoke(Context, argument);
         }
+
+        public static RuntimeValueWrapper CreateValue(object o)
+        {
+            if (o.GetType().IsArray)
+            {
+                object[] a = (object[])o;
+                return new RuntimeValueWrapper(new RuntimeEvaluatedValue(a.Select(i => CreateValue(i)).ToArray()), new RuntimeContext());
+            }
+            else
+            {
+                return new RuntimeValueWrapper(new RuntimeEvaluatedValue(o), new RuntimeContext());
+            }
+        }
+
+        public static RuntimeValueWrapper CreateArray(params object[] o)
+        {
+            return CreateValue(o);
+        }
     }
 
     internal abstract class RuntimeValue
