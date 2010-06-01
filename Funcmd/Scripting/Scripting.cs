@@ -50,9 +50,11 @@ namespace Funcmd.Scripting
             return new ScriptingValue(RuntimeValueWrapper.CreateArray(o));
         }
 
-        public static ScriptingValue CreateFunction(Func<object[], object> externalFunction, int parameterCount)
+        public static ScriptingValue CreateFunction(Func<ScriptingValue[], ScriptingValue> externalFunction, int parameterCount)
         {
-            return new ScriptingValue(RuntimeValueWrapper.CreateFunction(externalFunction, parameterCount));
+            return new ScriptingValue(RuntimeValueWrapper.CreateFunction(
+                (xs) => externalFunction(xs.Select(w => new ScriptingValue(w)).ToArray()).ValueWrapper
+                , parameterCount));
         }
     }
 

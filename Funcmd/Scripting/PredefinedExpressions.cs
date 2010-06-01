@@ -59,19 +59,9 @@ namespace Funcmd.Scripting
     {
         public string Name { get; set; }
 
-        public override bool Equals(object obj)
-        {
-            return obj is FlagExpression && Name == (obj as FlagExpression).Name;
-        }
-
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode();
-        }
-
         public override RuntimeValueWrapper Execute(RuntimeContext context)
         {
-            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(this), context);
+            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(new Flag(Name)), context);
         }
 
         public override bool Match(RuntimeContext context, RuntimeValueWrapper valueWrapper)
@@ -82,7 +72,7 @@ namespace Funcmd.Scripting
             }
             else if (!valueWrapper.IsInvokable)
             {
-                return this.Equals(valueWrapper.RuntimeObject);
+                return new Flag(Name).Equals(valueWrapper.RuntimeObject);
             }
             else
             {
