@@ -259,7 +259,15 @@ namespace Funcmd.Scripting
 
         public override RuntimeValueWrapper Execute(RuntimeContext context)
         {
-            RuntimeInvokableValue.IncompletedExpression incompletedExpression = new RuntimeInvokableValue.IncompletedExpression();
+            RuntimeInvokableValue.IncompletedExpression incompletedExpression = new RuntimeInvokableValue.IncompletedExpression()
+            {
+                Context = new RuntimeContext()
+                {
+                    PreviousContext = context
+                },
+                Expression = Expression,
+                Patterns = Parameters.Select(n => (Expression)new IdentifierExpression() { Name = n }).ToList(),
+            };
             RuntimeInvokableValue value = new RuntimeInvokableValue();
             value.IncompletedExpressions.Add(incompletedExpression);
             return new RuntimeValueWrapper(value, context);
@@ -296,10 +304,15 @@ namespace Funcmd.Scripting
                     context.Values.Add(Name, new RuntimeValueWrapper(invokableValue, context));
                 }
 
-                RuntimeInvokableValue.IncompletedExpression incompletedExpression = new RuntimeInvokableValue.IncompletedExpression();
-                incompletedExpression.context = new RuntimeContext();
-                incompletedExpression.Expression = Expression;
-                incompletedExpression.Patterns = new List<Expression>(Patterns);
+                RuntimeInvokableValue.IncompletedExpression incompletedExpression = new RuntimeInvokableValue.IncompletedExpression()
+                {
+                    Context = new RuntimeContext()
+                    {
+                        PreviousContext = context
+                    },
+                    Expression = Expression,
+                    Patterns = new List<Expression>(Patterns),
+                };
                 invokableValue.IncompletedExpressions.Add(incompletedExpression);
             }
         }
