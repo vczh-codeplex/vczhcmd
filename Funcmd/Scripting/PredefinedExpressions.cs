@@ -9,6 +9,11 @@ namespace Funcmd.Scripting
     {
         public object Value { get; set; }
 
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
+        {
+            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(Value), context);
+        }
+
         public override bool Match(RuntimeContext context, RuntimeValueWrapper valueWrapper)
         {
             if (!valueWrapper.IsInvokable)
@@ -22,6 +27,19 @@ namespace Funcmd.Scripting
     class IdentifierExpression : Expression
     {
         public string Name { get; set; }
+
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
+        {
+            while (context != null)
+            {
+                if (context.Values.ContainsKey(Name))
+                {
+                    return context.Values[Name];
+                }
+                context = context.PreviousContext;
+            }
+            throw new Exception(string.Format("{0}没有定义。", Name));
+        }
 
         public override bool Match(RuntimeContext context, RuntimeValueWrapper valueWrapper)
         {
@@ -51,16 +69,24 @@ namespace Funcmd.Scripting
             return Name.GetHashCode();
         }
 
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
+        {
+            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(this), context);
+        }
+
         public override bool Match(RuntimeContext context, RuntimeValueWrapper valueWrapper)
         {
             if (context.Values.ContainsKey(Name))
             {
                 throw new Exception(string.Format("{0}不可重复定义。", Name));
             }
+            else if (!valueWrapper.IsInvokable)
+            {
+                return this.Equals(valueWrapper.RuntimeObject);
+            }
             else
             {
-                context.Values.Add(Name, new RuntimeValueWrapper(new RuntimeEvaluatedValue(this), context));
-                return true;
+                return false;
             }
         }
     }
@@ -68,6 +94,13 @@ namespace Funcmd.Scripting
     class ArrayExpression : Expression
     {
         public List<Expression> Elements { get; set; }
+
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
+        {
+            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(
+                Elements.Select(e => e.Execute(context)).ToArray()
+                ), context);
+        }
 
         public override bool Match(RuntimeContext context, RuntimeValueWrapper valueWrapper)
         {
@@ -93,6 +126,17 @@ namespace Funcmd.Scripting
     class ListExpression : Expression
     {
         public List<Expression> Elements { get; set; }
+
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
+        {
+            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(
+                Elements
+                    .Take(Elements.Count - 1)
+                    .Select(e => e.Execute(context))
+                    .Union((RuntimeValueWrapper[])Elements.Last().Execute(context).RuntimeObject)
+                    .ToArray()
+                ), context);
+        }
 
         public override bool Match(RuntimeContext context, RuntimeValueWrapper valueWrapper)
         {
@@ -126,6 +170,11 @@ namespace Funcmd.Scripting
     {
         public Expression Function { get; set; }
         public Expression Argument { get; set; }
+
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
+        {
+            return Function.Execute(context).Invoke(Argument.Execute(context));
+        }
     }
 
     class CaseExpression : Expression
@@ -138,12 +187,43 @@ namespace Funcmd.Scripting
 
         public Expression Source { get; set; }
         public List<CasePair> Pairs { get; set; }
+
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
+        {
+            RuntimeValueWrapper valueToBeMatched = Source.Execute(context);
+            foreach (CasePair pair in Pairs)
+            {
+                RuntimeContext newContext = new RuntimeContext()
+                {
+                    PreviousContext = context
+                };
+                if (pair.Pattern.Match(newContext, valueToBeMatched))
+                {
+                    return pair.Expression.Execute(newContext);
+                }
+            }
+            throw new Exception("模式匹配不成功。");
+        }
     }
 
     class DoExpression : Expression
     {
         public Expression MonadProvider { get; set; }
         public List<Expression> Expressions { get; set; }
+
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
+        {
+            RuntimeValueWrapper result = new RuntimeValueWrapper(new RuntimeEvaluatedValue(new object()), context);
+            RuntimeContext newContext = new RuntimeContext()
+            {
+                PreviousContext = context
+            };
+            foreach (Expression e in Expressions)
+            {
+                result = e.Execute(newContext);
+            }
+            return result;
+        }
     }
 
     class VarExpression : Expression
@@ -153,7 +233,22 @@ namespace Funcmd.Scripting
 
         public override void BuildContext(RuntimeContext context)
         {
-            throw new NotSupportedException();
+            if (!Pattern.Match(context, Expression.Execute(context)))
+            {
+                throw new Exception("模式匹配不成功。");
+            }
+        }
+
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
+        {
+            if (Pattern.Match(context, Expression.Execute(context)))
+            {
+                return new RuntimeValueWrapper(new RuntimeEvaluatedValue(new object()), context);
+            }
+            else
+            {
+                throw new Exception("模式匹配不成功。");
+            }
         }
     }
 
@@ -161,6 +256,14 @@ namespace Funcmd.Scripting
     {
         public List<string> Parameters { get; set; }
         public Expression Expression { get; set; }
+
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
+        {
+            RuntimeInvokableValue.IncompletedExpression incompletedExpression = new RuntimeInvokableValue.IncompletedExpression();
+            RuntimeInvokableValue value = new RuntimeInvokableValue();
+            value.IncompletedExpressions.Add(incompletedExpression);
+            return new RuntimeValueWrapper(value, context);
+        }
     }
 
     class DefinitionExpression : Expression
@@ -199,6 +302,12 @@ namespace Funcmd.Scripting
                 incompletedExpression.Patterns = new List<Expression>(Patterns);
                 invokableValue.IncompletedExpressions.Add(incompletedExpression);
             }
+        }
+
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
+        {
+            BuildContext(context);
+            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(new object()), context);
         }
     }
 }

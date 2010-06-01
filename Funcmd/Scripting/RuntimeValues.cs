@@ -30,12 +30,12 @@ namespace Funcmd.Scripting
             }
         }
 
-        public override RuntimeValue Execute(RuntimeContext context)
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
         {
-            return this;
+            return new RuntimeValueWrapper(this, context);
         }
 
-        public override RuntimeValue Invoke(RuntimeContext context, RuntimeValueWrapper argument)
+        public override RuntimeValueWrapper Invoke(RuntimeContext context, RuntimeValueWrapper argument)
         {
             throw new NotSupportedException();
         }
@@ -81,12 +81,12 @@ namespace Funcmd.Scripting
             }
         }
 
-        public override RuntimeValue Execute(RuntimeContext context)
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
         {
-            return this;
+            return new RuntimeValueWrapper(this, context);
         }
 
-        public override RuntimeValue Invoke(RuntimeContext context, RuntimeValueWrapper argument)
+        public override RuntimeValueWrapper Invoke(RuntimeContext context, RuntimeValueWrapper argument)
         {
             throw new NotSupportedException();
         }
@@ -125,12 +125,12 @@ namespace Funcmd.Scripting
             }
         }
 
-        public override RuntimeValue Execute(RuntimeContext context)
+        public override RuntimeValueWrapper Execute(RuntimeContext context)
         {
             throw new NotImplementedException();
         }
 
-        public override RuntimeValue Invoke(RuntimeContext context, RuntimeValueWrapper argument)
+        public override RuntimeValueWrapper Invoke(RuntimeContext context, RuntimeValueWrapper argument)
         {
             throw new NotSupportedException();
         }

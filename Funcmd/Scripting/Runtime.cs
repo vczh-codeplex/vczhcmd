@@ -19,20 +19,22 @@ namespace Funcmd.Scripting
     internal class RuntimeValueWrapper
     {
         public RuntimeValue Value { get; private set; }
-        public RuntimeContext context { get; private set; }
+        public RuntimeContext Context { get; private set; }
 
         private void EnsureValueExecuted()
         {
             if (!Value.IsReady)
             {
-                Value = Value.Execute(context);
+                RuntimeValueWrapper valueWrapper = Value.Execute(Context);
+                Value = valueWrapper.Value;
+                Context = valueWrapper.Context;
             }
         }
 
         public RuntimeValueWrapper(RuntimeValue value, RuntimeContext context)
         {
             this.Value = value;
-            this.context = context;
+            this.Context = context;
         }
 
         public bool IsInvokable
@@ -52,14 +54,20 @@ namespace Funcmd.Scripting
                 return Value.RuntimeObject;
             }
         }
+
+        public RuntimeValueWrapper Invoke(RuntimeValueWrapper argument)
+        {
+            EnsureValueExecuted();
+            return Value.Invoke(Context, argument);
+        }
     }
 
     internal abstract class RuntimeValue
     {
         public abstract bool IsReady { get; }
         public abstract bool IsInvokable { get; }
-        public abstract RuntimeValue Execute(RuntimeContext context);
-        public abstract RuntimeValue Invoke(RuntimeContext context, RuntimeValueWrapper argument);
+        public abstract RuntimeValueWrapper Execute(RuntimeContext context);
+        public abstract RuntimeValueWrapper Invoke(RuntimeContext context, RuntimeValueWrapper argument);
         public abstract object RuntimeObject { get; }
     }
 }
