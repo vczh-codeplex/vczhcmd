@@ -17,7 +17,7 @@ namespace Funcmd.Scripting
         {
         }
 
-        public virtual RuntimeValue Execute(RuntimeContext context)
+        public virtual RuntimeValueWrapper Execute(RuntimeContext context)
         {
             throw new NotSupportedException();
         }
