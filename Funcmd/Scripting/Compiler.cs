@@ -168,6 +168,7 @@ namespace Funcmd.Scripting
                     return (Expression)new CaseExpression()
                     {
                         TokenPosition = p.Value1.TokenPosition,
+                        Source = p.Value1,
                         Pairs = p.Value2.Select(pair => new CaseExpression.CasePair()
                         {
                             Pattern = pair.Value1,

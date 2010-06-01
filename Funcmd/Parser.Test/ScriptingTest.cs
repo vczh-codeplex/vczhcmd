@@ -101,14 +101,43 @@ namespace Parser.Test
         [TestMethod]
         public void ParseCase()
         {
-            Parse(
+            var context = Parse(
+                "let first (x:xs) = x;\r\n" +
                 "let sum (x:xs) = case x of\r\n" +
                 "  'leaf => first xs;\r\n" +
                 "  'tree => case xs of\r\n" +
-                "    [a,b]=>add a b;\r\n" +
+                "    [a,b]=>add (sum a) (sum b);\r\n" +
                 "  end;\r\n" +
                 "end;\r\n"
                 );
+            var sum = context["sum"];
+            var tree = ScriptingValue.CreateArray(
+                    new Flag("tree"),
+                    ScriptingValue.CreateArray(
+                        new Flag("tree"),
+                        ScriptingValue.CreateArray(
+                            new Flag("leaf"),
+                            1
+                        ),
+                        ScriptingValue.CreateArray(
+                            new Flag("leaf"),
+                            2
+                        )
+                    ),
+                    ScriptingValue.CreateArray(
+                        new Flag("tree"),
+                        ScriptingValue.CreateArray(
+                            new Flag("leaf"),
+                            3
+                        ),
+                        ScriptingValue.CreateArray(
+                            new Flag("leaf"),
+                            4
+                        )
+                    )
+                );
+            var result = sum.Invoke(tree);
+            Assert.AreEqual(10, (int)result.Value);
         }
 
         [TestMethod]
