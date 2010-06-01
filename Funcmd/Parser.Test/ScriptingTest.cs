@@ -10,9 +10,9 @@ namespace Parser.Test
     [TestClass]
     public class ScriptingTest
     {
-        private RuntimeContext Parse(string code)
+        private Dictionary<string, ScriptingValue> Parse(string code)
         {
-            return new ScriptingParser().Parse(code).BuildContext();
+            return new Scripting().Parse(code);
         }
 
         [TestMethod]
@@ -22,10 +22,10 @@ namespace Parser.Test
                 "let sum [] = [];\r\n" +
                 "let sum (x:xs) = add x (sum xs);\r\n"
                 );
-            var sum = context.Values["sum"];
-            var array = RuntimeValueWrapper.CreateArray(1, 2, 3, 4, 5);
+            var sum = context["sum"];
+            var array = ScriptingValue.CreateArray(1, 2, 3, 4, 5);
             var result = sum.Invoke(array);
-            Assert.AreEqual(15, (int)result.RuntimeObject);
+            Assert.AreEqual(15, (int)result.Value);
         }
 
         [TestMethod]
