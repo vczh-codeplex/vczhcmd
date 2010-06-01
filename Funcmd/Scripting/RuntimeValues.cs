@@ -102,6 +102,13 @@ namespace Funcmd.Scripting
 
     class RuntimeUnevaluatedValue : RuntimeValue
     {
+        public Expression UnevaluatedValue { get; private set; }
+
+        public RuntimeUnevaluatedValue(Expression unevaluatedValue)
+        {
+            this.UnevaluatedValue = unevaluatedValue;
+        }
+
         public override bool IsReady
         {
             get

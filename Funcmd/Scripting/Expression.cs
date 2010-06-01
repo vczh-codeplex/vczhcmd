@@ -13,7 +13,16 @@ namespace Funcmd.Scripting
 
     internal abstract class Expression : Element
     {
+        public virtual void BuildContext(RuntimeContext context)
+        {
+        }
+
         public virtual RuntimeValue Execute(RuntimeContext context)
+        {
+            throw new NotSupportedException();
+        }
+
+        public virtual bool Match(RuntimeContext context, RuntimeValueWrapper valueWrapper)
         {
             throw new NotSupportedException();
         }
@@ -22,5 +31,15 @@ namespace Funcmd.Scripting
     internal class Program
     {
         public List<Expression> Definitions { get; set; }
+
+        public RuntimeContext BuildContext()
+        {
+            RuntimeContext context = new RuntimeContext();
+            foreach (Expression e in Definitions)
+            {
+                e.BuildContext(context);
+            }
+            return context;
+        }
     }
 }

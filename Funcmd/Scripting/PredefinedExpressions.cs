@@ -58,6 +58,11 @@ namespace Funcmd.Scripting
     {
         public Expression Pattern { get; set; }
         public Expression Expression { get; set; }
+
+        public override void BuildContext(RuntimeContext context)
+        {
+            throw new NotSupportedException();
+        }
     }
 
     class LambdaExpression : Expression
@@ -71,5 +76,37 @@ namespace Funcmd.Scripting
         public string Name { get; set; }
         public List<Expression> Patterns { get; set; }
         public Expression Expression { get; set; }
+
+        public override void BuildContext(RuntimeContext context)
+        {
+            RuntimeInvokableValue invokableValue = new RuntimeInvokableValue();
+            if (context.Values.ContainsKey(Name))
+            {
+                RuntimeValueWrapper valueWrapper = context.Values[Name];
+                invokableValue = valueWrapper.Value as RuntimeInvokableValue;
+                if (invokableValue == null || this.Patterns.Count == 0)
+                {
+                    throw new Exception(string.Format("{0}不可重复定义。", Name));
+                }
+            }
+            if (this.Patterns.Count == 0)
+            {
+                context.Values.Add(Name, new RuntimeValueWrapper(new RuntimeUnevaluatedValue(Expression), context));
+            }
+            else
+            {
+                if (invokableValue == null)
+                {
+                    invokableValue = new RuntimeInvokableValue();
+                    context.Values.Add(Name, new RuntimeValueWrapper(invokableValue, context));
+                }
+
+                RuntimeInvokableValue.IncompletedExpression incompletedExpression = new RuntimeInvokableValue.IncompletedExpression();
+                incompletedExpression.context = new RuntimeContext();
+                incompletedExpression.Expression = Expression;
+                incompletedExpression.Patterns = new List<Expression>(Patterns);
+                invokableValue.IncompletedExpressions.Add(incompletedExpression);
+            }
+        }
     }
 }

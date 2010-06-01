@@ -10,9 +10,9 @@ namespace Parser.Test
     [TestClass]
     public class ScriptingTest
     {
-        private Program Parse(string code)
+        private RuntimeContext Parse(string code)
         {
-            return new ScriptingParser().Parse(code);
+            return new ScriptingParser().Parse(code).BuildContext();
         }
 
         [TestMethod]
