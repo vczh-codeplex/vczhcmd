@@ -53,7 +53,7 @@ namespace Funcmd.Scripting
 
         private void EnsureValueExecuted()
         {
-            if (!Value.IsReady)
+            while (!Value.IsReady)
             {
                 RuntimeValueWrapper valueWrapper = Value.Execute(Context);
                 Value = valueWrapper.Value;

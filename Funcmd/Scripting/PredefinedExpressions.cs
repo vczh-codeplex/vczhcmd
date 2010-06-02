@@ -88,7 +88,7 @@ namespace Funcmd.Scripting
         public override RuntimeValueWrapper Execute(RuntimeContext context)
         {
             return new RuntimeValueWrapper(new RuntimeEvaluatedValue(
-                Elements.Select(e => e.Execute(context)).ToArray()
+                Elements.Select(e => new RuntimeValueWrapper(new RuntimeUnevaluatedValue(e), context)).ToArray()
                 ), context);
         }
 
@@ -122,7 +122,7 @@ namespace Funcmd.Scripting
             return new RuntimeValueWrapper(new RuntimeEvaluatedValue(
                 Elements
                     .Take(Elements.Count - 1)
-                    .Select(e => e.Execute(context))
+                    .Select(e => new RuntimeValueWrapper(new RuntimeUnevaluatedValue(e), context))
                     .Union((RuntimeValueWrapper[])Elements.Last().Execute(context).RuntimeObject)
                     .ToArray()
                 ), context);
@@ -189,7 +189,7 @@ namespace Funcmd.Scripting
                 };
                 if (pair.Pattern.Match(newContext, valueToBeMatched))
                 {
-                    return pair.Expression.Execute(newContext);
+                    return new RuntimeValueWrapper(new RuntimeUnevaluatedValue(pair.Expression), newContext);
                 }
             }
             throw new Exception("模式匹配不成功。");
@@ -203,7 +203,6 @@ namespace Funcmd.Scripting
 
         public override RuntimeValueWrapper Execute(RuntimeContext context)
         {
-            RuntimeValueWrapper result = new RuntimeValueWrapper(new RuntimeEvaluatedValue(new object()), context);
             RuntimeContext newContext = new RuntimeContext()
             {
                 PreviousContext = context
@@ -212,11 +211,14 @@ namespace Funcmd.Scripting
             {
                 e.BuildContext(newContext);
             }
-            foreach (Expression e in Expressions)
+            if (Expressions.Count > 0)
             {
-                result = e.Execute(newContext);
+                return new RuntimeValueWrapper(new RuntimeUnevaluatedValue(Expressions.Last()), newContext);
             }
-            return result;
+            else
+            {
+                return new RuntimeValueWrapper(new RuntimeEvaluatedValue(new object()), context);
+            }
         }
     }
 
