@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calendar\ICalendar.cs" />
+    <Compile Include="Calendar\MonthCalendar.cs" />
     <Compile Include="CommandForm.cs">
       <SubType>Form</SubType>
     </Compile>
