@@ -8,11 +8,11 @@ namespace Funcmd.CalendarPainter
 {
     public class SelectorCalendarPainter : ICalendarPainter
     {
-        public void DrawDay(Graphics graphics, Rectangle bounds, DateTime day, Font font, string text)
+        public void DrawDay(Graphics graphics, Rectangle bounds, DateTime day, Font font, string text, bool selected)
         {
             CalendarPainterNeededEventArgs e = new CalendarPainterNeededEventArgs(day);
             PainterNeeded(this, e);
-            e.Painter.DrawDay(graphics, bounds, day, font, text);
+            e.Painter.DrawDay(graphics, bounds, day, font, text, selected);
         }
 
         public event CalendarPainterNeededHandler PainterNeeded;

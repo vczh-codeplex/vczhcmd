@@ -10,11 +10,6 @@ namespace Funcmd.CalendarPainter
     {
         public abstract ICalendarPainter GetNormalPainter();
 
-        public virtual ICalendarPainter GetSelectedPainter()
-        {
-            return GetNormalPainter();
-        }
-
         public virtual ICalendarPainter GetInfoPainter()
         {
             return GetNormalPainter();

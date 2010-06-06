@@ -18,9 +18,9 @@ namespace Funcmd.Calendar
         private const int YearForward = 3;
         private const int DayStart = 4;
 
-        private DateTime currentDay = default(DateTime);
+        private DateTime currentDay = DateTime.MinValue;
         private int lastButton = -1;
-        private Font font = new Font("微软雅黑", 12, GraphicsUnit.Pixel);
+        private Font font = new Font("宋体", 10, GraphicsUnit.Pixel);
 
         public event CalendarDaySelectedHandler CalendarDayEntered;
         public event CalendarDaySelectedHandler CalendarDaySelected;
@@ -28,7 +28,7 @@ namespace Funcmd.Calendar
 
         public MonthCalendar()
         {
-            currentDay = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            currentDay = DateTime.MinValue;
         }
 
         public Size CalendarSize
@@ -36,6 +36,14 @@ namespace Funcmd.Calendar
             get
             {
                 return new Size(ButtonSize * 35 + ButtonSpace * 36, ButtonSize + ButtonSpace * 2);
+            }
+        }
+
+        public string Caption
+        {
+            get
+            {
+                return currentDay.Year.ToString() + "年" + currentDay.Month.ToString() + "月";
             }
         }
 
@@ -47,9 +55,10 @@ namespace Funcmd.Calendar
             }
             set
             {
-                if (currentDay != value)
+                DateTime day = new DateTime(value.Year, value.Month, 1);
+                if (currentDay != day)
                 {
-                    currentDay = value;
+                    currentDay = day;
                     if (CurrentDayChanged != null)
                     {
                         CurrentDayChanged(this, new EventArgs());
@@ -62,10 +71,11 @@ namespace Funcmd.Calendar
 
         public void Draw(Graphics graphics, Point location, Point cursor)
         {
+            graphics.FillRectangle(Brushes.White, new Rectangle(location, CalendarSize));
             int days = DateTime.DaysInMonth(currentDay.Year, currentDay.Month);
             for (int i = 0; i < days + DayStart; i++)
             {
-                Painter.DrawDay(graphics, GetButtonBounds(location, i), GetButtonDay(i), font, GetButtonText(i));
+                Painter.DrawDay(graphics, GetButtonBounds(location, i), GetButtonDay(i), font, GetButtonText(i), lastButton == i);
             }
         }
 
@@ -102,10 +112,10 @@ namespace Funcmd.Calendar
                         CurrentDay = new DateTime(currentDay.Year - 1, currentDay.Month, 1);
                         break;
                     case MonthBackward:
-                        CurrentDay = new DateTime(currentDay.Year, currentDay.Month, 1 - 1);
+                        CurrentDay = new DateTime(currentDay.Year, currentDay.Month - 1, 1);
                         break;
                     case MonthForward:
-                        CurrentDay = new DateTime(currentDay.Year, currentDay.Month, 1 + 1);
+                        CurrentDay = new DateTime(currentDay.Year, currentDay.Month + 1, 1);
                         break;
                     case YearForward:
                         CurrentDay = new DateTime(currentDay.Year + 1, currentDay.Month, 1);
@@ -127,7 +137,7 @@ namespace Funcmd.Calendar
                 case YearBackward: return "<<";
                 case MonthBackward: return "<";
                 case MonthForward: return ">";
-                case YearForward: return ">";
+                case YearForward: return ">>";
                 default: return (index - DayStart + 1).ToString();
             }
         }

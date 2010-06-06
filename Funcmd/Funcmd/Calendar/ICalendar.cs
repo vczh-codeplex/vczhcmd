@@ -12,6 +12,7 @@ namespace Funcmd.Calendar
     public interface ICalendar
     {
         Size CalendarSize { get; }
+        string Caption { get; }
         DateTime CurrentDay { get; set; }
         ICalendarPainter Painter { get; set; }
 
@@ -35,5 +36,5 @@ namespace Funcmd.Calendar
         }
     }
 
-    public delegate void CalendarDaySelectedHandler(object sender,CalendarDaySelectedEventArgs e);
+    public delegate void CalendarDaySelectedHandler(object sender, CalendarDaySelectedEventArgs e);
 }
