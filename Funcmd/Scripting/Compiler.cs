@@ -31,6 +31,7 @@ namespace Funcmd.Scripting
 
     internal enum TokenType
     {
+        Keyword,
         Integer,
         Float,
         String,
@@ -46,8 +47,8 @@ namespace Funcmd.Scripting
         Equal,
         Semicolon,
         Lambda,
+        Operator,
         Blank,
-        Keyword,
     }
 
     internal class ScriptingParser : LexerParserBase<TokenType, Program>
@@ -59,13 +60,15 @@ namespace Funcmd.Scripting
 
         protected override void Initialize(out Lexer<TokenType> lexer, out IParser<Lexer<TokenType>.Token, Program, object> parser)
         {
+            string operatorRegex = @"([+\-*/\\<>=%:&|^!])+";
+
             lexer = new Lexer<TokenType>();
             lexer.AddToken(@"case|of|end|let|do|var", TokenType.Keyword);
             lexer.AddToken(@"\d+\.\d+", TokenType.Float);
             lexer.AddToken(@"\d+", TokenType.Integer);
             lexer.AddToken(@"""([^""]|\.)*""", TokenType.String);
             lexer.AddToken(@"'[a-zA-Z_]\w*", TokenType.Flag);
-            lexer.AddToken(@"[a-zA-Z_]\w*", TokenType.Identifier);
+            lexer.AddToken(@"([a-zA-Z_]\w*)|(\(" + operatorRegex + @"\))", TokenType.Identifier);
             lexer.AddToken(@"\(", TokenType.OpenBracket);
             lexer.AddToken(@"\)", TokenType.CloseBracket);
             lexer.AddToken(@"\[", TokenType.OpenSquare);
@@ -76,11 +79,24 @@ namespace Funcmd.Scripting
             lexer.AddToken(@"=", TokenType.Equal);
             lexer.AddToken(@";", TokenType.Semicolon);
             lexer.AddToken(@"\\", TokenType.Lambda);
+            lexer.AddToken(operatorRegex, TokenType.Operator);
             lexer.AddToken(@"\s+", TokenType.Blank);
 
-            var expression = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
             var simple = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
             var primitive = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
+
+            var termExpr = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
+            var mulExpr = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
+            var addExpr = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
+            var andExpr = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
+            var orExpr = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
+            var compExpr = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
+            var bxorExpr = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
+            var bandExpr = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
+            var borExpr = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
+            var opExpr = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
+
+            var expression = opExpr;
             var program = new RuleParser<Lexer<TokenType>.Token, Program, object>();
 
             var INTEGER = tk(TokenType.Integer, "表达式").Convert(t => (Expression)new PrimitiveExpression()
@@ -236,7 +252,7 @@ namespace Funcmd.Scripting
             primitive.Imply(Alt(
                 match, monad, monadvar, lambda, def, simple));
 
-            expression.Imply(Seq(primitive, primitive.Loop()).Convert(p =>
+            termExpr.Imply(Seq(primitive, primitive.Loop()).Convert(p =>
             {
                 var t = p.Value1;
                 foreach (var exp in p.Value2)
@@ -251,9 +267,43 @@ namespace Funcmd.Scripting
                 return t;
             }));
 
+            mulExpr.Imply(Seq(termExpr, Seq(tks(new string[] { @"*", @"/" }), termExpr).Loop()).Convert(ToOperator));
+            addExpr.Imply(Seq(mulExpr, Seq(tks(new string[] { @"+", @"-" }), mulExpr).Loop()).Convert(ToOperator));
+            andExpr.Imply(Seq(addExpr, Seq(tk(@"&"), addExpr).Loop()).Convert(ToOperator));
+            orExpr.Imply(Seq(andExpr, Seq(tk(@"|"), andExpr).Loop()).Convert(ToOperator));
+            compExpr.Imply(Seq(orExpr, Seq(tks(new string[] { @"<", @">", @"<=", @">=", @"<>", @"==" }), orExpr).Loop()).Convert(ToOperator));
+            bxorExpr.Imply(Seq(compExpr, Seq(tk(@"^"), compExpr).Loop()).Convert(ToOperator));
+            bandExpr.Imply(Seq(bxorExpr, Seq(tk(@"&&"), bxorExpr).Loop()).Convert(ToOperator));
+            borExpr.Imply(Seq(bandExpr, Seq(tk(@"||"), bandExpr).Loop()).Convert(ToOperator));
+            opExpr.Imply(Seq(borExpr, Seq(tk(TokenType.Operator), borExpr).Loop()).Convert(ToOperator));
+
             program.Imply(expression.Left(tk(";")).LoopToEnd().Convert(es => new Program() { Definitions = es.ToList() }));
 
             parser = program;
+        }
+
+        private Expression ToOperator(Pair<Expression, IEnumerable<Pair<Lexer<TokenType>.Token, Expression>>> input)
+        {
+            Expression result = input.Value1;
+            foreach (var op in input.Value2)
+            {
+                result = new InvokeExpression()
+                {
+                    TokenPosition = op.Value1,
+                    Function = new InvokeExpression()
+                    {
+                        TokenPosition = op.Value1,
+                        Function = new IdentifierExpression()
+                        {
+                            TokenPosition = op.Value1,
+                            Name = "(" + op.Value1.Value + ")"
+                        },
+                        Argument = result
+                    },
+                    Argument = op.Value2
+                };
+            }
+            return result;
         }
 
         private string Escape(string s)

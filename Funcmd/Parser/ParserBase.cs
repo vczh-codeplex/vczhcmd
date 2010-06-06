@@ -90,7 +90,12 @@ namespace Funcmd.Parser
 
         protected IParser<Lexer<I>.Token, Lexer<I>.Token, C> tk(string value, string name = "")
         {
-            return new StringParser<I, C>(value, (name == "" ? value : name));
+            return new StringParser<I, C>(new string[] { value }, (name == "" ? value : name));
+        }
+
+        protected IParser<Lexer<I>.Token, Lexer<I>.Token, C> tks(string[] values, string name = "")
+        {
+            return new StringParser<I, C>(values, (name == "" ? values.Aggregate((a, b) => a + ", " + b) : name));
         }
 
         protected RuleParser<Lexer<I>.Token, int, object> CreateRule()
