@@ -10,8 +10,9 @@ namespace Funcmd.Calendar
 {
     public class MonthCalendar : ICalendar
     {
-        private const int ButtonSize = 16;
-        private const int ButtonSpace = 2;
+        private const int ButtonSize = 14;
+        private const int ButtonSpaceWidth = 2;
+        private const int ButtonSpaceHeight = 5;
         private const int YearBackward = 0;
         private const int MonthBackward = 1;
         private const int MonthForward = 2;
@@ -35,7 +36,7 @@ namespace Funcmd.Calendar
         {
             get
             {
-                return new Size(ButtonSize * 35 + ButtonSpace * 36, ButtonSize + ButtonSpace * 2);
+                return new Size(ButtonSize * 35 + ButtonSpaceWidth * 36, ButtonSize + ButtonSpaceHeight * 2);
             }
         }
 
@@ -144,7 +145,7 @@ namespace Funcmd.Calendar
 
         private Rectangle GetButtonBounds(Point location, int index)
         {
-            return new Rectangle(new Point(location.X + index * (ButtonSize + ButtonSpace) + ButtonSpace, location.Y + ButtonSpace), new Size(ButtonSize, ButtonSize));
+            return new Rectangle(new Point(location.X + index * (ButtonSize + ButtonSpaceWidth) + ButtonSpaceWidth, location.Y + ButtonSpaceHeight), new Size(ButtonSize, ButtonSize));
         }
 
         private int GetButton(Point location, Point cursor)

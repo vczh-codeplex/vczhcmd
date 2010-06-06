@@ -37,6 +37,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>112_RefreshArrow_Blue.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -55,6 +58,7 @@
     <Compile Include="Calendar\ICalendar.cs" />
     <Compile Include="CalendarPainter\ICalendarPainter.cs" />
     <Compile Include="Calendar\MonthCalendar.cs" />
+    <Compile Include="Calendar\NoCalendar.cs" />
     <Compile Include="CommandForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +90,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="112_RefreshArrow_Blue.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
