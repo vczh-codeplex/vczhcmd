@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Funcmd.Calendar;
 using Funcmd.CalendarPainter;
 using MonthCalendar = Funcmd.Calendar.MonthCalendar;
+using System.Globalization;
 
 namespace Funcmd
 {
@@ -56,6 +57,7 @@ namespace Funcmd
             calendarBuffer = new Bitmap(this.calendar.CalendarSize.Width, this.calendar.CalendarSize.Height);
             calendarGraphics = Graphics.FromImage(calendarBuffer);
             focusDay = DateTime.MaxValue;
+            labelCaption.Text = this.calendar.Caption;
 
             this.calendar.CurrentDay = DateTime.Today;
             this.calendar.MouseMove(new Point(0, 0), panelCalendar.PointToClient(Control.MousePosition));
@@ -72,6 +74,34 @@ namespace Funcmd
         {
             focusDay = e.Day;
             DrawCalendar();
+
+            string text = e.Day.ToLongDateString();
+            switch (e.Day.DayOfWeek)
+            {
+                case DayOfWeek.Sunday:
+                    text += " 星期天";
+                    break;
+                case DayOfWeek.Monday:
+                    text += " 星期一";
+                    break;
+                case DayOfWeek.Tuesday:
+                    text += " 星期二";
+                    break;
+                case DayOfWeek.Wednesday:
+                    text += " 星期三";
+                    break;
+                case DayOfWeek.Thursday:
+                    text += " 星期四";
+                    break;
+                case DayOfWeek.Friday:
+                    text += " 星期五";
+                    break;
+                case DayOfWeek.Saturday:
+                    text += " 星期六";
+                    break;
+            }
+            toolTipInfo.RemoveAll();
+            toolTipInfo.SetToolTip(panelCalendar, text);
         }
 
         private void calendar_CalendarDaySelected(object sender, CalendarDaySelectedEventArgs e)
@@ -101,7 +131,16 @@ namespace Funcmd
             {
                 int x = Control.MousePosition.X - lastCursor.X;
                 int y = Control.MousePosition.Y - lastCursor.Y;
-                this.Location = new Point(this.Left + x, this.Top + y);
+                Point pos = new Point(this.Left + x, Screen.PrimaryScreen.WorkingArea.Top);
+                if (pos.X < Screen.PrimaryScreen.WorkingArea.Left)
+                {
+                    pos.X = Screen.PrimaryScreen.WorkingArea.Left;
+                }
+                else if (pos.X + this.Width > Screen.PrimaryScreen.WorkingArea.Right)
+                {
+                    pos.X = Screen.PrimaryScreen.WorkingArea.Right - this.Width;
+                }
+                this.Location = pos;
                 lastCursor = Control.MousePosition;
             }
         }
@@ -129,6 +168,11 @@ namespace Funcmd
         private void panelCalendar_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawImage(calendarBuffer, new Point(0, 0));
+        }
+
+        private void menuItemNotifyIconExit_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

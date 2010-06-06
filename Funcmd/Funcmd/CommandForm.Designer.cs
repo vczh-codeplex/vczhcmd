@@ -28,15 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CommandForm));
             this.labelCaption = new System.Windows.Forms.Label();
             this.textBoxCommand = new System.Windows.Forms.TextBox();
             this.panelBackground = new System.Windows.Forms.Panel();
             this.tableInfo = new System.Windows.Forms.TableLayoutPanel();
             this.panelCalendar = new System.Windows.Forms.Panel();
             this.tableCommand = new System.Windows.Forms.TableLayoutPanel();
+            this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuNotifyIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.menuItemNotifyIconExit = new System.Windows.Forms.ToolStripMenuItem();
             this.panelBackground.SuspendLayout();
             this.tableInfo.SuspendLayout();
             this.tableCommand.SuspendLayout();
+            this.contextMenuNotifyIcon.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelCaption
@@ -58,7 +65,7 @@
             this.textBoxCommand.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxCommand.Location = new System.Drawing.Point(3, 39);
             this.textBoxCommand.Name = "textBoxCommand";
-            this.textBoxCommand.Size = new System.Drawing.Size(194, 21);
+            this.textBoxCommand.Size = new System.Drawing.Size(294, 21);
             this.textBoxCommand.TabIndex = 1;
             // 
             // panelBackground
@@ -68,14 +75,15 @@
             this.panelBackground.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelBackground.Location = new System.Drawing.Point(0, 0);
             this.panelBackground.Name = "panelBackground";
-            this.panelBackground.Size = new System.Drawing.Size(462, 102);
+            this.panelBackground.Size = new System.Drawing.Size(562, 102);
             this.panelBackground.TabIndex = 2;
             // 
             // tableInfo
             // 
+            this.tableInfo.BackColor = System.Drawing.Color.White;
             this.tableInfo.ColumnCount = 3;
             this.tableInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
-            this.tableInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
             this.tableInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableInfo.Controls.Add(this.panelCalendar, 2, 0);
             this.tableInfo.Controls.Add(this.labelCaption, 0, 0);
@@ -85,13 +93,13 @@
             this.tableInfo.Name = "tableInfo";
             this.tableInfo.RowCount = 1;
             this.tableInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableInfo.Size = new System.Drawing.Size(460, 100);
+            this.tableInfo.Size = new System.Drawing.Size(560, 100);
             this.tableInfo.TabIndex = 3;
             // 
             // panelCalendar
             // 
             this.panelCalendar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCalendar.Location = new System.Drawing.Point(360, 0);
+            this.panelCalendar.Location = new System.Drawing.Point(460, 0);
             this.panelCalendar.Margin = new System.Windows.Forms.Padding(0);
             this.panelCalendar.Name = "panelCalendar";
             this.panelCalendar.Size = new System.Drawing.Size(100, 100);
@@ -102,6 +110,7 @@
             // 
             // tableCommand
             // 
+            this.tableCommand.BackColor = System.Drawing.Color.White;
             this.tableCommand.ColumnCount = 1;
             this.tableCommand.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableCommand.Controls.Add(this.textBoxCommand, 0, 1);
@@ -113,15 +122,42 @@
             this.tableCommand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableCommand.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableCommand.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableCommand.Size = new System.Drawing.Size(200, 100);
+            this.tableCommand.Size = new System.Drawing.Size(300, 100);
             this.tableCommand.TabIndex = 1;
+            // 
+            // toolTipInfo
+            // 
+            this.toolTipInfo.IsBalloon = true;
+            // 
+            // notifyIcon
+            // 
+            this.notifyIcon.BalloonTipText = "Vczh Functional Command (陈梓瀚)";
+            this.notifyIcon.BalloonTipTitle = "Vczh Functional Command (陈梓瀚)";
+            this.notifyIcon.ContextMenuStrip = this.contextMenuNotifyIcon;
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "Vczh Functional Command (陈梓瀚)";
+            this.notifyIcon.Visible = true;
+            // 
+            // contextMenuNotifyIcon
+            // 
+            this.contextMenuNotifyIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemNotifyIconExit});
+            this.contextMenuNotifyIcon.Name = "contextMenuNotifyIcon";
+            this.contextMenuNotifyIcon.Size = new System.Drawing.Size(153, 48);
+            // 
+            // menuItemNotifyIconExit
+            // 
+            this.menuItemNotifyIconExit.Name = "menuItemNotifyIconExit";
+            this.menuItemNotifyIconExit.Size = new System.Drawing.Size(152, 22);
+            this.menuItemNotifyIconExit.Text = "退出(&X)";
+            this.menuItemNotifyIconExit.Click += new System.EventHandler(this.menuItemNotifyIconExit_Click);
             // 
             // CommandForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(462, 102);
+            this.ClientSize = new System.Drawing.Size(562, 102);
             this.Controls.Add(this.panelBackground);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "CommandForm";
@@ -132,6 +168,7 @@
             this.tableInfo.ResumeLayout(false);
             this.tableCommand.ResumeLayout(false);
             this.tableCommand.PerformLayout();
+            this.contextMenuNotifyIcon.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -144,6 +181,10 @@
         private System.Windows.Forms.TableLayoutPanel tableInfo;
         private System.Windows.Forms.TableLayoutPanel tableCommand;
         private System.Windows.Forms.Panel panelCalendar;
+        private System.Windows.Forms.ToolTip toolTipInfo;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.ContextMenuStrip contextMenuNotifyIcon;
+        private System.Windows.Forms.ToolStripMenuItem menuItemNotifyIconExit;
     }
 }
 
