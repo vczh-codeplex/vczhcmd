@@ -50,6 +50,11 @@ namespace Funcmd.Scripting
             return new ScriptingValue(result);
         }
 
+        public ScriptingValue RunStateMonad(ScriptingValue state)
+        {
+            return new ScriptingValue(StateMonad.RunStateMonad(ValueWrapper, state.ValueWrapper).result);
+        }
+
         #endregion
 
         #region Array

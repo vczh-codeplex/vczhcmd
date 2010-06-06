@@ -109,15 +109,19 @@ namespace Funcmd.Scripting
                     if (var == null)
                     {
                         expression.BuildContext(newContext);
-                        result = RunStateMonad(new RuntimeValueWrapper(new RuntimeUnevaluatedValue(expression), context), result.state.RuntimeObject);
+                        result = RunStateMonad(new RuntimeValueWrapper(new RuntimeUnevaluatedValue(expression), context), result.state);
                     }
                     else
                     {
-                        result = RunStateMonad(new RuntimeValueWrapper(new RuntimeUnevaluatedValue(var.Expression), context), result.state.RuntimeObject);
+                        result = RunStateMonad(new RuntimeValueWrapper(new RuntimeUnevaluatedValue(var.Expression), context), result.state);
                         if (!var.Pattern.Match(context, result.result))
                         {
                             throw new Exception("模式匹配不成功。");
                         }
+                    }
+                    if (!(bool)continueFunction.Invoke(result.state).RuntimeObject)
+                    {
+                        break;
                     }
                 }
                 if (result.result == null)
@@ -133,9 +137,9 @@ namespace Funcmd.Scripting
             }, context);
         }
 
-        public static StatePackage RunStateMonad(RuntimeValueWrapper monad, object state)
+        public static StatePackage RunStateMonad(RuntimeValueWrapper monad, RuntimeValueWrapper state)
         {
-            return monad.Invoke(new RuntimeValueWrapper(new RuntimeEvaluatedValue(state), new RuntimeContext())).RuntimeObject as StatePackage;
+            return monad.Invoke(state).RuntimeObject as StatePackage;
         }
 
         public static RuntimeValueWrapper ReturnStateMonadValue(RuntimeValueWrapper[] arguments)
