@@ -203,22 +203,17 @@ namespace Funcmd.Scripting
 
         public override RuntimeValueWrapper Execute(RuntimeContext context)
         {
-            RuntimeContext newContext = new RuntimeContext()
+            Monad monad = null;
+            if (MonadProvider == null)
             {
-                PreviousContext = context
-            };
-            foreach (Expression e in Expressions)
-            {
-                e.BuildContext(newContext);
-            }
-            if (Expressions.Count > 0)
-            {
-                return new RuntimeValueWrapper(new RuntimeUnevaluatedValue(Expressions.Last()), newContext);
+                monad = new PureMonad();
             }
             else
             {
-                return new RuntimeValueWrapper(new RuntimeEvaluatedValue(new object()), context);
+                RuntimeValueWrapper monadWrapper = MonadProvider.Execute(context);
+                monad = (Monad)monadWrapper.RuntimeObject;
             }
+            return monad.Execute(this, context);
         }
     }
 
@@ -229,7 +224,7 @@ namespace Funcmd.Scripting
 
         public override void BuildContext(RuntimeContext context)
         {
-            if (!Pattern.Match(context, Expression.Execute(context)))
+            if (!Pattern.Match(context, new RuntimeValueWrapper(new RuntimeUnevaluatedValue(Expression), context)))
             {
                 throw new Exception("模式匹配不成功。");
             }

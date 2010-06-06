@@ -130,6 +130,7 @@ namespace Funcmd.Scripting
         {
             this.context = context;
             this.context.PreviousContext = new RuntimeContext();
+            PredefinedLibrary.LoadLibrary(this);
         }
 
         public ScriptingValue this[string index]
