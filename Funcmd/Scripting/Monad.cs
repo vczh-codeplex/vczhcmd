@@ -69,4 +69,82 @@ namespace Funcmd.Scripting
             }
         }
     }
+
+    class StateMonad : Monad
+    {
+        public class StatePackage
+        {
+            public RuntimeValueWrapper state = null;
+            public RuntimeValueWrapper result = null;
+        }
+
+        private RuntimeValueWrapper continueFunction;
+
+        public StateMonad(RuntimeValueWrapper continueFunction)
+        {
+            this.continueFunction = continueFunction;
+        }
+
+        public override RuntimeValueWrapper Execute(DoExpression e, RuntimeContext context)
+        {
+            Func<RuntimeValueWrapper[], RuntimeValueWrapper> monadFunction = arguments =>
+            {
+                StatePackage result = new StatePackage()
+                {
+                    result = null,
+                    state = arguments[0]
+                };
+                RuntimeContext newContext = new RuntimeContext()
+                {
+                    PreviousContext = context
+                };
+                newContext.Values.Add("return", new RuntimeValueWrapper(new RuntimeExternalValue()
+                {
+                    ExternalFunction = ReturnStateMonadValue,
+                    ParameterCount = 2
+                }, context));
+                foreach (Expression expression in e.Expressions)
+                {
+                    VarExpression var = expression as VarExpression;
+                    if (var == null)
+                    {
+                        expression.BuildContext(newContext);
+                        result = RunStateMonad(new RuntimeValueWrapper(new RuntimeUnevaluatedValue(expression), context), result.state.RuntimeObject);
+                    }
+                    else
+                    {
+                        result = RunStateMonad(new RuntimeValueWrapper(new RuntimeUnevaluatedValue(var.Expression), context), result.state.RuntimeObject);
+                        if (!var.Pattern.Match(context, result.result))
+                        {
+                            throw new Exception("模式匹配不成功。");
+                        }
+                    }
+                }
+                if (result.result == null)
+                {
+                    result.result = new RuntimeValueWrapper(new RuntimeEvaluatedValue(new object()), context);
+                }
+                return new RuntimeValueWrapper(new RuntimeEvaluatedValue(result), context);
+            };
+            return new RuntimeValueWrapper(new RuntimeExternalValue()
+            {
+                ExternalFunction = monadFunction,
+                ParameterCount = 1
+            }, context);
+        }
+
+        public static StatePackage RunStateMonad(RuntimeValueWrapper monad, object state)
+        {
+            return monad.Invoke(new RuntimeValueWrapper(new RuntimeEvaluatedValue(state), new RuntimeContext())).RuntimeObject as StatePackage;
+        }
+
+        public static RuntimeValueWrapper ReturnStateMonadValue(RuntimeValueWrapper[] arguments)
+        {
+            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(new StatePackage()
+            {
+                result = arguments[0],
+                state = arguments[1]
+            }), new RuntimeContext());
+        }
+    }
 }
