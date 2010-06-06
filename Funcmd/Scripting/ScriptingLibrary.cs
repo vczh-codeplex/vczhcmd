@@ -5,12 +5,18 @@ using System.Text;
 
 namespace Funcmd.Scripting
 {
-    static class PredefinedLibrary
+    static class ScriptingLibrary
     {
         public static void LoadLibrary(ScriptingEnvironment e)
         {
             e.DefineValue("pure", ScriptingValue.CreateValue(new PureMonad()));
             e.DefineValue("ordered", ScriptingValue.CreateValue(new OrderedMonad()));
+            e.DefineValue("state", ScriptingValue.CreateFunction(State, 1));
+        }
+
+        public static ScriptingValue State(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateValue(new StateMonad(arguments[0].ValueWrapper));
         }
     }
 }
