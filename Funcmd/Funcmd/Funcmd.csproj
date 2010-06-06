@@ -49,8 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalendarPainter\CalendarPainterFactory.cs" />
+    <Compile Include="CalendarPainter\DefaultPainterFactory.cs" />
+    <Compile Include="CalendarPainter\SelectorCalendarPainter.cs" />
     <Compile Include="Calendar\ICalendar.cs" />
-    <Compile Include="Calendar\ICalendarPainter.cs" />
+    <Compile Include="CalendarPainter\ICalendarPainter.cs" />
     <Compile Include="Calendar\MonthCalendar.cs" />
     <Compile Include="CommandForm.cs">
       <SubType>Form</SubType>

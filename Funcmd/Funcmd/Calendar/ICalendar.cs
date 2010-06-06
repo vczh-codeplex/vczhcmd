@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using System.Xml.Linq;
 using System.Windows.Forms;
+using Funcmd.CalendarPainter;
 
 namespace Funcmd.Calendar
 {
