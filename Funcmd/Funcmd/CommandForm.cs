@@ -174,5 +174,15 @@ namespace Funcmd
         {
             Close();
         }
+
+        private void menuItemNotifyIconMonthCalendar_Click(object sender, EventArgs e)
+        {
+            SetDisplay(new MonthCalendar(), new DefaultPainterFactory());
+        }
+
+        private void menuItemNotifyIconNoCalendar_Click(object sender, EventArgs e)
+        {
+            SetDisplay(new NoCalendar(), new DefaultPainterFactory());
+        }
     }
 }
