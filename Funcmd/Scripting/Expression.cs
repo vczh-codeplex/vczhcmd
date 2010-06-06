@@ -19,7 +19,7 @@ namespace Funcmd.Scripting
 
         public virtual RuntimeValueWrapper Execute(RuntimeContext context)
         {
-            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(new object()), context);
+            return RuntimeValueWrapper.CreateValue(new object());
         }
 
         public virtual bool Match(RuntimeContext context, RuntimeValueWrapper valueWrapper)

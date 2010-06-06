@@ -173,5 +173,20 @@ namespace Parser.Test
                 );
             Assert.AreEqual(3, context["main"].Value);
         }
+
+        [TestMethod]
+        public void ParseStateMonad()
+        {
+            var context = Parse(
+                "let next s = create_state s (add s 1);\r\n" +
+                "let main = do(state(continue))\r\n" +
+                "  var a = next;\r\n" +
+                "  var b = next;\r\n" +
+                "  var c = return (add a b);\r\n" +
+                "  return c;\r\n" +
+                "end;\r\n"
+                );
+            Assert.AreEqual(3, context["main"].RunStateMonad(ScriptingValue.CreateValue(1)).Value);
+        }
     }
 }
