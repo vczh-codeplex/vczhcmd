@@ -28,7 +28,7 @@ namespace Funcmd.Scripting
             }
             else
             {
-                return new RuntimeValueWrapper(new RuntimeEvaluatedValue(new object()), context);
+                return RuntimeValueWrapper.CreateValue(new object());
             }
         }
     }
@@ -61,7 +61,7 @@ namespace Funcmd.Scripting
             }
             if (result == null)
             {
-                return new RuntimeValueWrapper(new RuntimeEvaluatedValue(new object()), context);
+                return RuntimeValueWrapper.CreateValue(new object());
             }
             else
             {
@@ -98,23 +98,19 @@ namespace Funcmd.Scripting
                 {
                     PreviousContext = context
                 };
-                newContext.Values.Add("return", new RuntimeValueWrapper(new RuntimeExternalValue()
-                {
-                    ExternalFunction = ReturnStateMonadValue,
-                    ParameterCount = 2
-                }, context));
+                newContext.Values.Add("return", RuntimeValueWrapper.CreateFunction(ReturnStateMonadValue, 2));
                 foreach (Expression expression in e.Expressions)
                 {
                     VarExpression var = expression as VarExpression;
                     if (var == null)
                     {
                         expression.BuildContext(newContext);
-                        result = RunStateMonad(new RuntimeValueWrapper(new RuntimeUnevaluatedValue(expression), context), result.state);
+                        result = RunStateMonad(new RuntimeValueWrapper(new RuntimeUnevaluatedValue(expression), newContext), result.state);
                     }
                     else
                     {
-                        result = RunStateMonad(new RuntimeValueWrapper(new RuntimeUnevaluatedValue(var.Expression), context), result.state);
-                        if (!var.Pattern.Match(context, result.result))
+                        result = RunStateMonad(new RuntimeValueWrapper(new RuntimeUnevaluatedValue(var.Expression), newContext), result.state);
+                        if (!var.Pattern.Match(newContext, result.result))
                         {
                             throw new Exception("模式匹配不成功。");
                         }
@@ -126,15 +122,11 @@ namespace Funcmd.Scripting
                 }
                 if (result.result == null)
                 {
-                    result.result = new RuntimeValueWrapper(new RuntimeEvaluatedValue(new object()), context);
+                    result.result = RuntimeValueWrapper.CreateValue(new object());
                 }
-                return new RuntimeValueWrapper(new RuntimeEvaluatedValue(result), context);
+                return RuntimeValueWrapper.CreateValue(result);
             };
-            return new RuntimeValueWrapper(new RuntimeExternalValue()
-            {
-                ExternalFunction = monadFunction,
-                ParameterCount = 1
-            }, context);
+            return RuntimeValueWrapper.CreateFunction(monadFunction, 1);
         }
 
         public static StatePackage RunStateMonad(RuntimeValueWrapper monad, RuntimeValueWrapper state)
@@ -144,11 +136,11 @@ namespace Funcmd.Scripting
 
         public static RuntimeValueWrapper ReturnStateMonadValue(RuntimeValueWrapper[] arguments)
         {
-            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(new StatePackage()
+            return RuntimeValueWrapper.CreateValue(new StatePackage()
             {
                 result = arguments[0],
                 state = arguments[1]
-            }), new RuntimeContext());
+            });
         }
     }
 }

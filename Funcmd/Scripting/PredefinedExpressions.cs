@@ -11,7 +11,7 @@ namespace Funcmd.Scripting
 
         public override RuntimeValueWrapper Execute(RuntimeContext context)
         {
-            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(Value), context);
+            return RuntimeValueWrapper.CreateValue(Value);
         }
 
         public override bool Match(RuntimeContext context, RuntimeValueWrapper valueWrapper)
@@ -61,7 +61,7 @@ namespace Funcmd.Scripting
 
         public override RuntimeValueWrapper Execute(RuntimeContext context)
         {
-            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(new Flag(Name)), context);
+            return RuntimeValueWrapper.CreateValue(new Flag(Name));
         }
 
         public override bool Match(RuntimeContext context, RuntimeValueWrapper valueWrapper)
@@ -87,9 +87,9 @@ namespace Funcmd.Scripting
 
         public override RuntimeValueWrapper Execute(RuntimeContext context)
         {
-            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(
+            return RuntimeValueWrapper.CreateValue(
                 Elements.Select(e => new RuntimeValueWrapper(new RuntimeUnevaluatedValue(e), context)).ToArray()
-                ), context);
+                );
         }
 
         public override bool Match(RuntimeContext context, RuntimeValueWrapper valueWrapper)
@@ -119,13 +119,13 @@ namespace Funcmd.Scripting
 
         public override RuntimeValueWrapper Execute(RuntimeContext context)
         {
-            return new RuntimeValueWrapper(new RuntimeEvaluatedValue(
+            return RuntimeValueWrapper.CreateValue(
                 Elements
                     .Take(Elements.Count - 1)
                     .Select(e => new RuntimeValueWrapper(new RuntimeUnevaluatedValue(e), context))
                     .Union((RuntimeValueWrapper[])Elements.Last().Execute(context).RuntimeObject)
                     .ToArray()
-                ), context);
+                );
         }
 
         public override bool Match(RuntimeContext context, RuntimeValueWrapper valueWrapper)
@@ -144,11 +144,7 @@ namespace Funcmd.Scripting
                     }
                     return Elements[Elements.Count - 1].Match(
                         context,
-                        new RuntimeValueWrapper(
-                            new RuntimeEvaluatedValue(
-                                valueWrappers.Skip(Elements.Count - 1).ToArray()),
-                                context
-                            )
+                        RuntimeValueWrapper.CreateValue(valueWrappers.Skip(Elements.Count - 1).ToArray())
                         );
                 }
             }
