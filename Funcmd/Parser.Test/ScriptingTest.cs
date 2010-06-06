@@ -133,7 +133,7 @@ namespace Parser.Test
         }
 
         [TestMethod]
-        public void ParseMonad1()
+        public void ParseDefaultMonad()
         {
             var context = Parse(
                 "let main = do\r\n" +
@@ -147,22 +147,31 @@ namespace Parser.Test
         }
 
         [TestMethod]
-        public void ParseMonad2()
+        public void ParsePureMonad()
         {
-            /* counter start next return
-             * let start i s = [[], i];
-             * let next s = [s, add s 1];
-             * let return x s = [x, s];
-             * let counter [x, s] = s;
-             */ 
-            Parse(
-                "let main = do(counter)\r\n" +
-                "  start 1;\r\n" +
-                "  var a = next;\r\n" +
-                "  var b = next;\r\n" +
-                "  return (add a b);\r\n" +
+            var context = Parse(
+                "let main = do(pure)\r\n" +
+                "  var a = 1;\r\n" +
+                "  var b = 2;\r\n" +
+                "  var c = add a b;\r\n" +
+                "  c;\r\n" +
                 "end;\r\n"
                 );
+            Assert.AreEqual(3, context["main"].Value);
+        }
+
+        [TestMethod]
+        public void ParseOrderedMonad()
+        {
+            var context = Parse(
+                "let main = do(ordered)\r\n" +
+                "  var a = 1;\r\n" +
+                "  var b = 2;\r\n" +
+                "  var c = add a b;\r\n" +
+                "  c;\r\n" +
+                "end;\r\n"
+                );
+            Assert.AreEqual(3, context["main"].Value);
         }
     }
 }
