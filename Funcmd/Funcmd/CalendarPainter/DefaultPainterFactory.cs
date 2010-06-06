@@ -14,7 +14,7 @@ namespace Funcmd.CalendarPainter
             public Brush Border { get; set; }
             public Brush Text { get; set; }
 
-            public void DrawDay(Graphics graphics, Rectangle bounds, DateTime day, Font font, string text)
+            public void DrawDay(Graphics graphics, Rectangle bounds, DateTime day, Font font, string text, bool selected)
             {
                 if (Background != null)
                 {
@@ -22,7 +22,7 @@ namespace Funcmd.CalendarPainter
                 }
                 SizeF size = graphics.MeasureString(text, font);
                 graphics.DrawString(text, font, Text, new PointF(bounds.X + (bounds.Width - size.Width) / 2, bounds.Y + (bounds.Height - size.Height) / 2));
-                if (day.Date == DateTime.Today)
+                if (selected || day.Date == DateTime.Today)
                 {
                     using (Pen pen = new Pen(Border))
                     {
@@ -37,13 +37,6 @@ namespace Funcmd.CalendarPainter
             Background = null,
             Border = Brushes.Black,
             Text = Brushes.Black
-        };
-
-        private Painter selectedPainter = new Painter()
-        {
-            Background = Brushes.Azure,
-            Border = Brushes.Blue,
-            Text = Brushes.Blue
         };
 
         private Painter infoPainter = new Painter()
@@ -63,11 +56,6 @@ namespace Funcmd.CalendarPainter
         public override ICalendarPainter GetNormalPainter()
         {
             return normalPainter;
-        }
-
-        public override ICalendarPainter GetSelectedPainter()
-        {
-            return selectedPainter;
         }
 
         public override ICalendarPainter GetInfoPainter()

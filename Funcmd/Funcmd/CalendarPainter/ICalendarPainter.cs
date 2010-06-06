@@ -8,6 +8,6 @@ namespace Funcmd.CalendarPainter
 {
     public interface ICalendarPainter
     {
-        void DrawDay(Graphics graphics, Rectangle bounds, DateTime day, Font font, string text);
+        void DrawDay(Graphics graphics, Rectangle bounds, DateTime day, Font font, string text, bool selected);
     }
 }
