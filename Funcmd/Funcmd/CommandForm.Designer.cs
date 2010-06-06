@@ -196,6 +196,7 @@
             this.Controls.Add(this.panelBackground);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "CommandForm";
+            this.ShowInTaskbar = false;
             this.Text = "Functional Command";
             this.TopMost = true;
             this.Shown += new System.EventHandler(this.CommandForm_Shown);
