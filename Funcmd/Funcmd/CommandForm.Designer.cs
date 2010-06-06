@@ -40,6 +40,10 @@
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuNotifyIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuItemNotifyIconExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuItemNotifyIconChangeDisplay = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemNotifyIconMonthCalendar = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemNotifyIconNoCalendar = new System.Windows.Forms.ToolStripMenuItem();
             this.panelBackground.SuspendLayout();
             this.tableInfo.SuspendLayout();
             this.tableCommand.SuspendLayout();
@@ -141,9 +145,11 @@
             // contextMenuNotifyIcon
             // 
             this.contextMenuNotifyIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemNotifyIconChangeDisplay,
+            this.toolStripSeparator1,
             this.menuItemNotifyIconExit});
             this.contextMenuNotifyIcon.Name = "contextMenuNotifyIcon";
-            this.contextMenuNotifyIcon.Size = new System.Drawing.Size(153, 48);
+            this.contextMenuNotifyIcon.Size = new System.Drawing.Size(153, 76);
             // 
             // menuItemNotifyIconExit
             // 
@@ -151,6 +157,34 @@
             this.menuItemNotifyIconExit.Size = new System.Drawing.Size(152, 22);
             this.menuItemNotifyIconExit.Text = "退出(&X)";
             this.menuItemNotifyIconExit.Click += new System.EventHandler(this.menuItemNotifyIconExit_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // menuItemNotifyIconChangeDisplay
+            // 
+            this.menuItemNotifyIconChangeDisplay.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemNotifyIconMonthCalendar,
+            this.menuItemNotifyIconNoCalendar});
+            this.menuItemNotifyIconChangeDisplay.Name = "menuItemNotifyIconChangeDisplay";
+            this.menuItemNotifyIconChangeDisplay.Size = new System.Drawing.Size(152, 22);
+            this.menuItemNotifyIconChangeDisplay.Text = "切换样式";
+            // 
+            // menuItemNotifyIconMonthCalendar
+            // 
+            this.menuItemNotifyIconMonthCalendar.Name = "menuItemNotifyIconMonthCalendar";
+            this.menuItemNotifyIconMonthCalendar.Size = new System.Drawing.Size(152, 22);
+            this.menuItemNotifyIconMonthCalendar.Text = "月历";
+            this.menuItemNotifyIconMonthCalendar.Click += new System.EventHandler(this.menuItemNotifyIconMonthCalendar_Click);
+            // 
+            // menuItemNotifyIconNoCalendar
+            // 
+            this.menuItemNotifyIconNoCalendar.Name = "menuItemNotifyIconNoCalendar";
+            this.menuItemNotifyIconNoCalendar.Size = new System.Drawing.Size(152, 22);
+            this.menuItemNotifyIconNoCalendar.Text = "仅命令";
+            this.menuItemNotifyIconNoCalendar.Click += new System.EventHandler(this.menuItemNotifyIconNoCalendar_Click);
             // 
             // CommandForm
             // 
@@ -185,6 +219,10 @@
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.ContextMenuStrip contextMenuNotifyIcon;
         private System.Windows.Forms.ToolStripMenuItem menuItemNotifyIconExit;
+        private System.Windows.Forms.ToolStripMenuItem menuItemNotifyIconChangeDisplay;
+        private System.Windows.Forms.ToolStripMenuItem menuItemNotifyIconMonthCalendar;
+        private System.Windows.Forms.ToolStripMenuItem menuItemNotifyIconNoCalendar;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }
 
