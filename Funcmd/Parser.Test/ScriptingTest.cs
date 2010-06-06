@@ -188,5 +188,16 @@ namespace Parser.Test
                 );
             Assert.AreEqual(3, context["main"].RunStateMonad(ScriptingValue.CreateValue(1)).Value);
         }
+
+        [TestMethod]
+        public void ParseOperator()
+        {
+            var context = Parse(
+                "let (+) a b = add a b;\r\n" +
+                "let (*) a b = sub a b;\r\n" +
+                "let main = 1+2*3;\r\n"
+                );
+            Assert.AreEqual(0, context["main"].Value);
+        }
     }
 }
