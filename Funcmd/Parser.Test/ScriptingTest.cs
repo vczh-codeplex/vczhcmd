@@ -46,7 +46,7 @@ namespace Parser.Test
         {
             var context = Parse(
                 "let sum ['leaf, n] = n;\r\n" +
-                "let sum ['tree, m, n] = add (sum m) (sum n);\r\n"
+                "let sum ['tree, m, n] = add (m :> sum) (sum n);\r\n"
                 );
             var sum = context["sum"];
             var tree = ScriptingValue.CreateArray(

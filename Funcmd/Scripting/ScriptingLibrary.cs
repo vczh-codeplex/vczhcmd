@@ -278,5 +278,9 @@ namespace Funcmd.Scripting
         }
 
         #endregion
+
+        #region Linq
+
+        #endregion
     }
 }

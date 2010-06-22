@@ -48,6 +48,7 @@ namespace Funcmd.Scripting
         Semicolon,
         Lambda,
         Operator,
+        Invoke,
         Blank,
     }
 
@@ -79,6 +80,7 @@ namespace Funcmd.Scripting
             lexer.AddToken(@"=", TokenType.Equal);
             lexer.AddToken(@";", TokenType.Semicolon);
             lexer.AddToken(@"\\", TokenType.Lambda);
+            lexer.AddToken(@":>", TokenType.Invoke);
             lexer.AddToken(operatorRegex, TokenType.Operator);
             lexer.AddToken(@"\s+", TokenType.Blank);
 
@@ -95,8 +97,9 @@ namespace Funcmd.Scripting
             var bandExpr = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
             var borExpr = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
             var opExpr = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
+            var invokeExpr = new RuleParser<Lexer<TokenType>.Token, Expression, object>();
 
-            var expression = opExpr;
+            var expression = invokeExpr;
             var program = new RuleParser<Lexer<TokenType>.Token, Program, object>();
 
             var INTEGER = tk(TokenType.Integer, "表达式").Convert(t => (Expression)new PrimitiveExpression()
@@ -252,20 +255,7 @@ namespace Funcmd.Scripting
             primitive.Imply(Alt(
                 match, monad, monadvar, lambda, def, simple));
 
-            termExpr.Imply(Seq(primitive, primitive.Loop()).Convert(p =>
-            {
-                var t = p.Value1;
-                foreach (var exp in p.Value2)
-                {
-                    t = new InvokeExpression()
-                    {
-                        TokenPosition = t.TokenPosition,
-                        Function = t,
-                        Argument = exp
-                    };
-                }
-                return t;
-            }));
+            termExpr.Imply(Seq(primitive, primitive.Loop()).Convert(ToInvoke));
 
             mulExpr.Imply(Seq(termExpr, Seq(tks(new string[] { @"*", @"/" }), termExpr).Loop()).Convert(ToOperator));
             addExpr.Imply(Seq(mulExpr, Seq(tks(new string[] { @"+", @"-" }), mulExpr).Loop()).Convert(ToOperator));
@@ -276,6 +266,7 @@ namespace Funcmd.Scripting
             bandExpr.Imply(Seq(bxorExpr, Seq(tk(@"&&"), bxorExpr).Loop()).Convert(ToOperator));
             borExpr.Imply(Seq(bandExpr, Seq(tk(@"||"), bandExpr).Loop()).Convert(ToOperator));
             opExpr.Imply(Seq(borExpr, Seq(tk(TokenType.Operator), borExpr).Loop()).Convert(ToOperator));
+            invokeExpr.Imply(Seq(opExpr, tk(@":>").Right(opExpr).Loop()).Convert(ToInvokeReverse));
 
             program.Imply(expression.Left(tk(";")).LoopToEnd().Convert(es => new Program() { Definitions = es.ToList() }));
 
@@ -304,6 +295,36 @@ namespace Funcmd.Scripting
                 };
             }
             return result;
+        }
+
+        private Expression ToInvoke(Pair<Expression, IEnumerable<Expression>> p)
+        {
+            var t = p.Value1;
+            foreach (var exp in p.Value2)
+            {
+                t = new InvokeExpression()
+                {
+                    TokenPosition = t.TokenPosition,
+                    Function = t,
+                    Argument = exp
+                };
+            }
+            return t;
+        }
+
+        private Expression ToInvokeReverse(Pair<Expression, IEnumerable<Expression>> p)
+        {
+            var t = p.Value1;
+            foreach (var exp in p.Value2)
+            {
+                t = new InvokeExpression()
+                {
+                    TokenPosition = t.TokenPosition,
+                    Function = exp,
+                    Argument = t
+                };
+            }
+            return t;
         }
 
         private string Escape(string s)
