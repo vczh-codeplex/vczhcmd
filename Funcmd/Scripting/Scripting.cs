@@ -14,6 +14,11 @@ namespace Funcmd.Scripting
             this.ValueWrapper = valueWrapper;
         }
 
+        public override string ToString()
+        {
+            return ValueWrapper.ToString();
+        }
+
         #region Primitive
 
         public bool IsInvokable
