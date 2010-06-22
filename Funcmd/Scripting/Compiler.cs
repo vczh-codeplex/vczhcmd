@@ -308,7 +308,43 @@ namespace Funcmd.Scripting
 
         private string Escape(string s)
         {
-            return s;
+            string result = "";
+            bool escaping = false;
+            foreach (char c in s.Substring(1, s.Length - 2))
+            {
+                if (escaping)
+                {
+                    switch (c)
+                    {
+                        case 'r':
+                            result += '\r';
+                            break;
+                        case 'n':
+                            result += '\n';
+                            break;
+                        case 't':
+                            result += '\t';
+                            break;
+                        default:
+                            result += c;
+                            break;
+                    }
+                    escaping = false;
+                }
+                else
+                {
+                    switch (c)
+                    {
+                        case '\\':
+                            escaping = true;
+                            break;
+                        default:
+                            result += c;
+                            break;
+                    }
+                }
+            }
+            return result;
         }
     }
 }
