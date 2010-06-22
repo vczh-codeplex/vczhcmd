@@ -30,6 +30,21 @@ namespace Funcmd.Scripting
             }
         }
 
+        class ScriptingValueFunctionComparer : IComparer<ScriptingValue>
+        {
+            private ScriptingValue function;
+
+            public ScriptingValueFunctionComparer(ScriptingValue function)
+            {
+                this.function = function;
+            }
+
+            public int Compare(ScriptingValue x, ScriptingValue y)
+            {
+                return (int)function.Invoke(x, y).Value;
+            }
+        }
+
         public static void LoadLibrary(ScriptingEnvironment e)
         {
             e.DefineValue("pure", ScriptingValue.CreateValue(new PureMonad()));
@@ -50,6 +65,11 @@ namespace Funcmd.Scripting
             e.DefineValue("(>=)", ScriptingValue.CreateFunction(PrimitiveGe, 2));
             e.DefineValue("(==)", ScriptingValue.CreateFunction(PrimitiveEq, 2));
             e.DefineValue("(!=)", ScriptingValue.CreateFunction(PrimitiveNe, 2));
+            e.DefineValue("(&&)", ScriptingValue.CreateFunction(PrimitiveAnd, 2));
+            e.DefineValue("(||)", ScriptingValue.CreateFunction(PrimitiveOr, 2));
+            e.DefineValue("(^)", ScriptingValue.CreateFunction(PrimitiveXor, 2));
+            e.DefineValue("not", ScriptingValue.CreateFunction(PrimitiveNot, 1));
+            e.DefineValue("neg", ScriptingValue.CreateFunction(PrimitiveNeg, 1));
 
             foreach (MethodInfo method in typeof(Math).GetMethods(BindingFlags.Public | BindingFlags.Static))
             {
@@ -65,6 +85,23 @@ namespace Funcmd.Scripting
 
             e.DefineValue("pi", ScriptingValue.CreateValue(Math.PI));
             e.DefineValue("e", ScriptingValue.CreateValue(Math.E));
+
+            e.DefineValue("aggregate", ScriptingValue.CreateFunction(Aggregate, 3));
+            e.DefineValue("distinct", ScriptingValue.CreateFunction(Distinct, 1));
+            e.DefineValue("except", ScriptingValue.CreateFunction(Except, 2));
+            e.DefineValue("first", ScriptingValue.CreateFunction(First, 2));
+            e.DefineValue("intersect", ScriptingValue.CreateFunction(Intersect, 2));
+            e.DefineValue("last", ScriptingValue.CreateFunction(Last, 2));
+            e.DefineValue("orderby", ScriptingValue.CreateFunction(OrderBy, 2));
+            e.DefineValue("select", ScriptingValue.CreateFunction(Select, 2));
+            e.DefineValue("select_many", ScriptingValue.CreateFunction(SelectMany, 2));
+            e.DefineValue("skip", ScriptingValue.CreateFunction(Skip, 2));
+            e.DefineValue("skip_while", ScriptingValue.CreateFunction(SkipWhile, 2));
+            e.DefineValue("take", ScriptingValue.CreateFunction(Take, 2));
+            e.DefineValue("take_while", ScriptingValue.CreateFunction(TakeWhile, 2));
+            e.DefineValue("union", ScriptingValue.CreateFunction(Union, 2));
+            e.DefineValue("where", ScriptingValue.CreateFunction(Where, 2));
+            e.DefineValue("zip", ScriptingValue.CreateFunction(Zip, 2));
         }
 
         private static CompareResult ConvertCompareResult(int i)
@@ -217,6 +254,46 @@ namespace Funcmd.Scripting
             }
         }
 
+        private static ScriptingValue PrimitiveAnd(ScriptingValue[] arguments)
+        {
+            bool a = (bool)arguments[0].Value;
+            bool b = (bool)arguments[1].Value;
+            return ScriptingValue.CreateValue(a && b);
+        }
+
+        private static ScriptingValue PrimitiveOr(ScriptingValue[] arguments)
+        {
+            bool a = (bool)arguments[0].Value;
+            bool b = (bool)arguments[1].Value;
+            return ScriptingValue.CreateValue(a || b);
+        }
+
+        private static ScriptingValue PrimitiveXor(ScriptingValue[] arguments)
+        {
+            bool a = (bool)arguments[0].Value;
+            bool b = (bool)arguments[1].Value;
+            return ScriptingValue.CreateValue(a ^ b);
+        }
+
+        private static ScriptingValue PrimitiveNot(ScriptingValue[] arguments)
+        {
+            bool a = (bool)arguments[0].Value;
+            return ScriptingValue.CreateValue(!a);
+        }
+
+        private static ScriptingValue PrimitiveNeg(ScriptingValue[] arguments)
+        {
+            IConvertible a = (IConvertible)arguments[0].Value;
+            if (a is int)
+            {
+                return ScriptingValue.CreateValue(-a.ToInt32(CultureInfo.InvariantCulture));
+            }
+            else
+            {
+                return ScriptingValue.CreateValue(-a.ToDouble(CultureInfo.InvariantCulture));
+            }
+        }
+
         private static ScriptingValue PrimitiveLt(ScriptingValue[] arguments)
         {
             CompareResult result = Compare(arguments[0], arguments[1]);
@@ -280,6 +357,102 @@ namespace Funcmd.Scripting
         #endregion
 
         #region Linq
+
+        // aggregate default function list
+        private static ScriptingValue Aggregate(ScriptingValue[] arguments)
+        {
+            return arguments[2].Aggregate(arguments[0], (a, b) => arguments[1].Invoke(a, b));
+        }
+
+        // distinct list
+        private static ScriptingValue Distinct(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateArray(arguments[0].Distinct(new ScriptingValueComparer()).ToArray());
+        }
+
+        // except remover_list source_list
+        private static ScriptingValue Except(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateArray(arguments[1].Except(arguments[0], new ScriptingValueComparer()).ToArray());
+        }
+
+        // first default list
+        private static ScriptingValue First(ScriptingValue[] arguments)
+        {
+            return arguments[1].FirstOrDefault() ?? arguments[0];
+        }
+
+        // intersect list2 list1
+        private static ScriptingValue Intersect(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateArray(arguments[1].Intersect(arguments[0], new ScriptingValueComparer()).ToArray());
+        }
+
+        // last default list
+        private static ScriptingValue Last(ScriptingValue[] arguments)
+        {
+            return arguments[1].LastOrDefault() ?? arguments[0];
+        }
+
+        // orderby comparer list
+        private static ScriptingValue OrderBy(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateArray(arguments[1].OrderBy(s => s, new ScriptingValueFunctionComparer(arguments[0])).ToArray());
+        }
+
+        // select converter list
+        private static ScriptingValue Select(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateArray(arguments[1].Select(v => arguments[0].Invoke(v)).ToArray());
+        }
+
+        // select_many converter list
+        private static ScriptingValue SelectMany(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateArray(arguments[1].SelectMany(v => arguments[0].Invoke(v)).ToArray());
+        }
+
+        // skip number list
+        private static ScriptingValue Skip(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateArray(arguments[1].Skip((int)arguments[0].Value));
+        }
+
+        // skip_while predicate list
+        private static ScriptingValue SkipWhile(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateArray(arguments[1].SkipWhile(v => (bool)arguments[0].Invoke(v).Value).ToArray());
+        }
+
+        // take number list
+        private static ScriptingValue Take(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateArray(arguments[1].Take((int)arguments[0].Value));
+        }
+
+        // take_while predicate list
+        private static ScriptingValue TakeWhile(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateArray(arguments[1].TakeWhile(v => (bool)arguments[0].Invoke(v).Value).ToArray());
+        }
+
+        // union list2 list1
+        private static ScriptingValue Union(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateArray(arguments[1].Union(arguments[0], new ScriptingValueComparer()).ToArray());
+        }
+
+        // where predicate list
+        private static ScriptingValue Where(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateArray(arguments[1].Where(v => (bool)arguments[0].Invoke(v).Value).ToArray());
+        }
+
+        // zip list2 list1
+        private static ScriptingValue Zip(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateArray(arguments[1].Zip(arguments[0], (a, b) => ScriptingValue.CreateArray(a, b)).ToArray());
+        }
 
         #endregion
     }
