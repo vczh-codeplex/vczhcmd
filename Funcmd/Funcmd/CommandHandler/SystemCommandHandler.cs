@@ -5,16 +5,11 @@ using System.Text;
 
 namespace Funcmd.CommandHandler
 {
-    public interface ISystemCommandHandlerCallback
-    {
-        void DoExit();
-    }
-
     public class SystemCommandHandler : ICommandHandler
     {
-        private ISystemCommandHandlerCallback callback;
+        private ICommandHandlerCallback callback;
 
-        public SystemCommandHandler(ISystemCommandHandlerCallback callback)
+        public SystemCommandHandler(ICommandHandlerCallback callback)
         {
             this.callback = callback;
         }

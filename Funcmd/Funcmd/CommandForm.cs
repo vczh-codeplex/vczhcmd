@@ -18,7 +18,7 @@ namespace Funcmd
 {
     public partial class CommandForm
         : Form
-        , ISystemCommandHandlerCallback
+        , ICommandHandlerCallback
     {
         private Point lastCursor;
         private Size originalWindowSize;
@@ -32,6 +32,7 @@ namespace Funcmd
         private Graphics calendarGraphics = null;
 
         private CommandHandlerManager commandHandlerManager = new CommandHandlerManager();
+        private ICommandHandlerCallback systemCallback = null;
 
         public CommandForm()
         {
@@ -42,8 +43,10 @@ namespace Funcmd
             painter = new SelectorCalendarPainter();
             painter.PainterNeeded += new CalendarPainterNeededHandler(painter_PainterNeeded);
 
-            commandHandlerManager.AddCommandHandler(new SystemCommandHandler(this));
+            systemCallback = this;
+            commandHandlerManager.AddCommandHandler(new SystemCommandHandler(systemCallback));
             commandHandlerManager.AddCommandHandler(new ShellCommandHandler());
+            commandHandlerManager.AddCommandHandler(new ScriptingCommandHandler(systemCallback));
         }
 
         private void SetDisplay(ICalendar calendar, CalendarPainterFactory factory)
@@ -80,16 +83,21 @@ namespace Funcmd
             panelCalendar.Refresh();
         }
 
-        private void ShowError(string message)
-        {
-            MessageBox.Show(message, "Functional Command", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
         #region ISystemCommandHandlerCallback Members
 
-        void ISystemCommandHandlerCallback.DoExit()
+        void ICommandHandlerCallback.DoExit()
         {
             Close();
+        }
+
+        void ICommandHandlerCallback.ShowMessage(string message)
+        {
+            MessageBox.Show(message, "Functional Command", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        void ICommandHandlerCallback.ShowError(string message)
+        {
+            MessageBox.Show(message, "Functional Command", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         #endregion
@@ -196,7 +204,7 @@ namespace Funcmd
 
         private void menuItemNotifyIconExit_Click(object sender, EventArgs e)
         {
-            (this as ISystemCommandHandlerCallback).DoExit();
+            systemCallback.DoExit();
         }
 
         private void menuItemNotifyIconMonthCalendar_Click(object sender, EventArgs e)
@@ -222,7 +230,7 @@ namespace Funcmd
                 }
                 catch (Exception ex)
                 {
-                    ShowError(ex.Message);
+                    systemCallback.ShowError(ex.Message);
                 }
             }
         }

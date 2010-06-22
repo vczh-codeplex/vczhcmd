@@ -10,6 +10,13 @@ namespace Funcmd.CommandHandler
         bool HandleCommand(string command, ref Exception error);
     }
 
+    public interface ICommandHandlerCallback
+    {
+        void DoExit();
+        void ShowMessage(string message);
+        void ShowError(string message);
+    }
+
     public class CommandHandlerManager
     {
         private List<ICommandHandler> handlers = new List<ICommandHandler>();

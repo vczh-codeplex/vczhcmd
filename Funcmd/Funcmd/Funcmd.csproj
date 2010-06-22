@@ -66,6 +66,7 @@
       <DependentUpon>CommandForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CommandHandler\ICommandHandler.cs" />
+    <Compile Include="CommandHandler\ScriptingCommandHandler.cs" />
     <Compile Include="CommandHandler\ShellCommandHandler.cs" />
     <Compile Include="CommandHandler\SystemCommandHandler.cs" />
     <Compile Include="Program.cs" />
@@ -96,6 +97,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="112_RefreshArrow_Blue.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Scripting\Scripting.csproj">
+      <Project>{0B7997AE-A9FF-4F38-BADA-9A84C2BFE68E}</Project>
+      <Name>Scripting</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
