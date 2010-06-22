@@ -111,6 +111,24 @@ namespace Funcmd.Scripting
             e.DefineValue("union", ScriptingValue.CreateFunction(Union, 2));
             e.DefineValue("where", ScriptingValue.CreateFunction(Where, 2));
             e.DefineValue("zip", ScriptingValue.CreateFunction(Zip, 2));
+
+            /*
+             * to_lower s->s
+             * to_upper s->s
+             * find target->source->i
+             * find_all target->source->[i]
+             * split s->[s]->[s]
+             * trim s->s
+             * sub s->i->i->s
+             * length s->i
+             * length [x]->i
+             * reg_find pattern->source->[i,s]
+             * reg_find_all pattern->source->[[i,s]]
+             * stocs s->[s]
+             * 
+             * min x->x->x
+             * max x->x->x
+             */
         }
 
         private static CompareResult ConvertCompareResult(int i)
