@@ -71,6 +71,7 @@
             this.textBoxCommand.Name = "textBoxCommand";
             this.textBoxCommand.Size = new System.Drawing.Size(294, 21);
             this.textBoxCommand.TabIndex = 1;
+            this.textBoxCommand.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxCommand_KeyDown);
             // 
             // panelBackground
             // 

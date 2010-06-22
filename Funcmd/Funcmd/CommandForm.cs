@@ -10,6 +10,8 @@ using Funcmd.Calendar;
 using Funcmd.CalendarPainter;
 using MonthCalendar = Funcmd.Calendar.MonthCalendar;
 using System.Globalization;
+using System.Diagnostics;
+using System.IO;
 
 namespace Funcmd
 {
@@ -68,6 +70,11 @@ namespace Funcmd
         {
             calendar.Draw(calendarGraphics, new Point(0, 0), panelCalendar.PointToClient(Control.MousePosition));
             panelCalendar.Refresh();
+        }
+
+        private void ShowError(string message)
+        {
+            MessageBox.Show(message, "Functional Command", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void calendar_CalendarDayEntered(object sender, CalendarDaySelectedEventArgs e)
@@ -183,6 +190,35 @@ namespace Funcmd
         private void menuItemNotifyIconNoCalendar_Click(object sender, EventArgs e)
         {
             SetDisplay(new NoCalendar(), new DefaultPainterFactory());
+        }
+
+        private void textBoxCommand_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string text = textBoxCommand.Text;
+                textBoxCommand.Text = "";
+                ProcessStartInfo info = new ProcessStartInfo();
+                info.ErrorDialog = false;
+                info.FileName = text;
+                info.UseShellExecute = true;
+                info.Verb = "OPEN";
+                try
+                {
+                    info.WorkingDirectory = Path.GetDirectoryName(text);
+                }
+                catch (Exception)
+                {
+                }
+                try
+                {
+                    Process.Start(info);
+                }
+                catch (Exception ex)
+                {
+                    ShowError(ex.Message);
+                }
+            }
         }
     }
 }
