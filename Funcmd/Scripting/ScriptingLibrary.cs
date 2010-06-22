@@ -26,7 +26,18 @@ namespace Funcmd.Scripting
 
             public int GetHashCode(ScriptingValue obj)
             {
-                return obj.GetHashCode();
+                if (obj.IsArray)
+                {
+                    return obj.Select(v => GetHashCode(v)).Sum();
+                }
+                else if (obj.IsInvokable)
+                {
+                    return obj.GetHashCode();
+                }
+                else
+                {
+                    return obj.Value.GetHashCode();
+                }
             }
         }
 
@@ -415,7 +426,7 @@ namespace Funcmd.Scripting
         // skip number list
         private static ScriptingValue Skip(ScriptingValue[] arguments)
         {
-            return ScriptingValue.CreateArray(arguments[1].Skip((int)arguments[0].Value));
+            return ScriptingValue.CreateArray(arguments[1].Skip((int)arguments[0].Value).ToArray());
         }
 
         // skip_while predicate list
@@ -427,7 +438,7 @@ namespace Funcmd.Scripting
         // take number list
         private static ScriptingValue Take(ScriptingValue[] arguments)
         {
-            return ScriptingValue.CreateArray(arguments[1].Take((int)arguments[0].Value));
+            return ScriptingValue.CreateArray(arguments[1].Take((int)arguments[0].Value).ToArray());
         }
 
         // take_while predicate list
