@@ -126,6 +126,31 @@ namespace Funcmd.Scripting
         {
             return CreateValue(o);
         }
+
+        public override string ToString()
+        {
+            if (IsInvokable)
+            {
+                return Value.ToString();
+            }
+            else
+            {
+                object runtimeObject = RuntimeObject;
+                if (runtimeObject is RuntimeValueWrapper[])
+                {
+                    return "["
+                        + (runtimeObject as RuntimeValueWrapper[])
+                        .Select(o => ", " + o.ToString())
+                        .Aggregate("", (a, b) => a + b)
+                        .Substring(2)
+                        + "]";
+                }
+                else
+                {
+                    return RuntimeObject.ToString();
+                }
+            }
+        }
     }
 
     internal abstract class RuntimeValue

@@ -223,14 +223,17 @@ namespace Funcmd
             {
                 e.Handled = true;
                 string command = textBoxCommand.Text;
-                textBoxCommand.Text = "";
-                try
+                if (command != "")
                 {
-                    commandHandlerManager.HandleCommand(command);
-                }
-                catch (Exception ex)
-                {
-                    systemCallback.ShowError(ex.Message);
+                    textBoxCommand.Text = "";
+                    try
+                    {
+                        commandHandlerManager.HandleCommand(command);
+                    }
+                    catch (Exception ex)
+                    {
+                        systemCallback.ShowError(ex.Message);
+                    }
                 }
             }
         }

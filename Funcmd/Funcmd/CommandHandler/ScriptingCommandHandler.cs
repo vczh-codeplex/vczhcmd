@@ -21,7 +21,7 @@ namespace Funcmd.CommandHandler
             try
             {
                 ScriptingValue value = scriptingEnvironment.ParseValue(command);
-                callback.ShowMessage(value.Value.ToString());
+                callback.ShowMessage(value.ToString());
                 return true;
             }
             catch (Exception ex)
