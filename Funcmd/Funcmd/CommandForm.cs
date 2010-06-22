@@ -12,10 +12,13 @@ using MonthCalendar = Funcmd.Calendar.MonthCalendar;
 using System.Globalization;
 using System.Diagnostics;
 using System.IO;
+using Funcmd.CommandHandler;
 
 namespace Funcmd
 {
-    public partial class CommandForm : Form
+    public partial class CommandForm
+        : Form
+        , ISystemCommandHandlerCallback
     {
         private Point lastCursor;
         private Size originalWindowSize;
@@ -28,6 +31,8 @@ namespace Funcmd
         private Bitmap calendarBuffer = null;
         private Graphics calendarGraphics = null;
 
+        private CommandHandlerManager commandHandlerManager = new CommandHandlerManager();
+
         public CommandForm()
         {
             InitializeComponent();
@@ -36,6 +41,9 @@ namespace Funcmd
 
             painter = new SelectorCalendarPainter();
             painter.PainterNeeded += new CalendarPainterNeededHandler(painter_PainterNeeded);
+
+            commandHandlerManager.AddCommandHandler(new SystemCommandHandler(this));
+            commandHandlerManager.AddCommandHandler(new ShellCommandHandler());
         }
 
         private void SetDisplay(ICalendar calendar, CalendarPainterFactory factory)
@@ -76,6 +84,15 @@ namespace Funcmd
         {
             MessageBox.Show(message, "Functional Command", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+
+        #region ISystemCommandHandlerCallback Members
+
+        void ISystemCommandHandlerCallback.DoExit()
+        {
+            Close();
+        }
+
+        #endregion
 
         private void calendar_CalendarDayEntered(object sender, CalendarDaySelectedEventArgs e)
         {
@@ -179,7 +196,7 @@ namespace Funcmd
 
         private void menuItemNotifyIconExit_Click(object sender, EventArgs e)
         {
-            Close();
+            (this as ISystemCommandHandlerCallback).DoExit();
         }
 
         private void menuItemNotifyIconMonthCalendar_Click(object sender, EventArgs e)
@@ -192,27 +209,16 @@ namespace Funcmd
             SetDisplay(new NoCalendar(), new DefaultPainterFactory());
         }
 
-        private void textBoxCommand_KeyDown(object sender, KeyEventArgs e)
+        private void textBoxCommand_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyChar == '\r')
             {
-                string text = textBoxCommand.Text;
+                e.Handled = true;
+                string command = textBoxCommand.Text;
                 textBoxCommand.Text = "";
-                ProcessStartInfo info = new ProcessStartInfo();
-                info.ErrorDialog = false;
-                info.FileName = text;
-                info.UseShellExecute = true;
-                info.Verb = "OPEN";
                 try
                 {
-                    info.WorkingDirectory = Path.GetDirectoryName(text);
-                }
-                catch (Exception)
-                {
-                }
-                try
-                {
-                    Process.Start(info);
+                    commandHandlerManager.HandleCommand(command);
                 }
                 catch (Exception ex)
                 {
