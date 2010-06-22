@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Globalization;
+using System.Reflection;
 
 namespace Funcmd.Scripting
 {
@@ -22,6 +23,21 @@ namespace Funcmd.Scripting
             e.DefineValue("(/)", ScriptingValue.CreateFunction(PrimitiveDiv, 2));
             e.DefineValue("(%)", ScriptingValue.CreateFunction(PrimitiveMod, 2));
             e.DefineValue("(++)", ScriptingValue.CreateFunction(PrimitiveConcat, 2));
+
+            foreach (MethodInfo method in typeof(Math).GetMethods(BindingFlags.Public | BindingFlags.Static))
+            {
+                if (method.ReturnType == typeof(double) && method.GetParameters().Length > 0 && method.GetParameters().All(p => p.ParameterType == typeof(double)))
+                {
+                    string methodName = method.Name.ToLower();
+                    if (!e.IsDefined(methodName))
+                    {
+                        e.DefineValue(methodName, ScriptingValue.CreateFunction(MakeDoubleFunction(method), method.GetParameters().Length));
+                    }
+                }
+            }
+
+            e.DefineValue("pi", ScriptingValue.CreateValue(Math.PI));
+            e.DefineValue("e", ScriptingValue.CreateValue(Math.E));
         }
 
         private static ScriptingValue State(ScriptingValue[] arguments)
@@ -116,6 +132,16 @@ namespace Funcmd.Scripting
             {
                 return ScriptingValue.CreateArray(arguments[0].Concat(arguments[1]).ToArray());
             }
+        }
+
+        private static ScriptingValue DoubleFunction(MethodInfo method, ScriptingValue[] argument)
+        {
+            return ScriptingValue.CreateValue((double)method.Invoke(null, argument.Select(v => (object)((IConvertible)v.Value).ToDouble(CultureInfo.InvariantCulture)).ToArray()));
+        }
+
+        private static Func<ScriptingValue[], ScriptingValue> MakeDoubleFunction(MethodInfo method)
+        {
+            return (a) => DoubleFunction(method, a);
         }
     }
 }
