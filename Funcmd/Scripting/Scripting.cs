@@ -119,11 +119,11 @@ namespace Funcmd.Scripting
 
     public class Scripting
     {
-        private static ScriptingParser parser = new ScriptingParser();
+        internal static ScriptingParser parser = new ScriptingParser();
 
         public ScriptingEnvironment Parse(string code)
         {
-            return new ScriptingEnvironment(parser.Parse(code).BuildContext());
+            return new ScriptingEnvironment(code == null ? new RuntimeContext() : parser.Parse(code).BuildContext());
         }
     }
 
@@ -149,6 +149,13 @@ namespace Funcmd.Scripting
         public void DefineValue(string name, ScriptingValue value)
         {
             context.PreviousContext.Values.Add(name, value.ValueWrapper);
+        }
+
+        public ScriptingValue ParseValue(string expression)
+        {
+            RuntimeContext tempContext = Scripting.parser.Parse("let main = " + expression + ";").BuildContext();
+            tempContext.PreviousContext = context;
+            return new ScriptingValue(tempContext.Values["main"]);
         }
     }
 }
