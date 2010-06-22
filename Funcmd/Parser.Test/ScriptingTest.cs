@@ -255,6 +255,24 @@ namespace Parser.Test
         }
 
         [TestMethod]
+        public void LibraryOrderBy()
+        {
+            var context = Parse(
+                "let main = ([2,1,3] :> order_by unit) == [1,2,3];\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibraryReverse()
+        {
+            var context = Parse(
+                "let main = ([1,2,3] :> reverse) == [3,2,1];\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
         public void LibrarySelect()
         {
             var context = Parse(

@@ -17,7 +17,7 @@ namespace Funcmd.Scripting
             NotComparable
         }
 
-        class ScriptingValueComparer : IEqualityComparer<ScriptingValue>
+        class ScriptingValueComparer : IEqualityComparer<ScriptingValue>, IComparer<ScriptingValue>
         {
             public bool Equals(ScriptingValue x, ScriptingValue y)
             {
@@ -39,20 +39,16 @@ namespace Funcmd.Scripting
                     return obj.Value.GetHashCode();
                 }
             }
-        }
-
-        class ScriptingValueFunctionComparer : IComparer<ScriptingValue>
-        {
-            private ScriptingValue function;
-
-            public ScriptingValueFunctionComparer(ScriptingValue function)
-            {
-                this.function = function;
-            }
 
             public int Compare(ScriptingValue x, ScriptingValue y)
             {
-                return (int)function.Invoke(x, y).Value;
+                switch (ScriptingLibrary.Compare(x, y))
+                {
+                    case CompareResult.EqualTo: return 0;
+                    case CompareResult.GreaterThan: return 1;
+                    case CompareResult.LessThan: return -1;
+                    default: throw new InvalidOperationException(string.Format("{0}和{1}无法进行比较。", x, y));
+                }
             }
         }
 
@@ -81,6 +77,7 @@ namespace Funcmd.Scripting
             e.DefineValue("(^)", ScriptingValue.CreateFunction(PrimitiveXor, 2));
             e.DefineValue("not", ScriptingValue.CreateFunction(PrimitiveNot, 1));
             e.DefineValue("neg", ScriptingValue.CreateFunction(PrimitiveNeg, 1));
+            e.DefineValue("unit", ScriptingValue.CreateFunction(PrimitiveUnit, 1));
 
             foreach (MethodInfo method in typeof(Math).GetMethods(BindingFlags.Public | BindingFlags.Static))
             {
@@ -103,7 +100,8 @@ namespace Funcmd.Scripting
             e.DefineValue("first", ScriptingValue.CreateFunction(First, 2));
             e.DefineValue("intersect", ScriptingValue.CreateFunction(Intersect, 2));
             e.DefineValue("last", ScriptingValue.CreateFunction(Last, 2));
-            e.DefineValue("orderby", ScriptingValue.CreateFunction(OrderBy, 2));
+            e.DefineValue("order_by", ScriptingValue.CreateFunction(OrderBy, 2));
+            e.DefineValue("reverse", ScriptingValue.CreateFunction(Reverse, 1));
             e.DefineValue("select", ScriptingValue.CreateFunction(Select, 2));
             e.DefineValue("select_many", ScriptingValue.CreateFunction(SelectMany, 2));
             e.DefineValue("skip", ScriptingValue.CreateFunction(Skip, 2));
@@ -305,6 +303,11 @@ namespace Funcmd.Scripting
             }
         }
 
+        private static ScriptingValue PrimitiveUnit(ScriptingValue[] arguments)
+        {
+            return arguments[0];
+        }
+
         private static ScriptingValue PrimitiveLt(ScriptingValue[] arguments)
         {
             CompareResult result = Compare(arguments[0], arguments[1]);
@@ -405,10 +408,16 @@ namespace Funcmd.Scripting
             return arguments[1].LastOrDefault() ?? arguments[0];
         }
 
-        // orderby comparer list
+        // order_by converter list
         private static ScriptingValue OrderBy(ScriptingValue[] arguments)
         {
-            return ScriptingValue.CreateArray(arguments[1].OrderBy(s => s, new ScriptingValueFunctionComparer(arguments[0])).ToArray());
+            return ScriptingValue.CreateArray(arguments[1].OrderBy(s => arguments[0].Invoke(s), new ScriptingValueComparer()).ToArray());
+        }
+
+        // reverse list
+        private static ScriptingValue Reverse(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateArray(arguments[0].Reverse().ToArray());
         }
 
         // select converter list
