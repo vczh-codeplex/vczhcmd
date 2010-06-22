@@ -65,6 +65,9 @@
     <Compile Include="CommandForm.Designer.cs">
       <DependentUpon>CommandForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CommandHandler\ICommandHandler.cs" />
+    <Compile Include="CommandHandler\ShellCommandHandler.cs" />
+    <Compile Include="CommandHandler\SystemCommandHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CommandForm.resx">
