@@ -156,6 +156,11 @@ namespace Funcmd.Scripting
             context.PreviousContext.Values.Add(name, value.ValueWrapper);
         }
 
+        public bool IsDefined(string name)
+        {
+            return context.PreviousContext.Values.ContainsKey(name);
+        }
+
         public ScriptingValue ParseValue(string expression)
         {
             RuntimeContext tempContext = Scripting.parser.Parse("let main = " + expression + ";").BuildContext();
