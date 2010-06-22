@@ -9,6 +9,27 @@ namespace Funcmd.Scripting
 {
     static class ScriptingLibrary
     {
+        enum CompareResult
+        {
+            LessThan,
+            EqualTo,
+            GreaterThan,
+            NotComparable
+        }
+
+        class ScriptingValueComparer : IEqualityComparer<ScriptingValue>
+        {
+            public bool Equals(ScriptingValue x, ScriptingValue y)
+            {
+                return ScriptingLibrary.Compare(x, y) == CompareResult.EqualTo;
+            }
+
+            public int GetHashCode(ScriptingValue obj)
+            {
+                return obj.GetHashCode();
+            }
+        }
+
         public static void LoadLibrary(ScriptingEnvironment e)
         {
             e.DefineValue("pure", ScriptingValue.CreateValue(new PureMonad()));
@@ -23,6 +44,12 @@ namespace Funcmd.Scripting
             e.DefineValue("(/)", ScriptingValue.CreateFunction(PrimitiveDiv, 2));
             e.DefineValue("(%)", ScriptingValue.CreateFunction(PrimitiveMod, 2));
             e.DefineValue("(++)", ScriptingValue.CreateFunction(PrimitiveConcat, 2));
+            e.DefineValue("(<)", ScriptingValue.CreateFunction(PrimitiveLt, 2));
+            e.DefineValue("(<=)", ScriptingValue.CreateFunction(PrimitiveLe, 2));
+            e.DefineValue("(>)", ScriptingValue.CreateFunction(PrimitiveGt, 2));
+            e.DefineValue("(>=)", ScriptingValue.CreateFunction(PrimitiveGe, 2));
+            e.DefineValue("(==)", ScriptingValue.CreateFunction(PrimitiveEq, 2));
+            e.DefineValue("(!=)", ScriptingValue.CreateFunction(PrimitiveNe, 2));
 
             foreach (MethodInfo method in typeof(Math).GetMethods(BindingFlags.Public | BindingFlags.Static))
             {
@@ -39,6 +66,76 @@ namespace Funcmd.Scripting
             e.DefineValue("pi", ScriptingValue.CreateValue(Math.PI));
             e.DefineValue("e", ScriptingValue.CreateValue(Math.E));
         }
+
+        private static CompareResult ConvertCompareResult(int i)
+        {
+            if (i < 0) return CompareResult.LessThan;
+            else if (i > 0) return CompareResult.GreaterThan;
+            else return CompareResult.EqualTo;
+        }
+
+        private static CompareResult Compare(ScriptingValue a, ScriptingValue b)
+        {
+            if (a.IsInvokable || b.IsInvokable)
+            {
+                return CompareResult.NotComparable;
+            }
+            else if (a.IsArray && b.IsArray)
+            {
+                return a.SequenceEqual(b, new ScriptingValueComparer()) ? CompareResult.EqualTo : CompareResult.NotComparable;
+            }
+            else
+            {
+                try
+                {
+                    object obja = a.Value;
+                    object objb = b.Value;
+                    if (obja is int)
+                    {
+                        if (objb is int)
+                        {
+                            return ConvertCompareResult(((int)obja).CompareTo((int)objb));
+                        }
+                        else if (objb is double)
+                        {
+                            return ConvertCompareResult(((double)(int)obja).CompareTo((double)objb));
+                        }
+                    }
+                    else if (obja is double)
+                    {
+                        if (objb is int)
+                        {
+                            return ConvertCompareResult(((double)obja).CompareTo((double)(int)objb));
+                        }
+                        else if (objb is double)
+                        {
+                            return ConvertCompareResult(((double)obja).CompareTo((double)objb));
+                        }
+                    }
+                    else if (obja is string)
+                    {
+                        if (objb is string)
+                        {
+                            return ConvertCompareResult(((string)obja).CompareTo((string)objb));
+                        }
+                    }
+                    else if (obja is bool)
+                    {
+                        if (objb is bool)
+                        {
+                            return ConvertCompareResult(((bool)obja).CompareTo((bool)objb));
+                        }
+                    }
+                    return ConvertCompareResult(((IComparable)obja).CompareTo(objb));
+                }
+                catch (Exception)
+                {
+                    return CompareResult.NotComparable;
+                }
+            }
+        }
+
+        #region Predefined Functions
 
         private static ScriptingValue State(ScriptingValue[] arguments)
         {
@@ -120,6 +217,42 @@ namespace Funcmd.Scripting
             }
         }
 
+        private static ScriptingValue PrimitiveLt(ScriptingValue[] arguments)
+        {
+            CompareResult result = Compare(arguments[0], arguments[1]);
+            return ScriptingValue.CreateValue(result == CompareResult.LessThan);
+        }
+
+        private static ScriptingValue PrimitiveLe(ScriptingValue[] arguments)
+        {
+            CompareResult result = Compare(arguments[0], arguments[1]);
+            return ScriptingValue.CreateValue(result == CompareResult.LessThan || result == CompareResult.EqualTo);
+        }
+
+        private static ScriptingValue PrimitiveGt(ScriptingValue[] arguments)
+        {
+            CompareResult result = Compare(arguments[0], arguments[1]);
+            return ScriptingValue.CreateValue(result == CompareResult.GreaterThan);
+        }
+
+        private static ScriptingValue PrimitiveGe(ScriptingValue[] arguments)
+        {
+            CompareResult result = Compare(arguments[0], arguments[1]);
+            return ScriptingValue.CreateValue(result == CompareResult.GreaterThan || result == CompareResult.EqualTo);
+        }
+
+        private static ScriptingValue PrimitiveEq(ScriptingValue[] arguments)
+        {
+            CompareResult result = Compare(arguments[0], arguments[1]);
+            return ScriptingValue.CreateValue(result == CompareResult.EqualTo);
+        }
+
+        private static ScriptingValue PrimitiveNe(ScriptingValue[] arguments)
+        {
+            CompareResult result = Compare(arguments[0], arguments[1]);
+            return ScriptingValue.CreateValue(result != CompareResult.EqualTo);
+        }
+
         private static ScriptingValue PrimitiveConcat(ScriptingValue[] arguments)
         {
             object a = arguments[0].Value;
@@ -143,5 +276,7 @@ namespace Funcmd.Scripting
         {
             return (a) => DoubleFunction(method, a);
         }
+
+        #endregion
     }
 }
