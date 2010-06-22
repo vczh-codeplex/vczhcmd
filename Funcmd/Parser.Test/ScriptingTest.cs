@@ -199,5 +199,140 @@ namespace Parser.Test
                 );
             Assert.AreEqual(0, context["main"].Value);
         }
+
+        [TestMethod]
+        public void LibraryAggregate()
+        {
+            var context = Parse(
+                "let main = ([1,2,3] :> aggregate 0 (+)) == 6;\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibraryDistinct()
+        {
+            var context = Parse(
+                "let main = ([1,2,3,3,2,1] :> distinct) == [1,2,3];\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibraryExcept()
+        {
+            var context = Parse(
+                "let main = ([1,2,3,4,5,6] :> except [3,4]) == [1,2,5,6];\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibraryFirst()
+        {
+            var context = Parse(
+                "let main = ([1,2,3,4,5,6] :> first 0) == 1;\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibraryIntersect()
+        {
+            var context = Parse(
+                "let main = ([1,2,3,4] :> intersect [3,4,5,6]) == [3,4];\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibraryLast()
+        {
+            var context = Parse(
+                "let main = ([1,2,3,4,5,6] :> last 0) == 6;\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibrarySelect()
+        {
+            var context = Parse(
+                "let main = ([1,2,3] :> select (\\a=>a+1)) == [2,3,4];\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibrarySelectMany()
+        {
+            var context = Parse(
+                "let main = ([1,2,3] :> select_many (\\a=>[a,a+1])) == [1,2,2,3,3,4];\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibrarySkip()
+        {
+            var context = Parse(
+                "let main = ([1,2,3,4,5,6] :> skip 3) == [4,5,6];\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibrarySkipWhile()
+        {
+            var context = Parse(
+                "let main = ([1,2,3,4,5,6] :> skip_while (\\a=>a<4)) == [4,5,6];\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibraryTake()
+        {
+            var context = Parse(
+                "let main = ([1,2,3,4,5,6] :> take 3) == [1,2,3];\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibraryTakeWhile()
+        {
+            var context = Parse(
+                "let main = ([1,2,3,4,5,6] :> take_while (\\a=>a<4)) == [1,2,3];\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibraryUnion()
+        {
+            var context = Parse(
+                "let main = ([1,2,3,4] :> union [3,4,5,6]) == [1,2,3,4,5,6];\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibraryWhere()
+        {
+            var context = Parse(
+                "let main = ([1,2,3,4,5,6] :> where (\\a=>a%2==0)) == [2,4,6];\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
+
+        [TestMethod]
+        public void LibraryZip()
+        {
+            var context = Parse(
+                "let main = ([1,2,3] :> zip [4,5,6]) == [[1,4],[2,5],[3,6]];\r\n"
+                );
+            Assert.IsTrue((bool)context["main"].Value);
+        }
     }
 }
