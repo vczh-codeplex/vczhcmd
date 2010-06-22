@@ -310,7 +310,7 @@ namespace Funcmd.Scripting
         {
             string result = "";
             bool escaping = false;
-            foreach (char c in s.Substring(1, s.Length - 2))
+            foreach (char c in s)
             {
                 if (escaping)
                 {
