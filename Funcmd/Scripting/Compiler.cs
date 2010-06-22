@@ -257,7 +257,7 @@ namespace Funcmd.Scripting
 
             termExpr.Imply(Seq(primitive, primitive.Loop()).Convert(ToInvoke));
 
-            mulExpr.Imply(Seq(termExpr, Seq(tks(new string[] { @"*", @"/" }), termExpr).Loop()).Convert(ToOperator));
+            mulExpr.Imply(Seq(termExpr, Seq(tks(new string[] { @"*", @"/", @"%" }), termExpr).Loop()).Convert(ToOperator));
             addExpr.Imply(Seq(mulExpr, Seq(tks(new string[] { @"+", @"-" }), mulExpr).Loop()).Convert(ToOperator));
             andExpr.Imply(Seq(addExpr, Seq(tk(@"&"), addExpr).Loop()).Convert(ToOperator));
             orExpr.Imply(Seq(andExpr, Seq(tk(@"|"), andExpr).Loop()).Convert(ToOperator));
