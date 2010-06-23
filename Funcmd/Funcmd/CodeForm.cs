@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using Funcmd.Scripting;
 using Funcmd.CommandHandler;
+using System.Threading;
 
 namespace Funcmd
 {
@@ -22,6 +23,27 @@ namespace Funcmd
             InitializeComponent();
         }
 
+        private void Run(ScriptingValue value)
+        {
+            Invoke(new MethodInvoker(() =>
+            {
+                textCode.Enabled = false;
+                textLaunch.Enabled = false;
+                buttonRun.Enabled = false;
+            }));
+            Exception error = null;
+            Invoke(new MethodInvoker(() =>
+            {
+                if (error != null)
+                {
+                    callback.ShowError(error.Message);
+                }
+                textCode.Enabled = true;
+                textLaunch.Enabled = true;
+                buttonRun.Enabled = true;
+            }));
+        }
+
         private void buttonClose_Click(object sender, EventArgs e)
         {
             Close();
@@ -29,6 +51,20 @@ namespace Funcmd
 
         private void buttonRun_Click(object sender, EventArgs e)
         {
+            string text = textLaunch.Text;
+            try
+            {
+                ScriptingValue value = env.ParseValue(text);
+                textLaunch.Text = "";
+                textLaunch.Select();
+                new Thread(new ParameterizedThreadStart(o => Run((ScriptingValue)o))).Start(value);
+            }
+            catch (Exception ex)
+            {
+                callback.ShowError(ex.Message);
+                textLaunch.SelectAll();
+                textLaunch.Select();
+            }
         }
 
         private void tabCode_SelectedIndexChanged(object sender, EventArgs e)
@@ -38,6 +74,7 @@ namespace Funcmd
                 try
                 {
                     env = new Scripting.Scripting().Parse(textCode.Text);
+                    textLaunch.Select();
                 }
                 catch (ScriptingException ex)
                 {
@@ -53,6 +90,15 @@ namespace Funcmd
                     callback.ShowError(ex.Message);
                     tabCode.SelectedTab = tabPageEditor;
                 }
+            }
+        }
+
+        private void textLaunch_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\r')
+            {
+                e.Handled = true;
+                buttonRun_Click(buttonRun, new EventArgs());
             }
         }
     }

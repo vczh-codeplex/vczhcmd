@@ -143,6 +143,7 @@
             this.textLaunch.Name = "textLaunch";
             this.textLaunch.Size = new System.Drawing.Size(585, 21);
             this.textLaunch.TabIndex = 0;
+            this.textLaunch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textLaunch_KeyPress);
             // 
             // textOutput
             // 
