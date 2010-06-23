@@ -21,6 +21,11 @@ namespace Funcmd.CommandHandler
                 callback.DoExit();
                 return true;
             }
+            else if (command == "code")
+            {
+                callback.OpenCodeForm();
+                return true;
+            }
             else
             {
                 return false;

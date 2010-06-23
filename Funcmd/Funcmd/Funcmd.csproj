@@ -59,6 +59,12 @@
     <Compile Include="CalendarPainter\ICalendarPainter.cs" />
     <Compile Include="Calendar\MonthCalendar.cs" />
     <Compile Include="Calendar\NoCalendar.cs" />
+    <Compile Include="CodeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CodeForm.Designer.cs">
+      <DependentUpon>CodeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CommandForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,6 +77,9 @@
     <Compile Include="CommandHandler\SystemCommandHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CodeForm.resx">
+      <DependentUpon>CodeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CommandForm.resx">
       <DependentUpon>CommandForm.cs</DependentUpon>
     </EmbeddedResource>
