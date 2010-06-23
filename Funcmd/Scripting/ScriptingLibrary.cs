@@ -5,6 +5,7 @@ using System.Text;
 using System.Globalization;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Funcmd.Scripting
 {
@@ -127,6 +128,9 @@ namespace Funcmd.Scripting
             e.DefineValue("to_int", ScriptingValue.CreateFunction(ToInt, 1));
             e.DefineValue("to_double", ScriptingValue.CreateFunction(ToDouble, 1));
             e.DefineValue("to_string", ScriptingValue.CreateFunction(ToString, 1));
+
+            e.DefineValue("read_file", ScriptingValue.CreateFunction(ReadFile, 1));
+            e.DefineValue("write_file", ScriptingValue.CreateFunction(WriteFile, 2));
         }
 
         private static CompareResult ConvertCompareResult(int i)
@@ -643,6 +647,46 @@ namespace Funcmd.Scripting
         private static ScriptingValue ToString(ScriptingValue[] arguments)
         {
             return ScriptingValue.CreateValue(((IConvertible)arguments[0].Value).ToString(CultureInfo.CurrentCulture));
+        }
+
+        #endregion
+
+        #region Simple IO
+
+        // read_file file_name
+        private static ScriptingValue ReadFile(ScriptingValue[] arguments)
+        {
+            string filename = (string)arguments[0].Value;
+            try
+            {
+                using (StreamReader reader = new StreamReader(filename))
+                {
+                    return ScriptingValue.CreateValue(reader.ReadToEnd());
+                }
+            }
+            catch (Exception)
+            {
+                return ScriptingValue.CreateArray(new object[] { });
+            }
+        }
+
+        // write_file file_name content
+        private static ScriptingValue WriteFile(ScriptingValue[] arguments)
+        {
+            string filename = (string)arguments[0].Value;
+            string content = (string)arguments[0].Value;
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(filename))
+                {
+                    writer.Write(content);
+                }
+                return ScriptingValue.CreateValue(true);
+            }
+            catch (Exception)
+            {
+                return ScriptingValue.CreateValue(false);
+            }
         }
 
         #endregion
