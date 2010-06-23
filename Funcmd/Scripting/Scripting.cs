@@ -163,9 +163,10 @@ namespace Funcmd.Scripting
 
         public ScriptingValue ParseValue(string expression)
         {
-            RuntimeContext tempContext = Scripting.parser.Parse("let main = " + expression + ";").BuildContext();
+            string id = "vczh_do_not_want_you_to_use_this_identifier_because_if_you_try_to_do_this_you_will_be_bring_into_a_dead_loop_do_you_understand_question_mark";
+            RuntimeContext tempContext = Scripting.parser.Parse("let " + id + " = " + expression + ";").BuildContext();
             tempContext.PreviousContext = context;
-            return new ScriptingValue(tempContext.Values["main"]);
+            return new ScriptingValue(tempContext.Values[id]);
         }
     }
 }
