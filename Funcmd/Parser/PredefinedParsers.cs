@@ -218,18 +218,18 @@ namespace Funcmd.Parser
 
         public ParserResult<Lexer<I>.Token, C> Parse(ref ICloneableEnumerator<Lexer<I>.Token> input, C context)
         {
-            string inputValue = input.Current.Value;
-            string value = values.Where(s => inputValue == s).FirstOrDefault();
-            if (input.Available && value != null)
+            if (input.Available)
             {
-                Lexer<I>.Token token = input.Current;
-                input.MoveNext();
-                return new ParserResult<Lexer<I>.Token, C>(token, context);
+                string inputValue = input.Current.Value;
+                string value = values.Where(s => inputValue == s).FirstOrDefault();
+                if (value != null)
+                {
+                    Lexer<I>.Token token = input.Current;
+                    input.MoveNext();
+                    return new ParserResult<Lexer<I>.Token, C>(token, context);
+                }
             }
-            else
-            {
-                throw new ParserException<Lexer<I>.Token>("此处需要" + name + "。", input);
-            }
+            throw new ParserException<Lexer<I>.Token>("此处需要" + name + "。", input);
         }
     }
 }

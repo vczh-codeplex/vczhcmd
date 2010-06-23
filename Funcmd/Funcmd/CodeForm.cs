@@ -31,13 +31,20 @@ namespace Funcmd
                 textLaunch.Enabled = false;
                 buttonRun.Enabled = false;
             }));
-            Exception error = null;
+            string result = "";
+            try
+            {
+                result = value.ToString();
+            }
+            catch (Exception ex)
+            {
+                result = ex.Message;
+            }
             Invoke(new MethodInvoker(() =>
             {
-                if (error != null)
-                {
-                    callback.ShowError(error.Message);
-                }
+                textOutput.Text += result + "\r\n";
+                textOutput.Select(textOutput.Text.Length, 0);
+                textOutput.ScrollToCaret();
                 textCode.Enabled = true;
                 textLaunch.Enabled = true;
                 buttonRun.Enabled = true;
@@ -81,9 +88,11 @@ namespace Funcmd
                     if (ex.Start != -1)
                     {
                         textCode.Select(ex.Start, ex.Length);
+                        textCode.ScrollToCaret();
                     }
-                    callback.ShowError(ex.Message);
                     tabCode.SelectedTab = tabPageEditor;
+                    textCode.Select();
+                    callback.ShowError(ex.Message);
                 }
                 catch (Exception ex)
                 {
