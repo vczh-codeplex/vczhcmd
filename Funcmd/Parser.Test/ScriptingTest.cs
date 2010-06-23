@@ -352,5 +352,65 @@ namespace Parser.Test
                 );
             Assert.IsTrue((bool)context["main"].Value);
         }
+
+        [TestMethod]
+        public void LibraryString()
+        {
+            string[] lines = new string[]
+            {
+                @"to_lower ""VCZH is GENIUS!"" == ""vczh is genius!""",                                      // main0
+                @"to_upper ""VCZH is GENIUS!"" == ""VCZH IS GENIUS!""",                                      // main1
+                @"find ""vczh"" ""hello vczh!"" == 6",                                                       // main2
+                @"find ""vczh"" ""hello world!"" == neg 1",                                                  // main3
+                @"find_all ""vczh"" ""vczh is genius! hello vczh"" == [0,22]",                               // main4
+                @"find_all ""vczh"" ""hello world!"" == []",                                                 // main5
+                @"reg_find ""vczh"" ""hello vczh!"" == [6,""vczh""]",                                        // main6
+                @"reg_find ""vczh"" ""hello world!"" == [neg 1,""""]",                                       // main7
+                @"reg_find_all ""vczh"" ""vczh is genius! hello vczh"" == [[0,""vczh""],[22,""vczh""]]",     // main8
+                @"reg_find_all ""vczh"" ""hello world!"" == []",                                             // main9
+                @"length ""vczh"" == 4",                                                                     // main10
+                @"item 2 ""vczh"" == ""z""",                                                                 // main11
+                @"empty ""vczh"" == false",                                                                  // main12
+                @"empty """" == true",                                                                       // main12
+                @"length [1,2,3,4] == 4",                                                                    // main13
+                @"item 2 [1,2,3,4] == 3",                                                                    // main14
+                @"empty [1,2,3,4] == false",                                                                 // main15
+                @"empty [] == true",                                                                         // main16
+                @"split "","" ""12,34,56"" == [""12"",""34"",""56""]",                                       // main17
+            };
+            var context = Parse(lines
+                .Select((a, i) => "let main" + i.ToString() + " = " + a + ";\r\n")
+                .Aggregate((a, b) => a + b)
+                );
+            for (int i = 0; i < lines.Length; i++)
+            {
+                Assert.IsTrue((bool)context["main" + i.ToString()].Value, "main" + i.ToString() + " failed!");
+            }
+        }
+
+        [TestMethod]
+        public void LibraryConversion()
+        {
+            string[] lines = new string[]
+            {
+                @"to_int 10 == 10",                      // main0
+                @"to_int 10.0 == 10",                    // main1
+                @"to_int ""10"" == 10",                  // main2
+                @"to_double 10 == 10.0",                 // main3
+                @"to_double 10.0 == 10.0",               // main4
+                @"to_double ""10"" == 10.0",             // main5
+                @"to_string 10 == ""10""",               // main6
+                @"to_string 10.0 == ""10""",             // main7
+                @"to_string ""10"" == ""10""",           // main8
+            };
+            var context = Parse(lines
+                .Select((a, i) => "let main" + i.ToString() + " = " + a + ";\r\n")
+                .Aggregate((a, b) => a + b)
+                );
+            for (int i = 0; i < lines.Length; i++)
+            {
+                Assert.IsTrue((bool)context["main" + i.ToString()].Value, "main" + i.ToString() + " failed!");
+            }
+        }
     }
 }
