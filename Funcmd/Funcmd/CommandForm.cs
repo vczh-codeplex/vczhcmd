@@ -33,7 +33,7 @@ namespace Funcmd
 
         private CommandHandlerManager commandHandlerManager = new CommandHandlerManager();
         private ICommandHandlerCallback systemCallback = null;
-        private CodeForm codeForm = new CodeForm();
+        private CodeForm codeForm;
 
         public CommandForm()
         {
@@ -48,6 +48,7 @@ namespace Funcmd
             commandHandlerManager.AddCommandHandler(new SystemCommandHandler(systemCallback));
             commandHandlerManager.AddCommandHandler(new ShellCommandHandler());
             commandHandlerManager.AddCommandHandler(new ScriptingCommandHandler(systemCallback));
+            codeForm = new CodeForm(systemCallback);
         }
 
         private void SetDisplay(ICalendar calendar, CalendarPainterFactory factory)

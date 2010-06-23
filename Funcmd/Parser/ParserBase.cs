@@ -103,7 +103,7 @@ namespace Funcmd.Parser
             return new RuleParser<Lexer<I>.Token, int, object>();
         }
 
-        public O Parse(string input)
+        public virtual O Parse(string input)
         {
             if (lexer == null)
             {

@@ -52,8 +52,51 @@ namespace Funcmd.Scripting
         Blank,
     }
 
+    public class ScriptingException : Exception
+    {
+        public int Start { get; set; }
+        public int Length { get; set; }
+
+        public ScriptingException(string message, int start, int length, Exception innerException)
+            : base(message, innerException)
+        {
+            this.Start = start;
+            this.Length = length;
+        }
+    }
+
     internal class ScriptingParser : LexerParserBase<TokenType, Program>
     {
+        public override Program Parse(string input)
+        {
+            try
+            {
+                return base.Parse(input);
+            }
+            catch (LexerException<TokenType> e)
+            {
+                if (e.Token == null)
+                {
+                    throw new ScriptingException(e.Message, -1, -1, e);
+                }
+                else
+                {
+                    throw new ScriptingException(e.Message, e.Token.Position, e.Token.Value.Length, e);
+                }
+            }
+            catch (ParserException<Lexer<TokenType>.Token> e)
+            {
+                if (!e.Input.Available)
+                {
+                    throw new ScriptingException(e.Message, -1, -1, e);
+                }
+                else
+                {
+                    throw new ScriptingException(e.Message, e.Input.Current.Position, e.Input.Current.Value.Length, e);
+                }
+            }
+        }
+
         protected override bool TokenFilter(Lexer<TokenType>.Token token)
         {
             return token.Tag != TokenType.Blank;
