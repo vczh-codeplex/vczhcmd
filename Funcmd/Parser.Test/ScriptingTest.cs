@@ -29,6 +29,15 @@ namespace Parser.Test
         }
 
         [TestMethod]
+        public void ParseEscaping()
+        {
+            var context = Parse(
+                @"let main = ""a\\b\rc\td\ne"";"
+                );
+            Assert.AreEqual("a\\b\rc\td\ne", (string)context["main"].Value);
+        }
+
+        [TestMethod]
         public void ParseSumArray()
         {
             var context = Parse(
