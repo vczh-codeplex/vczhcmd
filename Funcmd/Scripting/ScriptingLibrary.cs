@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Funcmd.Scripting
 {
@@ -112,23 +113,20 @@ namespace Funcmd.Scripting
             e.DefineValue("where", ScriptingValue.CreateFunction(Where, 2));
             e.DefineValue("zip", ScriptingValue.CreateFunction(Zip, 2));
 
-            /*
-             * to_lower s->s
-             * to_upper s->s
-             * find target->source->i
-             * find_all target->source->[i]
-             * split s->[s]->[s]
-             * trim s->s
-             * sub s->i->i->s
-             * length s->i
-             * length [x]->i
-             * reg_find pattern->source->[i,s]
-             * reg_find_all pattern->source->[[i,s]]
-             * stocs s->[s]
-             * 
-             * min x->x->x
-             * max x->x->x
-             */
+            e.DefineValue("to_lower", ScriptingValue.CreateFunction(ToLower, 1));
+            e.DefineValue("to_upper", ScriptingValue.CreateFunction(ToUpper, 1));
+            e.DefineValue("find", ScriptingValue.CreateFunction(Find, 2));
+            e.DefineValue("find_all", ScriptingValue.CreateFunction(FindAll, 2));
+            e.DefineValue("reg_find", ScriptingValue.CreateFunction(RegFind, 2));
+            e.DefineValue("reg_find_all", ScriptingValue.CreateFunction(RegFindAll, 2));
+            e.DefineValue("length", ScriptingValue.CreateFunction(Length, 1));
+            e.DefineValue("item", ScriptingValue.CreateFunction(Item, 2));
+            e.DefineValue("empty", ScriptingValue.CreateFunction(Empty, 1));
+            e.DefineValue("split", ScriptingValue.CreateFunction(Split, 2));
+
+            e.DefineValue("to_int", ScriptingValue.CreateFunction(ToInt, 1));
+            e.DefineValue("to_double", ScriptingValue.CreateFunction(ToDouble, 1));
+            e.DefineValue("to_string", ScriptingValue.CreateFunction(ToString, 1));
         }
 
         private static CompareResult ConvertCompareResult(int i)
@@ -490,6 +488,161 @@ namespace Funcmd.Scripting
         private static ScriptingValue Zip(ScriptingValue[] arguments)
         {
             return ScriptingValue.CreateArray(arguments[1].Zip(arguments[0], (a, b) => ScriptingValue.CreateArray(a, b)).ToArray());
+        }
+
+        #endregion
+
+        #region String
+
+        // to_lower string
+        private static ScriptingValue ToLower(ScriptingValue[] arguments)
+        {
+            string s = (string)arguments[0].Value;
+            return ScriptingValue.CreateValue(s.ToLower(CultureInfo.CurrentCulture));
+        }
+
+        // to_upper string
+        private static ScriptingValue ToUpper(ScriptingValue[] arguments)
+        {
+            string s = (string)arguments[0].Value;
+            return ScriptingValue.CreateValue(s.ToUpper(CultureInfo.CurrentCulture));
+        }
+
+        // find pattern string
+        private static ScriptingValue Find(ScriptingValue[] arguments)
+        {
+            string p = (string)arguments[0].Value;
+            string s = (string)arguments[1].Value;
+            return ScriptingValue.CreateValue(s.IndexOf(p, StringComparison.CurrentCulture));
+        }
+
+        // find_all pattern string
+        private static ScriptingValue FindAll(ScriptingValue[] arguments)
+        {
+            string p = (string)arguments[0].Value;
+            string s = (string)arguments[1].Value;
+            int index = 0;
+            List<int> result = new List<int>();
+            while (index < s.Length)
+            {
+                int pos = s.IndexOf(p, index, StringComparison.CurrentCulture);
+                if (pos == -1)
+                {
+                    break;
+                }
+                else
+                {
+                    result.Add(pos);
+                    index = pos + p.Length;
+                }
+            }
+            return ScriptingValue.CreateArray(result.Cast<object>().ToArray());
+        }
+
+        // reg_find pattern string
+        private static ScriptingValue RegFind(ScriptingValue[] arguments)
+        {
+            string p = (string)arguments[0].Value;
+            string s = (string)arguments[1].Value;
+            Match match = new Regex(p).Match(s);
+            if (match.Success)
+            {
+                return ScriptingValue.CreateArray(match.Index, match.Value);
+            }
+            else
+            {
+                return ScriptingValue.CreateArray(-1, "");
+            }
+        }
+
+        // reg_find_all pattern string
+        private static ScriptingValue RegFindAll(ScriptingValue[] arguments)
+        {
+            Regex p = new Regex((string)arguments[0].Value);
+            string s = (string)arguments[1].Value;
+            int index = 0;
+            List<object[]> result = new List<object[]>();
+            while (index < s.Length)
+            {
+                Match match = p.Match(s, index);
+                if (match.Success)
+                {
+                    result.Add(new object[] { match.Index, match.Value });
+                    index = match.Index + match.Length;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return ScriptingValue.CreateArray(result.Cast<object>().ToArray());
+        }
+
+        // length string/array
+        private static ScriptingValue Length(ScriptingValue[] arguments)
+        {
+            if (arguments[0].IsArray)
+            {
+                return ScriptingValue.CreateValue(arguments[0].Length);
+            }
+            else
+            {
+                return ScriptingValue.CreateValue(((string)arguments[0].Value).Length);
+            }
+        }
+
+        // item index string/array
+        private static ScriptingValue Item(ScriptingValue[] arguments)
+        {
+            int index = (int)arguments[0].Value;
+            if (arguments[1].IsArray)
+            {
+                return ScriptingValue.CreateValue(arguments[1][index]);
+            }
+            else
+            {
+                return ScriptingValue.CreateValue(((string)arguments[1].Value)[index].ToString());
+            }
+        }
+
+        // empty string/array
+        private static ScriptingValue Empty(ScriptingValue[] arguments)
+        {
+            if (arguments[0].IsArray)
+            {
+                return ScriptingValue.CreateValue(arguments[0].Length == 0);
+            }
+            else
+            {
+                return ScriptingValue.CreateValue(((string)arguments[0].Value).Length == 0);
+            }
+        }
+
+        // split pattern string
+        private static ScriptingValue Split(ScriptingValue[] arguments)
+        {
+            string p = (string)arguments[0].Value;
+            string s = (string)arguments[1].Value;
+            return ScriptingValue.CreateValue(s.Split(new string[] { p }, StringSplitOptions.None).Cast<object>().ToArray());
+        }
+
+        #endregion
+
+        #region Conversion
+
+        private static ScriptingValue ToInt(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateValue(((IConvertible)arguments[0].Value).ToInt32(CultureInfo.CurrentCulture));
+        }
+
+        private static ScriptingValue ToDouble(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateValue(((IConvertible)arguments[0].Value).ToDouble(CultureInfo.CurrentCulture));
+        }
+
+        private static ScriptingValue ToString(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateValue(((IConvertible)arguments[0].Value).ToString(CultureInfo.CurrentCulture));
         }
 
         #endregion
