@@ -25,12 +25,6 @@ namespace Funcmd
 
         private void Run(ScriptingValue value)
         {
-            Invoke(new MethodInvoker(() =>
-            {
-                textCode.Enabled = false;
-                textLaunch.Enabled = false;
-                buttonRun.Enabled = false;
-            }));
             string result = "";
             try
             {
@@ -45,9 +39,6 @@ namespace Funcmd
                 textOutput.Text += result + "\r\n";
                 textOutput.Select(textOutput.Text.Length, 0);
                 textOutput.ScrollToCaret();
-                textCode.Enabled = true;
-                textLaunch.Enabled = true;
-                buttonRun.Enabled = true;
             }));
         }
 
@@ -64,7 +55,33 @@ namespace Funcmd
                 ScriptingValue value = env.ParseValue(text);
                 textLaunch.Text = "";
                 textLaunch.Select();
-                new Thread(new ParameterizedThreadStart(o => Run((ScriptingValue)o))).Start(value);
+                textCode.Enabled = false;
+                textLaunch.Enabled = false;
+                buttonRun.Enabled = false;
+
+                Thread interpretorThread = new Thread(new ParameterizedThreadStart(o => Run((ScriptingValue)o)));
+                interpretorThread.Start(value);
+
+                Thread waitingThread = new Thread(() =>
+                {
+                    bool terminated = false;
+                    terminated = interpretorThread.Join(10000);
+                    if (!terminated)
+                    {
+                        interpretorThread.Abort();
+                    }
+                    this.Invoke(new MethodInvoker(() =>
+                    {
+                        if (!terminated)
+                        {
+                            callback.ShowError("10秒超时，停止脚本执行。");
+                        }
+                        textCode.Enabled = true;
+                        textLaunch.Enabled = true;
+                        buttonRun.Enabled = true;
+                    }));
+                });
+                waitingThread.Start();
             }
             catch (Exception ex)
             {
