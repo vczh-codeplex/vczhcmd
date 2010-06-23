@@ -15,6 +15,7 @@ namespace Funcmd.CommandHandler
         void DoExit();
         void ShowMessage(string message);
         void ShowError(string message);
+        void OpenCodeForm();
     }
 
     public class CommandHandlerManager

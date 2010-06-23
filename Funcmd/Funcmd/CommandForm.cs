@@ -33,6 +33,7 @@ namespace Funcmd
 
         private CommandHandlerManager commandHandlerManager = new CommandHandlerManager();
         private ICommandHandlerCallback systemCallback = null;
+        private CodeForm codeForm = new CodeForm();
 
         public CommandForm()
         {
@@ -98,6 +99,11 @@ namespace Funcmd
         void ICommandHandlerCallback.ShowError(string message)
         {
             MessageBox.Show(message, "Functional Command", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        void ICommandHandlerCallback.OpenCodeForm()
+        {
+            codeForm.Show();
         }
 
         #endregion
