@@ -39,6 +39,7 @@
             this.textLaunch = new System.Windows.Forms.TextBox();
             this.textOutput = new System.Windows.Forms.TextBox();
             this.buttonRun = new System.Windows.Forms.Button();
+            this.buttonClear = new System.Windows.Forms.Button();
             this.tableCode.SuspendLayout();
             this.tabCode.SuspendLayout();
             this.tabPageEditor.SuspendLayout();
@@ -121,12 +122,14 @@
             // 
             // tableInterpretor
             // 
-            this.tableInterpretor.ColumnCount = 2;
+            this.tableInterpretor.ColumnCount = 3;
             this.tableInterpretor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableInterpretor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableInterpretor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableInterpretor.Controls.Add(this.textLaunch, 0, 1);
             this.tableInterpretor.Controls.Add(this.textOutput, 0, 0);
             this.tableInterpretor.Controls.Add(this.buttonRun, 1, 1);
+            this.tableInterpretor.Controls.Add(this.buttonClear, 2, 1);
             this.tableInterpretor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableInterpretor.Location = new System.Drawing.Point(3, 3);
             this.tableInterpretor.Name = "tableInterpretor";
@@ -141,13 +144,13 @@
             this.textLaunch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textLaunch.Location = new System.Drawing.Point(3, 401);
             this.textLaunch.Name = "textLaunch";
-            this.textLaunch.Size = new System.Drawing.Size(585, 21);
+            this.textLaunch.Size = new System.Drawing.Size(504, 21);
             this.textLaunch.TabIndex = 0;
             this.textLaunch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textLaunch_KeyPress);
             // 
             // textOutput
             // 
-            this.tableInterpretor.SetColumnSpan(this.textOutput, 2);
+            this.tableInterpretor.SetColumnSpan(this.textOutput, 3);
             this.textOutput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textOutput.Location = new System.Drawing.Point(3, 3);
             this.textOutput.Multiline = true;
@@ -156,16 +159,27 @@
             this.textOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textOutput.Size = new System.Drawing.Size(666, 392);
             this.textOutput.TabIndex = 2;
+            this.textOutput.WordWrap = false;
             // 
             // buttonRun
             // 
-            this.buttonRun.Location = new System.Drawing.Point(594, 401);
+            this.buttonRun.Location = new System.Drawing.Point(513, 401);
             this.buttonRun.Name = "buttonRun";
             this.buttonRun.Size = new System.Drawing.Size(75, 23);
             this.buttonRun.TabIndex = 1;
             this.buttonRun.Text = "运行";
             this.buttonRun.UseVisualStyleBackColor = true;
             this.buttonRun.Click += new System.EventHandler(this.buttonRun_Click);
+            // 
+            // buttonClear
+            // 
+            this.buttonClear.Location = new System.Drawing.Point(594, 401);
+            this.buttonClear.Name = "buttonClear";
+            this.buttonClear.Size = new System.Drawing.Size(75, 23);
+            this.buttonClear.TabIndex = 3;
+            this.buttonClear.Text = "清除";
+            this.buttonClear.UseVisualStyleBackColor = true;
+            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
             // 
             // CodeForm
             // 
@@ -200,5 +214,6 @@
         private System.Windows.Forms.TextBox textLaunch;
         private System.Windows.Forms.TextBox textOutput;
         private System.Windows.Forms.Button buttonRun;
+        private System.Windows.Forms.Button buttonClear;
     }
 }

@@ -58,6 +58,7 @@ namespace Funcmd
                 textCode.Enabled = false;
                 textLaunch.Enabled = false;
                 buttonRun.Enabled = false;
+                buttonClear.Enabled = false;
 
                 Thread interpretorThread = new Thread(new ParameterizedThreadStart(o => Run((ScriptingValue)o)));
                 interpretorThread.Start(value);
@@ -79,6 +80,7 @@ namespace Funcmd
                         textCode.Enabled = true;
                         textLaunch.Enabled = true;
                         buttonRun.Enabled = true;
+                        buttonClear.Enabled = true;
                     }));
                 });
                 waitingThread.Start();
@@ -126,6 +128,11 @@ namespace Funcmd
                 e.Handled = true;
                 buttonRun_Click(buttonRun, new EventArgs());
             }
+        }
+
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            textOutput.Clear();
         }
     }
 }
