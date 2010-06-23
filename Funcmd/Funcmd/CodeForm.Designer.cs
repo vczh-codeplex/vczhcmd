@@ -33,8 +33,8 @@
             this.buttonClose = new System.Windows.Forms.Button();
             this.tabCode = new System.Windows.Forms.TabControl();
             this.tabPageEditor = new System.Windows.Forms.TabPage();
-            this.tabPageInterpretor = new System.Windows.Forms.TabPage();
             this.textCode = new System.Windows.Forms.TextBox();
+            this.tabPageInterpretor = new System.Windows.Forms.TabPage();
             this.tableInterpretor = new System.Windows.Forms.TableLayoutPanel();
             this.textLaunch = new System.Windows.Forms.TextBox();
             this.textOutput = new System.Windows.Forms.TextBox();
@@ -72,6 +72,7 @@
             this.buttonClose.TabIndex = 1;
             this.buttonClose.Text = "关闭";
             this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
             // tabCode
             // 
@@ -84,6 +85,7 @@
             this.tabCode.SelectedIndex = 0;
             this.tabCode.Size = new System.Drawing.Size(686, 459);
             this.tabCode.TabIndex = 0;
+            this.tabCode.SelectedIndexChanged += new System.EventHandler(this.tabCode_SelectedIndexChanged);
             // 
             // tabPageEditor
             // 
@@ -96,6 +98,16 @@
             this.tabPageEditor.Text = "编辑窗口";
             this.tabPageEditor.UseVisualStyleBackColor = true;
             // 
+            // textCode
+            // 
+            this.textCode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textCode.Location = new System.Drawing.Point(3, 3);
+            this.textCode.Multiline = true;
+            this.textCode.Name = "textCode";
+            this.textCode.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textCode.Size = new System.Drawing.Size(672, 427);
+            this.textCode.TabIndex = 0;
+            // 
             // tabPageInterpretor
             // 
             this.tabPageInterpretor.Controls.Add(this.tableInterpretor);
@@ -106,16 +118,6 @@
             this.tabPageInterpretor.TabIndex = 1;
             this.tabPageInterpretor.Text = "运行窗口";
             this.tabPageInterpretor.UseVisualStyleBackColor = true;
-            // 
-            // textCode
-            // 
-            this.textCode.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textCode.Location = new System.Drawing.Point(3, 3);
-            this.textCode.Multiline = true;
-            this.textCode.Name = "textCode";
-            this.textCode.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textCode.Size = new System.Drawing.Size(672, 427);
-            this.textCode.TabIndex = 0;
             // 
             // tableInterpretor
             // 
@@ -162,6 +164,7 @@
             this.buttonRun.TabIndex = 1;
             this.buttonRun.Text = "运行";
             this.buttonRun.UseVisualStyleBackColor = true;
+            this.buttonRun.Click += new System.EventHandler(this.buttonRun_Click);
             // 
             // CodeForm
             // 
@@ -171,6 +174,7 @@
             this.Controls.Add(this.tableCode);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CodeForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "代码试验窗口";
             this.tableCode.ResumeLayout(false);
             this.tabCode.ResumeLayout(false);
