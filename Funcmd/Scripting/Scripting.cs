@@ -60,6 +60,27 @@ namespace Funcmd.Scripting
             return new ScriptingValue(StateMonad.RunStateMonad(ValueWrapper, state.ValueWrapper).result);
         }
 
+        public ScriptingValue StateMonadState
+        {
+            get
+            {
+                return new ScriptingValue(((StateMonad.StatePackage)Value).state);
+            }
+        }
+
+        public ScriptingValue StateMonadResult
+        {
+            get
+            {
+                return new ScriptingValue(((StateMonad.StatePackage)Value).result);
+            }
+        }
+
+        public ScriptingValue CreateState(ScriptingValue state, ScriptingValue result)
+        {
+            return CreateValue(new StateMonad.StatePackage() { state = state.ValueWrapper, result = result.ValueWrapper });
+        }
+
         #endregion
 
         #region Array

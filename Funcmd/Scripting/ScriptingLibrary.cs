@@ -60,6 +60,7 @@ namespace Funcmd.Scripting
             e.DefineValue("ordered", ScriptingValue.CreateValue(new OrderedMonad()));
             e.DefineValue("state", ScriptingValue.CreateFunction(State, 1));
             e.DefineValue("continue", ScriptingValue.CreateFunction(Continue, 1));
+            e.DefineValue("io", ScriptingValue.CreateFunction(IOContinue, 1));
             e.DefineValue("create_state", new ScriptingValue(RuntimeValueWrapper.CreateFunction(StateMonad.ReturnStateMonadValue, 2)));
 
             e.DefineValue("(+)", ScriptingValue.CreateFunction(PrimitiveAdd, 2));
@@ -201,7 +202,7 @@ namespace Funcmd.Scripting
             }
         }
 
-        #region Predefined Functions
+        #region Monad
 
         private static ScriptingValue State(ScriptingValue[] arguments)
         {
@@ -212,6 +213,15 @@ namespace Funcmd.Scripting
         {
             return ScriptingValue.CreateValue(true);
         }
+
+        private static ScriptingValue IOContinue(ScriptingValue[] arguments)
+        {
+            return ScriptingValue.CreateValue(arguments[0].Value is Exception);
+        }
+
+        #endregion
+
+        #region Predefined Functions
 
         private static ScriptingValue PrimitiveAdd(ScriptingValue[] arguments)
         {
@@ -659,7 +669,7 @@ namespace Funcmd.Scripting
             string filename = (string)arguments[0].Value;
             try
             {
-                using (StreamReader reader = new StreamReader(filename))
+                using (StreamReader reader = new StreamReader(filename, true))
                 {
                     return ScriptingValue.CreateValue(reader.ReadToEnd());
                 }
