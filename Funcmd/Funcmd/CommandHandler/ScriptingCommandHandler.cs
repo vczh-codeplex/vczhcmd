@@ -23,7 +23,7 @@ namespace Funcmd.CommandHandler
         {
             if (command == "command")
             {
-                using (ObjectEditorForm form = new ObjectEditorForm(provider))
+                using (ObjectEditorForm form = new ObjectEditorForm(provider, callback))
                 {
                     form.ShowDialog();
                 }

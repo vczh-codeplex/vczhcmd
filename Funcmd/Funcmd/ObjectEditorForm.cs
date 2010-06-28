@@ -6,19 +6,22 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Funcmd.CommandHandler;
 
 namespace Funcmd
 {
     public partial class ObjectEditorForm : Form
     {
         private IObjectEditorProvider provider;
+        private ICommandHandlerCallback callback;
         private IObjectEditorObject lastObject = null;
         private ListViewItem lastItem = null;
 
-        public ObjectEditorForm(IObjectEditorProvider provider)
+        public ObjectEditorForm(IObjectEditorProvider provider, ICommandHandlerCallback callback)
         {
             InitializeComponent();
             this.provider = provider;
+            this.callback = callback;
             Text = provider.Title;
             columnHeaderName.Text = provider.Header;
 
@@ -81,6 +84,21 @@ namespace Funcmd
                 Control editor = lastObject.Type.EditObject(lastObject);
                 editor.Dock = DockStyle.Fill;
                 panelEditor.Controls.Add(editor);
+            }
+        }
+
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+            if (listViewCommands.SelectedItems.Count == 0)
+            {
+                callback.ShowError("必须选中命令后才能删除。");
+            }
+            else
+            {
+                listViewCommands.Items.Remove(lastItem);
+                provider.Objects.Remove(lastObject);
+                lastItem = null;
+                lastObject = null;
             }
         }
     }
