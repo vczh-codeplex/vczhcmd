@@ -35,11 +35,16 @@
             this.panelEditor = new System.Windows.Forms.Panel();
             this.toolStripCommands = new System.Windows.Forms.ToolStrip();
             this.listViewCommands = new System.Windows.Forms.ListView();
+            this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.buttonDelete = new System.Windows.Forms.ToolStripButton();
+            this.buttonAdd = new System.Windows.Forms.ToolStripDropDownButton();
+            this.普通命令ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableEditor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitEditor)).BeginInit();
             this.splitEditor.Panel1.SuspendLayout();
             this.splitEditor.Panel2.SuspendLayout();
             this.splitEditor.SuspendLayout();
+            this.toolStripCommands.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableEditor
@@ -71,6 +76,7 @@
             this.buttonOK.TabIndex = 0;
             this.buttonOK.Text = "确定";
             this.buttonOK.UseVisualStyleBackColor = true;
+            this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
             // buttonCancel
             // 
@@ -81,6 +87,7 @@
             this.buttonCancel.TabIndex = 1;
             this.buttonCancel.Text = "取消";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // splitEditor
             // 
@@ -104,6 +111,7 @@
             // 
             // panelEditor
             // 
+            this.panelEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelEditor.Location = new System.Drawing.Point(0, 0);
             this.panelEditor.Name = "panelEditor";
@@ -112,6 +120,9 @@
             // 
             // toolStripCommands
             // 
+            this.toolStripCommands.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.buttonAdd,
+            this.buttonDelete});
             this.toolStripCommands.Location = new System.Drawing.Point(0, 0);
             this.toolStripCommands.Name = "toolStripCommands";
             this.toolStripCommands.Size = new System.Drawing.Size(229, 25);
@@ -120,12 +131,44 @@
             // 
             // listViewCommands
             // 
+            this.listViewCommands.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeaderName});
             this.listViewCommands.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewCommands.Location = new System.Drawing.Point(0, 25);
             this.listViewCommands.Name = "listViewCommands";
             this.listViewCommands.Size = new System.Drawing.Size(229, 374);
             this.listViewCommands.TabIndex = 1;
             this.listViewCommands.UseCompatibleStateImageBehavior = false;
+            this.listViewCommands.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeaderName
+            // 
+            this.columnHeaderName.Text = "命令名称";
+            this.columnHeaderName.Width = 216;
+            // 
+            // buttonDelete
+            // 
+            this.buttonDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttonDelete.Image = global::Funcmd.ImageResource.DeleteCommand;
+            this.buttonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(23, 22);
+            // 
+            // buttonAdd
+            // 
+            this.buttonAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttonAdd.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.普通命令ToolStripMenuItem});
+            this.buttonAdd.Image = global::Funcmd.ImageResource.AddCommand;
+            this.buttonAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttonAdd.Name = "buttonAdd";
+            this.buttonAdd.Size = new System.Drawing.Size(29, 22);
+            // 
+            // 普通命令ToolStripMenuItem
+            // 
+            this.普通命令ToolStripMenuItem.Name = "普通命令ToolStripMenuItem";
+            this.普通命令ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.普通命令ToolStripMenuItem.Text = "普通命令";
             // 
             // CommandEditorForm
             // 
@@ -145,6 +188,8 @@
             this.splitEditor.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitEditor)).EndInit();
             this.splitEditor.ResumeLayout(false);
+            this.toolStripCommands.ResumeLayout(false);
+            this.toolStripCommands.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -158,5 +203,9 @@
         private System.Windows.Forms.Panel panelEditor;
         private System.Windows.Forms.ListView listViewCommands;
         private System.Windows.Forms.ToolStrip toolStripCommands;
+        private System.Windows.Forms.ColumnHeader columnHeaderName;
+        private System.Windows.Forms.ToolStripButton buttonDelete;
+        private System.Windows.Forms.ToolStripDropDownButton buttonAdd;
+        private System.Windows.Forms.ToolStripMenuItem 普通命令ToolStripMenuItem;
     }
 }
