@@ -56,6 +56,17 @@ namespace Funcmd.CommandHandler
 
     public class ScriptingObjectEditorProvider : IObjectEditorProvider
     {
+        private IObjectEditorType[] types;
+        private List<IObjectEditorObject> objects = new List<IObjectEditorObject>();
+
+        public ScriptingObjectEditorProvider()
+        {
+            types = new IObjectEditorType[]
+            {
+                new ScriptingShellExecuteType(this)
+            };
+        }
+
         public string Title
         {
             get
@@ -71,5 +82,45 @@ namespace Funcmd.CommandHandler
                 return "命令名称";
             }
         }
+
+        public IObjectEditorType[] Types
+        {
+            get
+            {
+                return types;
+            }
+        }
+
+        public IList<IObjectEditorObject> Objects
+        {
+            get
+            {
+                return objects;
+            }
+        }
+    }
+
+    public abstract class ScriptingCommand : IObjectEditorObject
+    {
+        public ScriptingCommand(ScriptingObjectEditorProvider provider)
+        {
+            this.Provider = provider;
+            this.Name = "";
+        }
+
+        public string Name { get; set; }
+        public ScriptingObjectEditorProvider Provider { get; private set; }
+
+        public IObjectEditorType Type
+        {
+            get
+            {
+                return Provider.Types.Where(t => t.GetType().AssemblyQualifiedName == CommandType).First();
+            }
+        }
+
+
+        public abstract string CommandType { get; }
+        public abstract ScriptingCommand CloneCommand();
     }
 }
