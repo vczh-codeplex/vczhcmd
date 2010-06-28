@@ -20,6 +20,9 @@ namespace Funcmd.CommandHandler
         void ShowMessage(string message);
         void ShowError(string message);
         void OpenCodeForm();
+
+        void ApplyCommandView();
+        void ApplyMonthView();
     }
 
     public class CommandHandlerManager

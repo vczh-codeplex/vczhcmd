@@ -122,6 +122,16 @@ namespace Funcmd
             new CodeForm(systemCallback).Show();
         }
 
+        void ICommandHandlerCallback.ApplyCommandView()
+        {
+            SetDisplay(new NoCalendar(), new DefaultPainterFactory());
+        }
+
+        void ICommandHandlerCallback.ApplyMonthView()
+        {
+            SetDisplay(new MonthCalendar(), new DefaultPainterFactory());
+        }
+
         #endregion
 
         private void calendar_CalendarDayEntered(object sender, CalendarDaySelectedEventArgs e)
@@ -231,12 +241,12 @@ namespace Funcmd
 
         private void menuItemNotifyIconMonthCalendar_Click(object sender, EventArgs e)
         {
-            SetDisplay(new MonthCalendar(), new DefaultPainterFactory());
+            systemCallback.ApplyMonthView();
         }
 
         private void menuItemNotifyIconNoCalendar_Click(object sender, EventArgs e)
         {
-            SetDisplay(new NoCalendar(), new DefaultPainterFactory());
+            systemCallback.ApplyCommandView();
         }
 
         private void textBoxCommand_KeyPress(object sender, KeyPressEventArgs e)

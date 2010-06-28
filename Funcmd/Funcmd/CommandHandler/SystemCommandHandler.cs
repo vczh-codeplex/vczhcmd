@@ -27,6 +27,16 @@ namespace Funcmd.CommandHandler
                 callback.OpenCodeForm();
                 return true;
             }
+            else if (command == "command view")
+            {
+                callback.ApplyCommandView();
+                return true;
+            }
+            else if (command == "month view")
+            {
+                callback.ApplyMonthView();
+                return true;
+            }
             else
             {
                 return false;
