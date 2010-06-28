@@ -35,9 +35,9 @@
             this.listViewCommands = new System.Windows.Forms.ListView();
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.toolStripCommands = new System.Windows.Forms.ToolStrip();
+            this.panelEditor = new System.Windows.Forms.Panel();
             this.buttonAdd = new System.Windows.Forms.ToolStripDropDownButton();
             this.buttonDelete = new System.Windows.Forms.ToolStripButton();
-            this.panelEditor = new System.Windows.Forms.Panel();
             this.tableEditor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitEditor)).BeginInit();
             this.splitEditor.Panel1.SuspendLayout();
@@ -113,12 +113,16 @@
             this.listViewCommands.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderName});
             this.listViewCommands.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewCommands.FullRowSelect = true;
+            this.listViewCommands.GridLines = true;
             this.listViewCommands.Location = new System.Drawing.Point(0, 25);
+            this.listViewCommands.MultiSelect = false;
             this.listViewCommands.Name = "listViewCommands";
             this.listViewCommands.Size = new System.Drawing.Size(229, 374);
             this.listViewCommands.TabIndex = 1;
             this.listViewCommands.UseCompatibleStateImageBehavior = false;
             this.listViewCommands.View = System.Windows.Forms.View.Details;
+            this.listViewCommands.SelectedIndexChanged += new System.EventHandler(this.listViewCommands_SelectedIndexChanged);
             // 
             // columnHeaderName
             // 
@@ -136,6 +140,15 @@
             this.toolStripCommands.TabIndex = 0;
             this.toolStripCommands.Text = "toolStrip1";
             // 
+            // panelEditor
+            // 
+            this.panelEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelEditor.Location = new System.Drawing.Point(0, 0);
+            this.panelEditor.Name = "panelEditor";
+            this.panelEditor.Size = new System.Drawing.Size(369, 399);
+            this.panelEditor.TabIndex = 0;
+            // 
             // buttonAdd
             // 
             this.buttonAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -151,15 +164,6 @@
             this.buttonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(23, 22);
-            // 
-            // panelEditor
-            // 
-            this.panelEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelEditor.Location = new System.Drawing.Point(0, 0);
-            this.panelEditor.Name = "panelEditor";
-            this.panelEditor.Size = new System.Drawing.Size(369, 399);
-            this.panelEditor.TabIndex = 0;
             // 
             // ObjectEditorForm
             // 

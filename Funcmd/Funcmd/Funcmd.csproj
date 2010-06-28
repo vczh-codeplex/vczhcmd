@@ -66,6 +66,12 @@
       <DependentUpon>CodeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CommandHandler\ScriptingShellExecuteCommand.cs" />
+    <Compile Include="CommandHandler\ScriptingShellExecuteEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CommandHandler\ScriptingShellExecuteEditor.Designer.cs">
+      <DependentUpon>ScriptingShellExecuteEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="ObjectEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,6 +97,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CodeForm.resx">
       <DependentUpon>CodeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CommandHandler\ScriptingShellExecuteEditor.resx">
+      <DependentUpon>ScriptingShellExecuteEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ObjectEditorForm.resx">
       <DependentUpon>ObjectEditorForm.cs</DependentUpon>
