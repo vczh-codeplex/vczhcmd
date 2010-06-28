@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Diagnostics;
 using System.IO;
 using Funcmd.CommandHandler;
+using System.Xml.Linq;
 
 namespace Funcmd
 {
@@ -31,8 +32,9 @@ namespace Funcmd
         private Bitmap calendarBuffer = null;
         private Graphics calendarGraphics = null;
 
-        private CommandHandlerManager commandHandlerManager = new CommandHandlerManager();
+        private CommandHandlerManager commandHandlerManager = null;
         private ICommandHandlerCallback systemCallback = null;
+        private string settingPath = null;
 
         public CommandForm()
         {
@@ -44,9 +46,24 @@ namespace Funcmd
             painter.PainterNeeded += new CalendarPainterNeededHandler(painter_PainterNeeded);
 
             systemCallback = this;
+            commandHandlerManager = new CommandHandlerManager(systemCallback);
             commandHandlerManager.AddCommandHandler(new SystemCommandHandler(systemCallback));
             commandHandlerManager.AddCommandHandler(new ShellCommandHandler());
             commandHandlerManager.AddCommandHandler(new ScriptingCommandHandler(systemCallback));
+
+            settingPath = Application.ExecutablePath + ".Settings.xml";
+            try
+            {
+                if (File.Exists(settingPath))
+                {
+                    XDocument document = XDocument.Load(settingPath);
+                    commandHandlerManager.LoadSetting(document.Root);
+                }
+            }
+            catch (Exception ex)
+            {
+                systemCallback.ShowError(ex.Message);
+            }
         }
 
         private void SetDisplay(ICalendar calendar, CalendarPainterFactory factory)
@@ -240,6 +257,21 @@ namespace Funcmd
                         systemCallback.ShowError(ex.Message);
                     }
                 }
+            }
+        }
+
+        private void CommandForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            try
+            {
+                XDocument document = new XDocument();
+                document.Add(new XElement("Settings"));
+                commandHandlerManager.SaveSetting(document.Root);
+                document.Save(settingPath);
+            }
+            catch (Exception ex)
+            {
+                systemCallback.ShowError(ex.Message);
             }
         }
     }

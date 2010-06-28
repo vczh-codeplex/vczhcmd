@@ -200,6 +200,7 @@
             this.ShowInTaskbar = false;
             this.Text = "Functional Command";
             this.TopMost = true;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CommandForm_FormClosed);
             this.Shown += new System.EventHandler(this.CommandForm_Shown);
             this.panelBackground.ResumeLayout(false);
             this.tableInfo.ResumeLayout(false);

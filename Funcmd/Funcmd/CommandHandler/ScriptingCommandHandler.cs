@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Funcmd.Scripting;
+using System.Xml.Linq;
 
 namespace Funcmd.CommandHandler
 {
@@ -29,6 +30,14 @@ namespace Funcmd.CommandHandler
                 error = ex;
                 return false;
             }
+        }
+
+        public void LoadSetting(XElement settingRoot)
+        {
+        }
+
+        public void SaveSetting(XElement settingRoot)
+        {
         }
     }
 }
