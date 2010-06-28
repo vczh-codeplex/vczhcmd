@@ -9,11 +9,16 @@ using System.Windows.Forms;
 
 namespace Funcmd
 {
-    public partial class CommandEditorForm : Form
+    public partial class ObjectEditorForm : Form
     {
-        public CommandEditorForm()
+        private IObjectEditorProvider provider;
+
+        public ObjectEditorForm(IObjectEditorProvider provider)
         {
             InitializeComponent();
+            this.provider = provider;
+            Text = provider.Title;
+            columnHeaderName.Text = provider.Header;
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -26,5 +31,11 @@ namespace Funcmd
             DialogResult = DialogResult.OK;
             Close();
         }
+    }
+
+    public interface IObjectEditorProvider
+    {
+        string Title { get; }
+        string Header { get; }
     }
 }
