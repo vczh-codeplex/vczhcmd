@@ -11,17 +11,19 @@ namespace Funcmd.CommandHandler
     {
         private ScriptingEnvironment scriptingEnvironment = new Scripting.Scripting().Parse(null);
         private ICommandHandlerCallback callback;
+        private ScriptingObjectEditorProvider provider;
 
         public ScriptingCommandHandler(ICommandHandlerCallback callback)
         {
             this.callback = callback;
+            provider = new ScriptingObjectEditorProvider();
         }
 
         public bool HandleCommand(string command, ref Exception error)
         {
             if (command == "command")
             {
-                using (CommandEditorForm form = new CommandEditorForm())
+                using (ObjectEditorForm form = new ObjectEditorForm(provider))
                 {
                     form.ShowDialog();
                 }
@@ -49,6 +51,25 @@ namespace Funcmd.CommandHandler
 
         public void SaveSetting(XElement settingRoot)
         {
+        }
+    }
+
+    public class ScriptingObjectEditorProvider : IObjectEditorProvider
+    {
+        public string Title
+        {
+            get
+            {
+                return "命令编辑器";
+            }
+        }
+
+        public string Header
+        {
+            get
+            {
+                return "命令名称";
+            }
         }
     }
 }

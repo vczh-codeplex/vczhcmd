@@ -65,11 +65,11 @@
     <Compile Include="CodeForm.Designer.cs">
       <DependentUpon>CodeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CommandEditorForm.cs">
+    <Compile Include="ObjectEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CommandEditorForm.Designer.cs">
-      <DependentUpon>CommandEditorForm.cs</DependentUpon>
+    <Compile Include="ObjectEditorForm.Designer.cs">
+      <DependentUpon>ObjectEditorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CommandForm.cs">
       <SubType>Form</SubType>
@@ -91,8 +91,8 @@
     <EmbeddedResource Include="CodeForm.resx">
       <DependentUpon>CodeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CommandEditorForm.resx">
-      <DependentUpon>CommandEditorForm.cs</DependentUpon>
+    <EmbeddedResource Include="ObjectEditorForm.resx">
+      <DependentUpon>ObjectEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CommandForm.resx">
       <DependentUpon>CommandForm.cs</DependentUpon>

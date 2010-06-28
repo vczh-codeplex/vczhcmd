@@ -1,6 +1,6 @@
 ﻿namespace Funcmd
 {
-    partial class CommandEditorForm
+    partial class ObjectEditorForm
     {
         /// <summary>
         /// Required designer variable.
@@ -32,13 +32,13 @@
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.splitEditor = new System.Windows.Forms.SplitContainer();
-            this.panelEditor = new System.Windows.Forms.Panel();
-            this.toolStripCommands = new System.Windows.Forms.ToolStrip();
             this.listViewCommands = new System.Windows.Forms.ListView();
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.buttonDelete = new System.Windows.Forms.ToolStripButton();
+            this.toolStripCommands = new System.Windows.Forms.ToolStrip();
             this.buttonAdd = new System.Windows.Forms.ToolStripDropDownButton();
             this.普通命令ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonDelete = new System.Windows.Forms.ToolStripButton();
+            this.panelEditor = new System.Windows.Forms.Panel();
             this.tableEditor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitEditor)).BeginInit();
             this.splitEditor.Panel1.SuspendLayout();
@@ -109,26 +109,6 @@
             this.splitEditor.SplitterDistance = 229;
             this.splitEditor.TabIndex = 2;
             // 
-            // panelEditor
-            // 
-            this.panelEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelEditor.Location = new System.Drawing.Point(0, 0);
-            this.panelEditor.Name = "panelEditor";
-            this.panelEditor.Size = new System.Drawing.Size(369, 399);
-            this.panelEditor.TabIndex = 0;
-            // 
-            // toolStripCommands
-            // 
-            this.toolStripCommands.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.buttonAdd,
-            this.buttonDelete});
-            this.toolStripCommands.Location = new System.Drawing.Point(0, 0);
-            this.toolStripCommands.Name = "toolStripCommands";
-            this.toolStripCommands.Size = new System.Drawing.Size(229, 25);
-            this.toolStripCommands.TabIndex = 0;
-            this.toolStripCommands.Text = "toolStrip1";
-            // 
             // listViewCommands
             // 
             this.listViewCommands.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -143,16 +123,19 @@
             // 
             // columnHeaderName
             // 
-            this.columnHeaderName.Text = "命令名称";
+            this.columnHeaderName.Text = "对象名称";
             this.columnHeaderName.Width = 216;
             // 
-            // buttonDelete
+            // toolStripCommands
             // 
-            this.buttonDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.buttonDelete.Image = global::Funcmd.ImageResource.DeleteCommand;
-            this.buttonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Size = new System.Drawing.Size(23, 22);
+            this.toolStripCommands.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.buttonAdd,
+            this.buttonDelete});
+            this.toolStripCommands.Location = new System.Drawing.Point(0, 0);
+            this.toolStripCommands.Name = "toolStripCommands";
+            this.toolStripCommands.Size = new System.Drawing.Size(229, 25);
+            this.toolStripCommands.TabIndex = 0;
+            this.toolStripCommands.Text = "toolStrip1";
             // 
             // buttonAdd
             // 
@@ -167,10 +150,27 @@
             // 普通命令ToolStripMenuItem
             // 
             this.普通命令ToolStripMenuItem.Name = "普通命令ToolStripMenuItem";
-            this.普通命令ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.普通命令ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.普通命令ToolStripMenuItem.Text = "普通命令";
             // 
-            // CommandEditorForm
+            // buttonDelete
+            // 
+            this.buttonDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttonDelete.Image = global::Funcmd.ImageResource.DeleteCommand;
+            this.buttonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(23, 22);
+            // 
+            // panelEditor
+            // 
+            this.panelEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelEditor.Location = new System.Drawing.Point(0, 0);
+            this.panelEditor.Name = "panelEditor";
+            this.panelEditor.Size = new System.Drawing.Size(369, 399);
+            this.panelEditor.TabIndex = 0;
+            // 
+            // ObjectEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -178,9 +178,9 @@
             this.Controls.Add(this.tableEditor);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "CommandEditorForm";
+            this.Name = "ObjectEditorForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "命令编辑器";
+            this.Text = "对象编辑器";
             this.tableEditor.ResumeLayout(false);
             this.tableEditor.PerformLayout();
             this.splitEditor.Panel1.ResumeLayout(false);
