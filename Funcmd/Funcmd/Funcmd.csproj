@@ -81,6 +81,11 @@
     <Compile Include="CommandHandler\ScriptingCommandHandler.cs" />
     <Compile Include="CommandHandler\ShellCommandHandler.cs" />
     <Compile Include="CommandHandler\SystemCommandHandler.cs" />
+    <Compile Include="ImageResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImageResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CodeForm.resx">
@@ -91,6 +96,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CommandForm.resx">
       <DependentUpon>CommandForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImageResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ImageResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -115,6 +124,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="112_RefreshArrow_Blue.ico" />
+    <None Include="Resources\Delete.bmp" />
+    <None Include="Resources\AddTable.bmp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Scripting\Scripting.csproj">

@@ -19,16 +19,27 @@ namespace Funcmd.CommandHandler
 
         public bool HandleCommand(string command, ref Exception error)
         {
-            try
+            if (command == "command")
             {
-                ScriptingValue value = scriptingEnvironment.ParseValue(command);
-                callback.ShowMessage(value.ToString());
+                using (CommandEditorForm form = new CommandEditorForm())
+                {
+                    form.ShowDialog();
+                }
                 return true;
             }
-            catch (Exception ex)
+            else
             {
-                error = ex;
-                return false;
+                try
+                {
+                    ScriptingValue value = scriptingEnvironment.ParseValue(command);
+                    callback.ShowMessage(value.ToString());
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    error = ex;
+                    return false;
+                }
             }
         }
 
