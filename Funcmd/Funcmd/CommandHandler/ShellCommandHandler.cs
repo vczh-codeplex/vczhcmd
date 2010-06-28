@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.IO;
+using System.Xml.Linq;
 
 namespace Funcmd.CommandHandler
 {
@@ -33,6 +34,14 @@ namespace Funcmd.CommandHandler
                 error = ex;
                 return false;
             }
+        }
+
+        public void LoadSetting(XElement settingRoot)
+        {
+        }
+
+        public void SaveSetting(XElement settingRoot)
+        {
         }
     }
 }
