@@ -12,6 +12,8 @@ namespace Funcmd
     public partial class ObjectEditorForm : Form
     {
         private IObjectEditorProvider provider;
+        private IObjectEditorObject lastObject = null;
+        private ListViewItem lastItem = null;
 
         public ObjectEditorForm(IObjectEditorProvider provider)
         {
@@ -30,10 +32,25 @@ namespace Funcmd
                 item.Click += new EventHandler(item_Click);
                 buttonAdd.DropDownItems.Add(item);
             }
+
+            foreach (IObjectEditorObject obj in provider.Objects.OrderBy(o => o.Name))
+            {
+                ListViewItem item = new ListViewItem(obj.Name);
+                item.Tag = obj;
+                listViewCommands.Items.Add(item);
+            }
         }
 
         private void item_Click(object sender, EventArgs e)
         {
+            IObjectEditorType type = (sender as ToolStripMenuItem).Tag as IObjectEditorType;
+            IObjectEditorObject obj = type.CreateObject();
+            obj.Name = "未命名";
+
+            ListViewItem item = new ListViewItem(obj.Name);
+            item.Tag = obj;
+            listViewCommands.Items.Add(item);
+            item.Selected = true;
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -45,6 +62,26 @@ namespace Funcmd
         {
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        private void listViewCommands_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lastObject != null)
+            {
+                lastObject.Type.Save();
+                lastItem.Text = lastObject.Name;
+                panelEditor.Controls.Clear();
+                lastObject = null;
+                lastItem = null;
+            }
+            if (listViewCommands.SelectedIndices.Count > 0)
+            {
+                lastItem = listViewCommands.SelectedItems[0];
+                lastObject = (IObjectEditorObject)lastItem.Tag;
+                Control editor = lastObject.Type.EditObject(lastObject);
+                editor.Dock = DockStyle.Fill;
+                panelEditor.Controls.Add(editor);
+            }
         }
     }
 
@@ -61,11 +98,12 @@ namespace Funcmd
         string Name { get; }
         IObjectEditorObject CreateObject();
         Control EditObject(IObjectEditorObject obj);
+        void Save();
     }
 
     public interface IObjectEditorObject
     {
-        string Name { get; }
+        string Name { get; set; }
         IObjectEditorType Type { get; }
     }
 }

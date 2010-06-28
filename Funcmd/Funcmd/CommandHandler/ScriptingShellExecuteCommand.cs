@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Funcmd.CommandHandler
 {
@@ -10,9 +11,11 @@ namespace Funcmd.CommandHandler
         public ScriptingShellExecuteCommand(ScriptingObjectEditorProvider provider)
             : base(provider)
         {
+            Executable = "";
             Parameter = "";
         }
 
+        public string Executable { get; set; }
         public string Parameter { get; set; }
 
         public override string CommandType
@@ -36,10 +39,12 @@ namespace Funcmd.CommandHandler
     public class ScriptingShellExecuteType : IObjectEditorType
     {
         private ScriptingObjectEditorProvider provider;
+        private ScriptingShellExecuteEditor editor;
 
         public ScriptingShellExecuteType(ScriptingObjectEditorProvider provider)
         {
             this.provider = provider;
+            this.editor = new ScriptingShellExecuteEditor();
         }
 
         public string Name
@@ -55,9 +60,15 @@ namespace Funcmd.CommandHandler
             return new ScriptingShellExecuteCommand(provider);
         }
 
-        public System.Windows.Forms.Control EditObject(IObjectEditorObject obj)
+        public Control EditObject(IObjectEditorObject obj)
         {
-            throw new NotImplementedException();
+            editor.Edit((ScriptingShellExecuteCommand)obj);
+            return editor;
+        }
+
+        public void Save()
+        {
+            editor.Save();
         }
     }
 }
