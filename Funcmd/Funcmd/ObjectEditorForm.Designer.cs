@@ -164,6 +164,7 @@
             this.buttonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(23, 22);
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
             // ObjectEditorForm
             // 
