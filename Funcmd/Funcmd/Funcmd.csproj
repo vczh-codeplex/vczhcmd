@@ -65,6 +65,7 @@
     <Compile Include="CodeForm.Designer.cs">
       <DependentUpon>CodeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CommandHandler\ScriptingShellExecuteCommand.cs" />
     <Compile Include="ObjectEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>

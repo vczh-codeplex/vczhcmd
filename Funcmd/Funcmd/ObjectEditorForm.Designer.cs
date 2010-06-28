@@ -36,7 +36,6 @@
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.toolStripCommands = new System.Windows.Forms.ToolStrip();
             this.buttonAdd = new System.Windows.Forms.ToolStripDropDownButton();
-            this.普通命令ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonDelete = new System.Windows.Forms.ToolStripButton();
             this.panelEditor = new System.Windows.Forms.Panel();
             this.tableEditor.SuspendLayout();
@@ -140,18 +139,10 @@
             // buttonAdd
             // 
             this.buttonAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.buttonAdd.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.普通命令ToolStripMenuItem});
             this.buttonAdd.Image = global::Funcmd.ImageResource.AddCommand;
             this.buttonAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(29, 22);
-            // 
-            // 普通命令ToolStripMenuItem
-            // 
-            this.普通命令ToolStripMenuItem.Name = "普通命令ToolStripMenuItem";
-            this.普通命令ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
-            this.普通命令ToolStripMenuItem.Text = "普通命令";
             // 
             // buttonDelete
             // 
@@ -206,6 +197,5 @@
         private System.Windows.Forms.ColumnHeader columnHeaderName;
         private System.Windows.Forms.ToolStripButton buttonDelete;
         private System.Windows.Forms.ToolStripDropDownButton buttonAdd;
-        private System.Windows.Forms.ToolStripMenuItem 普通命令ToolStripMenuItem;
     }
 }
