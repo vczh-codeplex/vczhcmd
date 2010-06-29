@@ -10,6 +10,16 @@ namespace Funcmd.CommandHandler
 {
     public class ShellCommandHandler : ICommandHandler
     {
+        public event EventHandler SuggestedCommandsChanged;
+
+        public string[] SuggestedCommands
+        {
+            get
+            {
+                return new string[] { };
+            }
+        }
+
         public bool HandleCommand(string command, ref Exception error)
         {
             ProcessStartInfo info = new ProcessStartInfo();
@@ -42,6 +52,14 @@ namespace Funcmd.CommandHandler
 
         public void SaveSetting(XElement settingRoot)
         {
+        }
+
+        private void InvokeSuggestedCommandChanged()
+        {
+            if (SuggestedCommandsChanged != null)
+            {
+                SuggestedCommandsChanged(this, new EventArgs());
+            }
         }
     }
 }
