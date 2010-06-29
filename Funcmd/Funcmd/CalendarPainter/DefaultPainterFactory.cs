@@ -41,9 +41,9 @@ namespace Funcmd.CalendarPainter
 
         private Painter infoPainter = new Painter()
         {
-            Background = Brushes.Olive,
-            Border = Brushes.Green,
-            Text = Brushes.Green
+            Background = Brushes.LightBlue,
+            Border = Brushes.Blue,
+            Text = Brushes.Blue
         };
 
         private Painter urgentPainter = new Painter()

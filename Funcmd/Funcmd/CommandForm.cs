@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.IO;
 using Funcmd.CommandHandler;
 using System.Xml.Linq;
+using Funcmd.CalendarTimer;
 
 namespace Funcmd
 {
@@ -36,6 +37,11 @@ namespace Funcmd
         private ICommandHandlerCallback systemCallback = null;
         private string settingPath = null;
 
+        private SystemCommandHandler systemCommandHandler;
+        private ShellCommandHandler shellCommandHandler;
+        private TimerCommandHandler timerCommandHandler;
+        private ScriptingCommandHandler scriptingCommandHandler;
+
         public CommandForm()
         {
             InitializeComponent();
@@ -46,11 +52,18 @@ namespace Funcmd
             painter.PainterNeeded += new CalendarPainterNeededHandler(painter_PainterNeeded);
 
             systemCallback = this;
+
+            systemCommandHandler = new SystemCommandHandler(systemCallback);
+            shellCommandHandler = new ShellCommandHandler();
+            timerCommandHandler = new TimerCommandHandler(systemCallback);
+            timerCommandHandler.TimersChanged += new EventHandler(timerCommandHandler_TimersChanged);
+            scriptingCommandHandler = new ScriptingCommandHandler(systemCallback);
+
             commandHandlerManager = new CommandHandlerManager(systemCallback);
-            commandHandlerManager.AddCommandHandler(new SystemCommandHandler(systemCallback));
-            commandHandlerManager.AddCommandHandler(new ShellCommandHandler());
-            commandHandlerManager.AddCommandHandler(new TimerCommandHandler(systemCallback));
-            commandHandlerManager.AddCommandHandler(new ScriptingCommandHandler(systemCallback));
+            commandHandlerManager.AddCommandHandler(systemCommandHandler);
+            commandHandlerManager.AddCommandHandler(shellCommandHandler);
+            commandHandlerManager.AddCommandHandler(timerCommandHandler);
+            commandHandlerManager.AddCommandHandler(scriptingCommandHandler);
 
             settingPath = Application.ExecutablePath + ".Settings.xml";
             systemCallback.LoadSettings();
@@ -60,6 +73,11 @@ namespace Funcmd
                 handler.SuggestedCommandsChanged += new EventHandler(handler_SuggestedCommandsChanged);
             }
             handler_SuggestedCommandsChanged(null, new EventArgs());
+        }
+
+        private void timerCommandHandler_TimersChanged(object sender, EventArgs e)
+        {
+            DrawCalendar();
         }
 
         private void handler_SuggestedCommandsChanged(object sender, EventArgs e)
@@ -218,6 +236,24 @@ namespace Funcmd
                     text += " 星期六";
                     break;
             }
+            foreach (ICalendarTimer timer in timerCommandHandler
+                .Timers
+                .Where(t => t.ShowDescriptionOnDate(focusDay))
+                .OrderBy(t => t.GetDescriptionTime())
+                )
+            {
+                text += "\r\n";
+                if (timer.Enabled)
+                {
+                    text += "闹钟 ";
+                }
+                else
+                {
+                    text += "     ";
+                }
+                text += timer.GetDescriptionTime().ToShortTimeString() + " ";
+                text += timer.Descripting;
+            }
             toolTipInfo.RemoveAll();
             toolTipInfo.SetToolTip(panelCalendar, text);
         }
@@ -234,7 +270,19 @@ namespace Funcmd
 
         private void painter_PainterNeeded(object sender, CalendarPainterNeededEventArgs e)
         {
-            e.Painter = factory.GetNormalPainter();
+            ICalendarTimer[] timers = timerCommandHandler.Timers.Where(t => t.ShowMaskOnDate(e.Day)).ToArray();
+            if (timers.Any(t => t.Urgent))
+            {
+                e.Painter = factory.GetUrgentPainter();
+            }
+            else if (timers.Count() > 0)
+            {
+                e.Painter = factory.GetInfoPainter();
+            }
+            else
+            {
+                e.Painter = factory.GetNormalPainter();
+            }
         }
 
         private void labelCaption_MouseDown(object sender, MouseEventArgs e)

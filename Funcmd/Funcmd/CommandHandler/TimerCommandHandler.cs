@@ -21,12 +21,21 @@ namespace Funcmd.CommandHandler
         }
 
         public event EventHandler SuggestedCommandsChanged;
+        public event EventHandler TimersChanged;
 
         public string[] SuggestedCommands
         {
             get
             {
                 return new string[] { "event" };
+            }
+        }
+
+        public IEnumerable<ICalendarTimer> Timers
+        {
+            get
+            {
+                return timers;
             }
         }
 
@@ -41,6 +50,7 @@ namespace Funcmd.CommandHandler
                     {
                         provider.Save(timers);
                         callback.SaveSettings();
+                        InvokeTimersChanged();
                     }
                 }
                 return true;
@@ -82,6 +92,14 @@ namespace Funcmd.CommandHandler
             if (SuggestedCommandsChanged != null)
             {
                 SuggestedCommandsChanged(this, new EventArgs());
+            }
+        }
+
+        private void InvokeTimersChanged()
+        {
+            if (TimersChanged != null)
+            {
+                TimersChanged(this, new EventArgs());
             }
         }
     }
