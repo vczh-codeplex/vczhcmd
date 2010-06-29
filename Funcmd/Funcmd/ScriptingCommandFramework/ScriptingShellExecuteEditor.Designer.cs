@@ -1,4 +1,4 @@
-﻿namespace Funcmd.CommandHandler
+﻿namespace Funcmd.ScriptingCommandFramework
 {
     partial class ScriptingShellExecuteEditor
     {
