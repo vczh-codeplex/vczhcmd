@@ -26,10 +26,15 @@ namespace Funcmd.CalendarTimer
 
         public void Edit(ICalendarTimer timer)
         {
+            EventTimer eventTimer = (EventTimer)timer;
+            dateTimeDate.Value = eventTimer.EventDateTime;
+            dateTimeTime.Value = eventTimer.EventDateTime;
         }
 
         public void Save(ICalendarTimer timer)
         {
+            EventTimer eventTimer = (EventTimer)timer;
+            eventTimer.EventDateTime = dateTimeDate.Value.Date + dateTimeTime.Value.TimeOfDay;
         }
     }
 }
