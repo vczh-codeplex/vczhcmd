@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using System.Diagnostics;
+using System.IO;
 
 namespace Funcmd.CommandHandler
 {
@@ -49,6 +51,23 @@ namespace Funcmd.CommandHandler
             element.Add(new XAttribute("Name", Name));
             element.Add(new XAttribute("Executable", Executable));
             element.Add(new XAttribute("Parameter", Parameter));
+        }
+
+        public override void ExecuteCommand(ICommandHandlerCallback callback)
+        {
+            ProcessStartInfo info = new ProcessStartInfo();
+            info.Arguments = Parameter;
+            info.FileName = Executable;
+            info.UseShellExecute = true;
+            info.Verb = "OPEN";
+            try
+            {
+                info.WorkingDirectory = Path.GetDirectoryName(Executable);
+            }
+            catch (Exception)
+            {
+            }
+            Process.Start(info);
         }
     }
 
