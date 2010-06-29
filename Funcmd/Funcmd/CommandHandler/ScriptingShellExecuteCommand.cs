@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace Funcmd.CommandHandler
 {
@@ -31,8 +32,23 @@ namespace Funcmd.CommandHandler
             return new ScriptingShellExecuteCommand(Provider)
             {
                 Name = Name,
+                Executable = Executable,
                 Parameter = Parameter
             };
+        }
+
+        public override void LoadSetting(XElement element)
+        {
+            Name = element.Attribute("Name").Value;
+            Executable = element.Attribute("Executable").Value;
+            Parameter = element.Attribute("Parameter").Value;
+        }
+
+        public override void SaveSetting(XElement element)
+        {
+            element.Add(new XAttribute("Name", Name));
+            element.Add(new XAttribute("Executable", Executable));
+            element.Add(new XAttribute("Parameter", Parameter));
         }
     }
 

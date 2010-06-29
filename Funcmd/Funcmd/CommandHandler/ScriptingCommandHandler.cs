@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Funcmd.Scripting;
 using System.Xml.Linq;
+using System.Windows.Forms;
 
 namespace Funcmd.CommandHandler
 {
@@ -12,6 +13,7 @@ namespace Funcmd.CommandHandler
         private ScriptingEnvironment scriptingEnvironment = new Scripting.Scripting().Parse(null);
         private ICommandHandlerCallback callback;
         private ScriptingObjectEditorProvider provider;
+        private List<ScriptingCommand> commands = new List<ScriptingCommand>();
 
         public ScriptingCommandHandler(ICommandHandlerCallback callback)
         {
@@ -23,9 +25,13 @@ namespace Funcmd.CommandHandler
         {
             if (command == "command")
             {
+                provider.Load(commands);
                 using (ObjectEditorForm form = new ObjectEditorForm(provider, callback))
                 {
-                    form.ShowDialog();
+                    if (form.ShowDialog() == DialogResult.OK)
+                    {
+                        provider.Save(commands);
+                    }
                 }
                 return true;
             }
@@ -47,10 +53,28 @@ namespace Funcmd.CommandHandler
 
         public void LoadSetting(XElement settingRoot)
         {
+            commands.Clear();
+            foreach (XElement element in settingRoot.Elements("ScriptingCommand"))
+            {
+                IObjectEditorType type = provider.Types.Where(t => t.GetType().AssemblyQualifiedName == element.Attribute("Class").Value).FirstOrDefault();
+                if (type != null)
+                {
+                    ScriptingCommand command = (ScriptingCommand)type.CreateObject();
+                    command.LoadSetting(element);
+                    commands.Add(command);
+                }
+            }
         }
 
         public void SaveSetting(XElement settingRoot)
         {
+            foreach (ScriptingCommand command in commands)
+            {
+                XElement element = new XElement("ScriptingCommand");
+                element.Add(new XAttribute("Class", command.Type.GetType().AssemblyQualifiedName));
+                command.SaveSetting(element);
+                settingRoot.Add(element);
+            }
         }
     }
 
@@ -98,6 +122,19 @@ namespace Funcmd.CommandHandler
                 return objects;
             }
         }
+
+        public void Load(List<ScriptingCommand> commands)
+        {
+            objects.Clear();
+            objects.AddRange(commands.Select(c => c.CloneCommand()));
+        }
+
+        public void Save(List<ScriptingCommand> commands)
+        {
+            commands.Clear();
+            commands.AddRange(objects.Cast<ScriptingCommand>());
+            objects.Clear();
+        }
     }
 
     public abstract class ScriptingCommand : IObjectEditorObject
@@ -119,7 +156,8 @@ namespace Funcmd.CommandHandler
             }
         }
 
-
+        public abstract void LoadSetting(XElement element);
+        public abstract void SaveSetting(XElement element);
         public abstract string CommandType { get; }
         public abstract ScriptingCommand CloneCommand();
     }
