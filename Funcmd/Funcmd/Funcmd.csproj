@@ -55,8 +55,26 @@
     <Compile Include="CalendarPainter\CalendarPainterFactory.cs" />
     <Compile Include="CalendarPainter\DefaultPainterFactory.cs" />
     <Compile Include="CalendarPainter\SelectorCalendarPainter.cs" />
+    <Compile Include="CalendarTimer\CalendarTimerEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CalendarTimer\CalendarTimerEditor.Designer.cs">
+      <DependentUpon>CalendarTimerEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="CalendarTimer\EventTimer.cs" />
+    <Compile Include="CalendarTimer\EventTimerPlugin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CalendarTimer\EventTimerPlugin.Designer.cs">
+      <DependentUpon>EventTimerPlugin.cs</DependentUpon>
+    </Compile>
     <Compile Include="CalendarTimer\EventTimerType.cs" />
+    <Compile Include="CalendarTimer\EveryDayTimerPlugin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CalendarTimer\EveryDayTimerPlugin.Designer.cs">
+      <DependentUpon>EveryDayTimerPlugin.cs</DependentUpon>
+    </Compile>
     <Compile Include="CalendarTimer\EveryDayTimerType.cs" />
     <Compile Include="CalendarTimer\ICalendarTimer.cs" />
     <Compile Include="CalendarTimer\EveryDayTimer.cs" />
@@ -118,6 +136,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScriptingCommandFramework\ScriptingCommand.cs" />
     <Compile Include="ScriptingCommandFramework\ScriptingObjectEditorProvider.cs" />
+    <EmbeddedResource Include="CalendarTimer\CalendarTimerEditor.resx">
+      <DependentUpon>CalendarTimerEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CalendarTimer\EventTimerPlugin.resx">
+      <DependentUpon>EventTimerPlugin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CalendarTimer\EveryDayTimerPlugin.resx">
+      <DependentUpon>EveryDayTimerPlugin.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CodeForm.resx">
       <DependentUpon>CodeForm.cs</DependentUpon>
     </EmbeddedResource>
