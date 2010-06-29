@@ -20,11 +20,13 @@ namespace Funcmd.CommandHandler
 
         public override void LoadSetting(XElement element)
         {
+            Name = element.Attribute("Name").Value;
             Paths = element.Elements("Path").Select(e => e.Value).ToList();
         }
 
         public override void SaveSetting(XElement element)
         {
+            element.Add(new XAttribute("Name", Name));
             element.Add(Paths.Select(p => new XElement("Path") { Value = p }));
         }
 

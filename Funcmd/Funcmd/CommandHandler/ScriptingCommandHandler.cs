@@ -31,6 +31,7 @@ namespace Funcmd.CommandHandler
                     if (form.ShowDialog() == DialogResult.OK)
                     {
                         provider.Save(commands);
+                        callback.SaveSettings();
                     }
                 }
                 return true;
