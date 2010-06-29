@@ -96,7 +96,8 @@ namespace Funcmd.CommandHandler
         {
             types = new IObjectEditorType[]
             {
-                new ScriptingShellExecuteType(this)
+                new ScriptingShellExecuteType(this),
+                new ScriptingFileType(this)
             };
         }
 

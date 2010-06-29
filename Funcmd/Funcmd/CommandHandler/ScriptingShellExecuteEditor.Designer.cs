@@ -35,23 +35,20 @@
             this.textName = new System.Windows.Forms.TextBox();
             this.textExecutable = new System.Windows.Forms.TextBox();
             this.textParameter = new System.Windows.Forms.TextBox();
-            this.buttonBrowse = new System.Windows.Forms.Button();
             this.tableEditor.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableEditor
             // 
-            this.tableEditor.ColumnCount = 3;
+            this.tableEditor.ColumnCount = 2;
             this.tableEditor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableEditor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.65975F));
-            this.tableEditor.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableEditor.Controls.Add(this.label1, 0, 0);
             this.tableEditor.Controls.Add(this.label2, 0, 1);
             this.tableEditor.Controls.Add(this.label3, 0, 2);
             this.tableEditor.Controls.Add(this.textName, 1, 0);
             this.tableEditor.Controls.Add(this.textExecutable, 1, 1);
             this.tableEditor.Controls.Add(this.textParameter, 1, 2);
-            this.tableEditor.Controls.Add(this.buttonBrowse, 2, 1);
             this.tableEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableEditor.Location = new System.Drawing.Point(0, 0);
             this.tableEditor.Name = "tableEditor";
@@ -85,7 +82,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 64);
+            this.label3.Location = new System.Drawing.Point(3, 62);
             this.label3.Margin = new System.Windows.Forms.Padding(3, 8, 3, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(41, 12);
@@ -94,7 +91,6 @@
             // 
             // textName
             // 
-            this.tableEditor.SetColumnSpan(this.textName, 2);
             this.textName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textName.Location = new System.Drawing.Point(74, 3);
             this.textName.Name = "textName";
@@ -106,30 +102,18 @@
             this.textExecutable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textExecutable.Location = new System.Drawing.Point(74, 30);
             this.textExecutable.Name = "textExecutable";
-            this.textExecutable.Size = new System.Drawing.Size(354, 21);
+            this.textExecutable.Size = new System.Drawing.Size(405, 21);
             this.textExecutable.TabIndex = 4;
             // 
             // textParameter
             // 
-            this.tableEditor.SetColumnSpan(this.textParameter, 2);
             this.textParameter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textParameter.Location = new System.Drawing.Point(74, 59);
+            this.textParameter.Location = new System.Drawing.Point(74, 57);
             this.textParameter.Multiline = true;
             this.textParameter.Name = "textParameter";
             this.textParameter.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textParameter.Size = new System.Drawing.Size(405, 270);
+            this.textParameter.Size = new System.Drawing.Size(405, 272);
             this.textParameter.TabIndex = 5;
-            // 
-            // buttonBrowse
-            // 
-            this.buttonBrowse.AutoSize = true;
-            this.buttonBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonBrowse.Location = new System.Drawing.Point(434, 30);
-            this.buttonBrowse.Name = "buttonBrowse";
-            this.buttonBrowse.Size = new System.Drawing.Size(45, 23);
-            this.buttonBrowse.TabIndex = 6;
-            this.buttonBrowse.Text = "...";
-            this.buttonBrowse.UseVisualStyleBackColor = true;
             // 
             // ScriptingShellExecuteEditor
             // 
@@ -153,6 +137,5 @@
         private System.Windows.Forms.TextBox textName;
         private System.Windows.Forms.TextBox textExecutable;
         private System.Windows.Forms.TextBox textParameter;
-        private System.Windows.Forms.Button buttonBrowse;
     }
 }
