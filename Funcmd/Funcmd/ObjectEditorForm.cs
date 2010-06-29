@@ -97,8 +97,8 @@ namespace Funcmd
             }
             else
             {
-                listViewCommands.Items.Remove(lastItem);
                 provider.Objects.Remove(lastObject);
+                listViewCommands.Items.Remove(lastItem);
                 lastItem = null;
                 lastObject = null;
             }
