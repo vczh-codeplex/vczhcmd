@@ -49,6 +49,7 @@ namespace Funcmd
             commandHandlerManager = new CommandHandlerManager(systemCallback);
             commandHandlerManager.AddCommandHandler(new SystemCommandHandler(systemCallback));
             commandHandlerManager.AddCommandHandler(new ShellCommandHandler());
+            commandHandlerManager.AddCommandHandler(new TimerCommandHandler(systemCallback));
             commandHandlerManager.AddCommandHandler(new ScriptingCommandHandler(systemCallback));
 
             settingPath = Application.ExecutablePath + ".Settings.xml";

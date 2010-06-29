@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Funcmd.CalendarTimer
 {
@@ -12,11 +13,15 @@ namespace Funcmd.CalendarTimer
         bool Enabled { get; set; }
         bool TurnedOff { get; }
         bool IsActive();
+        ICalendarTimer CloneTimer();
+        void LoadSetting(XElement element);
+        void SaveSetting(XElement element);
     }
 
     public class CalendarTimerProvider : IObjectEditorProvider
     {
         private IObjectEditorType[] types;
+        private List<IObjectEditorObject> objects = new List<IObjectEditorObject>();
 
         public CalendarTimerProvider()
         {
@@ -45,12 +50,31 @@ namespace Funcmd.CalendarTimer
 
         public IObjectEditorType[] Types
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                return types;
+            }
         }
 
         public IList<IObjectEditorObject> Objects
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                return objects;
+            }
+        }
+
+        public void Load(List<ICalendarTimer> commands)
+        {
+            objects.Clear();
+            objects.AddRange(commands.Select(c => c.CloneTimer()));
+        }
+
+        public void Save(List<ICalendarTimer> commands)
+        {
+            commands.Clear();
+            commands.AddRange(objects.Cast<ICalendarTimer>());
+            objects.Clear();
         }
     }
 }
