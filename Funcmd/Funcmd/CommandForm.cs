@@ -142,6 +142,21 @@ namespace Funcmd
             }
         }
 
+        void ICommandHandlerCallback.RunCommand(string command)
+        {
+            if (command != "")
+            {
+                try
+                {
+                    commandHandlerManager.HandleCommand(command);
+                }
+                catch (Exception ex)
+                {
+                    systemCallback.ShowError(ex.Message);
+                }
+            }
+        }
+
         void ICommandHandlerCallback.ApplyCommandView()
         {
             SetDisplay(new NoCalendar(), new DefaultPainterFactory());
@@ -275,24 +290,24 @@ namespace Funcmd
             {
                 e.Handled = true;
                 string command = textBoxCommand.Text;
-                if (command != "")
-                {
-                    textBoxCommand.Text = "";
-                    try
-                    {
-                        commandHandlerManager.HandleCommand(command);
-                    }
-                    catch (Exception ex)
-                    {
-                        systemCallback.ShowError(ex.Message);
-                    }
-                }
+                textBoxCommand.Text = "";
+                systemCallback.RunCommand(command);
             }
         }
 
         private void CommandForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             systemCallback.SaveSettings();
+        }
+
+        private void menuItemNotifyIconOpenCodeForm_Click(object sender, EventArgs e)
+        {
+            systemCallback.OpenCodeForm();
+        }
+
+        private void menuItemNotifyIconEditCommands_Click(object sender, EventArgs e)
+        {
+            systemCallback.RunCommand("command");
         }
     }
 }

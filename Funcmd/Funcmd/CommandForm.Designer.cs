@@ -44,6 +44,8 @@
             this.menuItemNotifyIconNoCalendar = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuItemNotifyIconExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemNotifyIconEditCommands = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemNotifyIconOpenCodeForm = new System.Windows.Forms.ToolStripMenuItem();
             this.panelBackground.SuspendLayout();
             this.tableInfo.SuspendLayout();
             this.tableCommand.SuspendLayout();
@@ -147,11 +149,13 @@
             // contextMenuNotifyIcon
             // 
             this.contextMenuNotifyIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemNotifyIconOpenCodeForm,
+            this.menuItemNotifyIconEditCommands,
             this.menuItemNotifyIconChangeDisplay,
             this.toolStripSeparator1,
             this.menuItemNotifyIconExit});
             this.contextMenuNotifyIcon.Name = "contextMenuNotifyIcon";
-            this.contextMenuNotifyIcon.Size = new System.Drawing.Size(153, 76);
+            this.contextMenuNotifyIcon.Size = new System.Drawing.Size(153, 120);
             // 
             // menuItemNotifyIconChangeDisplay
             // 
@@ -165,14 +169,14 @@
             // menuItemNotifyIconMonthCalendar
             // 
             this.menuItemNotifyIconMonthCalendar.Name = "menuItemNotifyIconMonthCalendar";
-            this.menuItemNotifyIconMonthCalendar.Size = new System.Drawing.Size(112, 22);
+            this.menuItemNotifyIconMonthCalendar.Size = new System.Drawing.Size(152, 22);
             this.menuItemNotifyIconMonthCalendar.Text = "月历";
             this.menuItemNotifyIconMonthCalendar.Click += new System.EventHandler(this.menuItemNotifyIconMonthCalendar_Click);
             // 
             // menuItemNotifyIconNoCalendar
             // 
             this.menuItemNotifyIconNoCalendar.Name = "menuItemNotifyIconNoCalendar";
-            this.menuItemNotifyIconNoCalendar.Size = new System.Drawing.Size(112, 22);
+            this.menuItemNotifyIconNoCalendar.Size = new System.Drawing.Size(152, 22);
             this.menuItemNotifyIconNoCalendar.Text = "仅命令";
             this.menuItemNotifyIconNoCalendar.Click += new System.EventHandler(this.menuItemNotifyIconNoCalendar_Click);
             // 
@@ -187,6 +191,20 @@
             this.menuItemNotifyIconExit.Size = new System.Drawing.Size(152, 22);
             this.menuItemNotifyIconExit.Text = "退出(&X)";
             this.menuItemNotifyIconExit.Click += new System.EventHandler(this.menuItemNotifyIconExit_Click);
+            // 
+            // menuItemNotifyIconEditCommands
+            // 
+            this.menuItemNotifyIconEditCommands.Name = "menuItemNotifyIconEditCommands";
+            this.menuItemNotifyIconEditCommands.Size = new System.Drawing.Size(152, 22);
+            this.menuItemNotifyIconEditCommands.Text = "编辑命令";
+            this.menuItemNotifyIconEditCommands.Click += new System.EventHandler(this.menuItemNotifyIconEditCommands_Click);
+            // 
+            // menuItemNotifyIconOpenCodeForm
+            // 
+            this.menuItemNotifyIconOpenCodeForm.Name = "menuItemNotifyIconOpenCodeForm";
+            this.menuItemNotifyIconOpenCodeForm.Size = new System.Drawing.Size(152, 22);
+            this.menuItemNotifyIconOpenCodeForm.Text = "打开代码窗口";
+            this.menuItemNotifyIconOpenCodeForm.Click += new System.EventHandler(this.menuItemNotifyIconOpenCodeForm_Click);
             // 
             // CommandForm
             // 
@@ -227,6 +245,8 @@
         private System.Windows.Forms.ToolStripMenuItem menuItemNotifyIconMonthCalendar;
         private System.Windows.Forms.ToolStripMenuItem menuItemNotifyIconNoCalendar;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem menuItemNotifyIconOpenCodeForm;
+        private System.Windows.Forms.ToolStripMenuItem menuItemNotifyIconEditCommands;
     }
 }
 
