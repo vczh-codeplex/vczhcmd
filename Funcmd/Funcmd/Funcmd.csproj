@@ -65,6 +65,14 @@
     <Compile Include="CodeForm.Designer.cs">
       <DependentUpon>CodeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CommandHandler\ScriptingFileCommand.cs" />
+    <Compile Include="CommandHandler\ScriptingFileEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CommandHandler\ScriptingFileEditor.Designer.cs">
+      <DependentUpon>ScriptingFileEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CommandHandler\ScriptingFileType.cs" />
     <Compile Include="CommandHandler\ScriptingShellExecuteCommand.cs" />
     <Compile Include="CommandHandler\ScriptingShellExecuteEditor.cs">
       <SubType>UserControl</SubType>
@@ -72,6 +80,7 @@
     <Compile Include="CommandHandler\ScriptingShellExecuteEditor.Designer.cs">
       <DependentUpon>ScriptingShellExecuteEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="CommandHandler\ScriptingShellExecuteType.cs" />
     <Compile Include="ObjectEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +106,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CodeForm.resx">
       <DependentUpon>CodeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CommandHandler\ScriptingFileEditor.resx">
+      <DependentUpon>ScriptingFileEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CommandHandler\ScriptingShellExecuteEditor.resx">
       <DependentUpon>ScriptingShellExecuteEditor.cs</DependentUpon>
@@ -134,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="112_RefreshArrow_Blue.ico" />
+    <None Include="Resources\Properties.bmp" />
     <None Include="Resources\Delete.bmp" />
     <None Include="Resources\AddTable.bmp" />
   </ItemGroup>
