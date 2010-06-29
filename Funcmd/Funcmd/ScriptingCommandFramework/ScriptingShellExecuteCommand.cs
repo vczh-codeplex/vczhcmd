@@ -6,8 +6,9 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using System.Diagnostics;
 using System.IO;
+using Funcmd.CommandHandler;
 
-namespace Funcmd.CommandHandler
+namespace Funcmd.ScriptingCommandFramework
 {
     public class ScriptingShellExecuteCommand : ScriptingCommand
     {

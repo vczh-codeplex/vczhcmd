@@ -68,7 +68,7 @@ namespace Funcmd.CommandHandler
 
         public void SaveSetting(XElement settingRoot)
         {
-            foreach (ScriptingCommand timer in timers)
+            foreach (ICalendarTimer timer in timers)
             {
                 XElement element = new XElement("Timer");
                 element.Add(new XAttribute("Class", timer.Type.GetType().AssemblyQualifiedName));

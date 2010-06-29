@@ -70,28 +70,28 @@
     <Compile Include="CodeForm.Designer.cs">
       <DependentUpon>CodeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CommandHandler\ScriptingFileCommand.cs" />
-    <Compile Include="CommandHandler\ScriptingFileEditor.cs">
+    <Compile Include="ScriptingCommandFramework\ScriptingFileCommand.cs" />
+    <Compile Include="ScriptingCommandFramework\ScriptingFileEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CommandHandler\ScriptingFileEditor.Designer.cs">
+    <Compile Include="ScriptingCommandFramework\ScriptingFileEditor.Designer.cs">
       <DependentUpon>ScriptingFileEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="CommandHandler\ScriptingFileItemPropertyForm.cs">
+    <Compile Include="ScriptingCommandFramework\ScriptingFileItemPropertyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CommandHandler\ScriptingFileItemPropertyForm.Designer.cs">
+    <Compile Include="ScriptingCommandFramework\ScriptingFileItemPropertyForm.Designer.cs">
       <DependentUpon>ScriptingFileItemPropertyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CommandHandler\ScriptingFileType.cs" />
-    <Compile Include="CommandHandler\ScriptingShellExecuteCommand.cs" />
-    <Compile Include="CommandHandler\ScriptingShellExecuteEditor.cs">
+    <Compile Include="ScriptingCommandFramework\ScriptingFileType.cs" />
+    <Compile Include="ScriptingCommandFramework\ScriptingShellExecuteCommand.cs" />
+    <Compile Include="ScriptingCommandFramework\ScriptingShellExecuteEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CommandHandler\ScriptingShellExecuteEditor.Designer.cs">
+    <Compile Include="ScriptingCommandFramework\ScriptingShellExecuteEditor.Designer.cs">
       <DependentUpon>ScriptingShellExecuteEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="CommandHandler\ScriptingShellExecuteType.cs" />
+    <Compile Include="ScriptingCommandFramework\ScriptingShellExecuteType.cs" />
     <Compile Include="CommandHandler\TimerCommandHandler.cs" />
     <Compile Include="ObjectEditorForm.cs">
       <SubType>Form</SubType>
@@ -116,16 +116,18 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScriptingCommandFramework\ScriptingCommand.cs" />
+    <Compile Include="ScriptingCommandFramework\ScriptingObjectEditorProvider.cs" />
     <EmbeddedResource Include="CodeForm.resx">
       <DependentUpon>CodeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CommandHandler\ScriptingFileEditor.resx">
+    <EmbeddedResource Include="ScriptingCommandFramework\ScriptingFileEditor.resx">
       <DependentUpon>ScriptingFileEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CommandHandler\ScriptingFileItemPropertyForm.resx">
+    <EmbeddedResource Include="ScriptingCommandFramework\ScriptingFileItemPropertyForm.resx">
       <DependentUpon>ScriptingFileItemPropertyForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CommandHandler\ScriptingShellExecuteEditor.resx">
+    <EmbeddedResource Include="ScriptingCommandFramework\ScriptingShellExecuteEditor.resx">
       <DependentUpon>ScriptingShellExecuteEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ObjectEditorForm.resx">

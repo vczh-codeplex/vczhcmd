@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Funcmd.CommandHandler
+namespace Funcmd.ScriptingCommandFramework
 {
     public partial class ScriptingShellExecuteEditor : UserControl
     {

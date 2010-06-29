@@ -5,6 +5,7 @@ using System.Text;
 using Funcmd.Scripting;
 using System.Xml.Linq;
 using System.Windows.Forms;
+using Funcmd.ScriptingCommandFramework;
 
 namespace Funcmd.CommandHandler
 {
@@ -105,91 +106,5 @@ namespace Funcmd.CommandHandler
                 SuggestedCommandsChanged(this, new EventArgs());
             }
         }
-    }
-
-    public class ScriptingObjectEditorProvider : IObjectEditorProvider
-    {
-        private IObjectEditorType[] types;
-        private List<IObjectEditorObject> objects = new List<IObjectEditorObject>();
-
-        public ScriptingObjectEditorProvider(ICommandHandlerCallback callback)
-        {
-            types = new IObjectEditorType[]
-            {
-                new ScriptingShellExecuteType(this),
-                new ScriptingFileType(this, callback)
-            };
-        }
-
-        public string Title
-        {
-            get
-            {
-                return "命令编辑器";
-            }
-        }
-
-        public string Header
-        {
-            get
-            {
-                return "命令名称";
-            }
-        }
-
-        public IObjectEditorType[] Types
-        {
-            get
-            {
-                return types;
-            }
-        }
-
-        public IList<IObjectEditorObject> Objects
-        {
-            get
-            {
-                return objects;
-            }
-        }
-
-        public void Load(List<ScriptingCommand> commands)
-        {
-            objects.Clear();
-            objects.AddRange(commands.Select(c => c.CloneCommand()));
-        }
-
-        public void Save(List<ScriptingCommand> commands)
-        {
-            commands.Clear();
-            commands.AddRange(objects.Cast<ScriptingCommand>());
-            objects.Clear();
-        }
-    }
-
-    public abstract class ScriptingCommand : IObjectEditorObject
-    {
-        public ScriptingCommand(ScriptingObjectEditorProvider provider)
-        {
-            this.Provider = provider;
-            this.Name = "";
-        }
-
-        public string Name { get; set; }
-        public ScriptingObjectEditorProvider Provider { get; private set; }
-
-        public IObjectEditorType Type
-        {
-            get
-            {
-                return Provider.Types.Where(t => t.GetType().AssemblyQualifiedName == CommandType).First();
-            }
-        }
-
-        public abstract void LoadSetting(XElement element);
-        public abstract void SaveSetting(XElement element);
-        public abstract string CommandType { get; }
-        public abstract ScriptingCommand CloneCommand();
-        public abstract void ExecuteCommand(ICommandHandlerCallback callback);
     }
 }

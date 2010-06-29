@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Funcmd.CommandHandler;
 
-namespace Funcmd.CommandHandler
+namespace Funcmd.ScriptingCommandFramework
 {
     public class ScriptingFileType : IObjectEditorType
     {

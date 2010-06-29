@@ -6,8 +6,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Funcmd.CommandHandler;
 
-namespace Funcmd.CommandHandler
+namespace Funcmd.ScriptingCommandFramework
 {
     public partial class ScriptingFileEditor : UserControl
     {
