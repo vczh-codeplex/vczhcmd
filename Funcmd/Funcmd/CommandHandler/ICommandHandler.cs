@@ -22,6 +22,7 @@ namespace Funcmd.CommandHandler
         void OpenCodeForm();
         void LoadSettings();
         void SaveSettings();
+        void RunCommand(string command);
 
         void ApplyCommandView();
         void ApplyMonthView();
