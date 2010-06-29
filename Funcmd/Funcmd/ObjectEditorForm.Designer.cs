@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ObjectEditorForm));
             this.tableEditor = new System.Windows.Forms.TableLayoutPanel();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
@@ -35,9 +36,9 @@
             this.listViewCommands = new System.Windows.Forms.ListView();
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.toolStripCommands = new System.Windows.Forms.ToolStrip();
-            this.panelEditor = new System.Windows.Forms.Panel();
             this.buttonAdd = new System.Windows.Forms.ToolStripDropDownButton();
             this.buttonDelete = new System.Windows.Forms.ToolStripButton();
+            this.panelEditor = new System.Windows.Forms.Panel();
             this.tableEditor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitEditor)).BeginInit();
             this.splitEditor.Panel1.SuspendLayout();
@@ -140,15 +141,6 @@
             this.toolStripCommands.TabIndex = 0;
             this.toolStripCommands.Text = "toolStrip1";
             // 
-            // panelEditor
-            // 
-            this.panelEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelEditor.Location = new System.Drawing.Point(0, 0);
-            this.panelEditor.Name = "panelEditor";
-            this.panelEditor.Size = new System.Drawing.Size(369, 399);
-            this.panelEditor.TabIndex = 0;
-            // 
             // buttonAdd
             // 
             this.buttonAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -166,12 +158,22 @@
             this.buttonDelete.Size = new System.Drawing.Size(23, 22);
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
+            // panelEditor
+            // 
+            this.panelEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelEditor.Location = new System.Drawing.Point(0, 0);
+            this.panelEditor.Name = "panelEditor";
+            this.panelEditor.Size = new System.Drawing.Size(369, 399);
+            this.panelEditor.TabIndex = 0;
+            // 
             // ObjectEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(632, 458);
             this.Controls.Add(this.tableEditor);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ObjectEditorForm";

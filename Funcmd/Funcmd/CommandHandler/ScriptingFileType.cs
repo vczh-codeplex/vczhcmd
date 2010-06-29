@@ -10,10 +10,10 @@ namespace Funcmd.CommandHandler
         private ScriptingObjectEditorProvider provider;
         private ScriptingFileEditor editor = null;
 
-        public ScriptingFileType(ScriptingObjectEditorProvider provider)
+        public ScriptingFileType(ScriptingObjectEditorProvider provider, ICommandHandlerCallback callback)
         {
             this.provider = provider;
-            this.editor = new ScriptingFileEditor();
+            this.editor = new ScriptingFileEditor(callback);
         }
 
         public string Name

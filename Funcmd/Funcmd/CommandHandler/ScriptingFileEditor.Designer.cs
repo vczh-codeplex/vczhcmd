@@ -33,18 +33,20 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textName = new System.Windows.Forms.TextBox();
             this.panelPaths = new System.Windows.Forms.Panel();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.listViewPaths = new System.Windows.Forms.ListView();
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripPaths = new System.Windows.Forms.ToolStrip();
+            this.dialogOpen = new System.Windows.Forms.OpenFileDialog();
+            this.dialogFolder = new System.Windows.Forms.FolderBrowserDialog();
             this.buttonAdd = new System.Windows.Forms.ToolStripDropDownButton();
             this.menuItemFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemDirectory = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemUrl = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonDelete = new System.Windows.Forms.ToolStripButton();
             this.buttonProperties = new System.Windows.Forms.ToolStripButton();
+            this.buttonDelete = new System.Windows.Forms.ToolStripButton();
             this.tableEditor.SuspendLayout();
             this.panelPaths.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.toolStripPaths.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableEditor
@@ -96,42 +98,43 @@
             // 
             // panelPaths
             // 
-            this.panelPaths.Controls.Add(this.listView1);
-            this.panelPaths.Controls.Add(this.toolStrip1);
+            this.panelPaths.Controls.Add(this.listViewPaths);
+            this.panelPaths.Controls.Add(this.toolStripPaths);
             this.panelPaths.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPaths.Location = new System.Drawing.Point(74, 30);
             this.panelPaths.Name = "panelPaths";
             this.panelPaths.Size = new System.Drawing.Size(376, 364);
             this.panelPaths.TabIndex = 4;
             // 
-            // listView1
+            // listViewPaths
             // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.listViewPaths.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderName});
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.Location = new System.Drawing.Point(0, 25);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(376, 339);
-            this.listView1.TabIndex = 1;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listViewPaths.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewPaths.FullRowSelect = true;
+            this.listViewPaths.GridLines = true;
+            this.listViewPaths.Location = new System.Drawing.Point(0, 25);
+            this.listViewPaths.Name = "listViewPaths";
+            this.listViewPaths.Size = new System.Drawing.Size(376, 339);
+            this.listViewPaths.TabIndex = 1;
+            this.listViewPaths.UseCompatibleStateImageBehavior = false;
+            this.listViewPaths.View = System.Windows.Forms.View.Details;
             // 
             // columnHeaderName
             // 
             this.columnHeaderName.Text = "路径";
-            this.columnHeaderName.Width = 364;
+            this.columnHeaderName.Width = 276;
             // 
-            // toolStrip1
+            // toolStripPaths
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripPaths.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.buttonAdd,
             this.buttonProperties,
             this.buttonDelete});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(376, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStripPaths.Location = new System.Drawing.Point(0, 0);
+            this.toolStripPaths.Name = "toolStripPaths";
+            this.toolStripPaths.Size = new System.Drawing.Size(376, 25);
+            this.toolStripPaths.TabIndex = 0;
             // 
             // buttonAdd
             // 
@@ -166,15 +169,6 @@
             this.menuItemUrl.Text = "网址以及其他";
             this.menuItemUrl.Click += new System.EventHandler(this.menuItemUrl_Click);
             // 
-            // buttonDelete
-            // 
-            this.buttonDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.buttonDelete.Image = global::Funcmd.ImageResource.DeleteCommand;
-            this.buttonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Size = new System.Drawing.Size(23, 22);
-            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
-            // 
             // buttonProperties
             // 
             this.buttonProperties.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -183,6 +177,15 @@
             this.buttonProperties.Name = "buttonProperties";
             this.buttonProperties.Size = new System.Drawing.Size(23, 22);
             this.buttonProperties.Click += new System.EventHandler(this.buttonProperties_Click);
+            // 
+            // buttonDelete
+            // 
+            this.buttonDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttonDelete.Image = global::Funcmd.ImageResource.DeleteCommand;
+            this.buttonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(23, 22);
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
             // ScriptingFileEditor
             // 
@@ -195,8 +198,8 @@
             this.tableEditor.PerformLayout();
             this.panelPaths.ResumeLayout(false);
             this.panelPaths.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStripPaths.ResumeLayout(false);
+            this.toolStripPaths.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -208,14 +211,16 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textName;
         private System.Windows.Forms.Panel panelPaths;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStripPaths;
         private System.Windows.Forms.ToolStripButton buttonDelete;
         private System.Windows.Forms.ToolStripDropDownButton buttonAdd;
         private System.Windows.Forms.ToolStripMenuItem menuItemFile;
         private System.Windows.Forms.ToolStripMenuItem menuItemDirectory;
         private System.Windows.Forms.ToolStripMenuItem menuItemUrl;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView listViewPaths;
         private System.Windows.Forms.ColumnHeader columnHeaderName;
         private System.Windows.Forms.ToolStripButton buttonProperties;
+        private System.Windows.Forms.OpenFileDialog dialogOpen;
+        private System.Windows.Forms.FolderBrowserDialog dialogFolder;
     }
 }
