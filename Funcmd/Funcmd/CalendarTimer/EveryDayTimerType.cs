@@ -8,10 +8,12 @@ namespace Funcmd.CalendarTimer
     public class EveryDayTimerType : IObjectEditorType
     {
         private CalendarTimerProvider provider;
+        private CalendarTimerEditor editor;
 
         public EveryDayTimerType(CalendarTimerProvider provider)
         {
             this.provider = provider;
+            this.editor = new CalendarTimerEditor(new EveryDayTimerPlugin());
         }
 
         public string Name
@@ -29,12 +31,13 @@ namespace Funcmd.CalendarTimer
 
         public System.Windows.Forms.Control EditObject(IObjectEditorObject obj)
         {
-            throw new NotImplementedException();
+            editor.Edit((ICalendarTimer)obj);
+            return editor;
         }
 
         public void Save()
         {
-            throw new NotImplementedException();
+            editor.Save();
         }
     }
 }
