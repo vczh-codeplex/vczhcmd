@@ -65,7 +65,7 @@ namespace Funcmd.CommandHandler
                         .FirstOrDefault();
                     if (element != null)
                     {
-                        handler.SaveSetting(element);
+                        handler.LoadSetting(element);
                     }
                 }
                 catch (Exception ex)

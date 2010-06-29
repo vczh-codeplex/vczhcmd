@@ -49,6 +49,7 @@ namespace Funcmd
             IObjectEditorType type = (sender as ToolStripMenuItem).Tag as IObjectEditorType;
             IObjectEditorObject obj = type.CreateObject();
             obj.Name = "未命名";
+            provider.Objects.Add(obj);
 
             ListViewItem item = new ListViewItem(obj.Name);
             item.Tag = obj;
@@ -63,6 +64,7 @@ namespace Funcmd
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
+            listViewCommands.SelectedIndices.Clear();
             DialogResult = DialogResult.OK;
             Close();
         }
