@@ -18,7 +18,7 @@ namespace Funcmd.CalendarTimer
         {
             InitializeComponent();
             this.plugin = plugin;
-            plugin.Editor.Dock = new DockStyle();
+            plugin.Editor.Dock = DockStyle.Fill;
             panelTimer.Controls.Add(plugin.Editor);
         }
 
