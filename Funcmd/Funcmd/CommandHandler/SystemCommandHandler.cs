@@ -15,6 +15,16 @@ namespace Funcmd.CommandHandler
             this.callback = callback;
         }
 
+        public event EventHandler SuggestedCommandsChanged;
+
+        public string[] SuggestedCommands
+        {
+            get
+            {
+                return new string[] { "exit", "code", "command view", "month view" };
+            }
+        }
+
         public bool HandleCommand(string command, ref Exception error)
         {
             if (command == "exit")
@@ -49,6 +59,14 @@ namespace Funcmd.CommandHandler
 
         public void SaveSetting(XElement settingRoot)
         {
+        }
+
+        private void InvokeSuggestedCommandChanged()
+        {
+            if (SuggestedCommandsChanged != null)
+            {
+                SuggestedCommandsChanged(this, new EventArgs());
+            }
         }
     }
 }

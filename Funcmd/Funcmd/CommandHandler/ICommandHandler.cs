@@ -9,6 +9,9 @@ namespace Funcmd.CommandHandler
 {
     public interface ICommandHandler
     {
+        event EventHandler SuggestedCommandsChanged;
+        string[] SuggestedCommands { get; }
+
         bool HandleCommand(string command, ref Exception error);
         void LoadSetting(XElement settingRoot);
         void SaveSetting(XElement settingRoot);
@@ -95,6 +98,14 @@ namespace Funcmd.CommandHandler
                 {
                     callback.ShowError("为" + handler.GetType().AssemblyQualifiedName + "保存设置的时候发生错误：" + ex.Message);
                 }
+            }
+        }
+
+        public IEnumerable<ICommandHandler> Handlers
+        {
+            get
+            {
+                return handlers;
             }
         }
     }

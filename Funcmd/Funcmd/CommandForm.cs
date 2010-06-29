@@ -53,6 +53,24 @@ namespace Funcmd
 
             settingPath = Application.ExecutablePath + ".Settings.xml";
             systemCallback.LoadSettings();
+
+            foreach (ICommandHandler handler in commandHandlerManager.Handlers)
+            {
+                handler.SuggestedCommandsChanged += new EventHandler(handler_SuggestedCommandsChanged);
+            }
+            handler_SuggestedCommandsChanged(null, new EventArgs());
+        }
+
+        private void handler_SuggestedCommandsChanged(object sender, EventArgs e)
+        {
+            textBoxCommand.AutoCompleteCustomSource.Clear();
+            textBoxCommand.AutoCompleteCustomSource.AddRange(
+                commandHandlerManager
+                .Handlers
+                .SelectMany(h => h.SuggestedCommands)
+                .OrderBy(s => s)
+                .ToArray()
+                );
         }
 
         private void SetDisplay(ICalendar calendar, CalendarPainterFactory factory)
@@ -284,17 +302,6 @@ namespace Funcmd
             systemCallback.ApplyCommandView();
         }
 
-        private void textBoxCommand_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == '\r')
-            {
-                e.Handled = true;
-                string command = textBoxCommand.Text;
-                textBoxCommand.Text = "";
-                systemCallback.RunCommand(command);
-            }
-        }
-
         private void CommandForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             systemCallback.SaveSettings();
@@ -308,6 +315,16 @@ namespace Funcmd
         private void menuItemNotifyIconEditCommands_Click(object sender, EventArgs e)
         {
             systemCallback.RunCommand("command");
+        }
+
+        private void textBoxCommand_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                string command = textBoxCommand.Text;
+                textBoxCommand.Text = "";
+                systemCallback.RunCommand(command);
+            }
         }
     }
 }

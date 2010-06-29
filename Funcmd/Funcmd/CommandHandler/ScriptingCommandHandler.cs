@@ -21,6 +21,16 @@ namespace Funcmd.CommandHandler
             provider = new ScriptingObjectEditorProvider(callback);
         }
 
+        public event EventHandler SuggestedCommandsChanged;
+
+        public string[] SuggestedCommands
+        {
+            get
+            {
+                return new string[] { "command" }.Concat(commands.Select(c => c.Name)).ToArray();
+            }
+        }
+
         public bool HandleCommand(string command, ref Exception error)
         {
             if (command == "command")
@@ -32,6 +42,7 @@ namespace Funcmd.CommandHandler
                     {
                         provider.Save(commands);
                         callback.SaveSettings();
+                        InvokeSuggestedCommandChanged();
                     }
                 }
                 return true;
@@ -84,6 +95,14 @@ namespace Funcmd.CommandHandler
                 element.Add(new XAttribute("Class", command.Type.GetType().AssemblyQualifiedName));
                 command.SaveSetting(element);
                 settingRoot.Add(element);
+            }
+        }
+
+        private void InvokeSuggestedCommandChanged()
+        {
+            if (SuggestedCommandsChanged != null)
+            {
+                SuggestedCommandsChanged(this, new EventArgs());
             }
         }
     }
