@@ -74,5 +74,20 @@ namespace Funcmd.CalendarTimer
             element.Add(new XAttribute("Enabled", Enabled.ToString()));
             element.Add(new XAttribute("EventDateTime", EventDateTime.ToString(CultureInfo.InvariantCulture)));
         }
+
+        public bool ShowMaskOnDate(DateTime date)
+        {
+            return EventDateTime.Date == date.Date;
+        }
+
+        public bool ShowDescriptionOnDate(DateTime date)
+        {
+            return EventDateTime.Date == date.Date;
+        }
+
+        public DateTime GetDescriptionTime()
+        {
+            return DateTime.Now + (EventDateTime - EventDateTime.Date);
+        }
     }
 }

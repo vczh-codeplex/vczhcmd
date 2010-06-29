@@ -16,6 +16,10 @@ namespace Funcmd.CalendarTimer
         ICalendarTimer CloneTimer();
         void LoadSetting(XElement element);
         void SaveSetting(XElement element);
+
+        bool ShowMaskOnDate(DateTime date);
+        bool ShowDescriptionOnDate(DateTime date);
+        DateTime GetDescriptionTime();
     }
 
     public class CalendarTimerProvider : IObjectEditorProvider

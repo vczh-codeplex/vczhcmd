@@ -106,5 +106,20 @@ namespace Funcmd.CalendarTimer
                 element.Add(new XElement("ActiveWeekDay", new XAttribute("Name", weekDay.ToString())));
             }
         }
+
+        public bool ShowMaskOnDate(DateTime date)
+        {
+            return false;
+        }
+
+        public bool ShowDescriptionOnDate(DateTime date)
+        {
+            return ActiveWeekDays.Contains(date.DayOfWeek);
+        }
+
+        public DateTime GetDescriptionTime()
+        {
+            return DateTime.Now + (EventTime - EventTime.Date);
+        }
     }
 }
