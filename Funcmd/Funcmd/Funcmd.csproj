@@ -92,6 +92,7 @@
       <DependentUpon>ScriptingShellExecuteEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="CommandHandler\ScriptingShellExecuteType.cs" />
+    <Compile Include="CommandHandler\TimerCommandHandler.cs" />
     <Compile Include="ObjectEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
