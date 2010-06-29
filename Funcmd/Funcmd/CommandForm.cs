@@ -52,18 +52,7 @@ namespace Funcmd
             commandHandlerManager.AddCommandHandler(new ScriptingCommandHandler(systemCallback));
 
             settingPath = Application.ExecutablePath + ".Settings.xml";
-            try
-            {
-                if (File.Exists(settingPath))
-                {
-                    XDocument document = XDocument.Load(settingPath);
-                    commandHandlerManager.LoadSetting(document.Root);
-                }
-            }
-            catch (Exception ex)
-            {
-                systemCallback.ShowError(ex.Message);
-            }
+            systemCallback.LoadSettings();
         }
 
         private void SetDisplay(ICalendar calendar, CalendarPainterFactory factory)
@@ -120,6 +109,37 @@ namespace Funcmd
         void ICommandHandlerCallback.OpenCodeForm()
         {
             new CodeForm(systemCallback).Show();
+        }
+
+        void ICommandHandlerCallback.LoadSettings()
+        {
+            try
+            {
+                if (File.Exists(settingPath))
+                {
+                    XDocument document = XDocument.Load(settingPath);
+                    commandHandlerManager.LoadSetting(document.Root);
+                }
+            }
+            catch (Exception ex)
+            {
+                systemCallback.ShowError(ex.Message);
+            }
+        }
+
+        void ICommandHandlerCallback.SaveSettings()
+        {
+            try
+            {
+                XDocument document = new XDocument();
+                document.Add(new XElement("Settings"));
+                commandHandlerManager.SaveSetting(document.Root);
+                document.Save(settingPath);
+            }
+            catch (Exception ex)
+            {
+                systemCallback.ShowError(ex.Message);
+            }
         }
 
         void ICommandHandlerCallback.ApplyCommandView()
@@ -272,17 +292,7 @@ namespace Funcmd
 
         private void CommandForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            try
-            {
-                XDocument document = new XDocument();
-                document.Add(new XElement("Settings"));
-                commandHandlerManager.SaveSetting(document.Root);
-                document.Save(settingPath);
-            }
-            catch (Exception ex)
-            {
-                systemCallback.ShowError(ex.Message);
-            }
+            systemCallback.SaveSettings();
         }
     }
 }
