@@ -91,6 +91,7 @@
             this.dateTimeTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
             this.dateTimeTime.Location = new System.Drawing.Point(50, 30);
             this.dateTimeTime.Name = "dateTimeTime";
+            this.dateTimeTime.ShowUpDown = true;
             this.dateTimeTime.Size = new System.Drawing.Size(411, 21);
             this.dateTimeTime.TabIndex = 3;
             // 

@@ -9,7 +9,7 @@ namespace Funcmd.CalendarTimer
 {
     public class EveryDayTimer : ICalendarTimer
     {
-        private DateTime lastHappenDateTime = DateTime.MinValue;
+        private long lastHappenDateTime = -1;
         private CalendarTimerProvider provider;
 
         public EveryDayTimer(CalendarTimerProvider provider)
@@ -27,7 +27,7 @@ namespace Funcmd.CalendarTimer
         }
 
         public string Name { get; set; }
-        public string Descripting { get; set; }
+        public string Description { get; set; }
         public bool Urgent { get; set; }
         public bool Enabled { get; set; }
         public DateTime EventTime { get; set; }
@@ -41,13 +41,14 @@ namespace Funcmd.CalendarTimer
             }
         }
 
-        public bool IsActive()
+        public bool TestAndActive()
         {
-            if (EventTime.TimeOfDay == DateTime.Now.TimeOfDay)
+            long totalSeconds = (long)DateTime.Now.TimeOfDay.TotalSeconds;
+            if ((long)EventTime.TimeOfDay.TotalSeconds == totalSeconds)
             {
-                if (lastHappenDateTime != DateTime.Now)
+                if (lastHappenDateTime != totalSeconds)
                 {
-                    lastHappenDateTime = DateTime.Now;
+                    lastHappenDateTime = totalSeconds;
                     return true;
                 }
             }
@@ -59,7 +60,7 @@ namespace Funcmd.CalendarTimer
             return new EveryDayTimer(provider)
             {
                 Name = Name,
-                Descripting = Descripting,
+                Description = Description,
                 Urgent = Urgent,
                 Enabled = Enabled,
                 EventTime = EventTime,
@@ -78,7 +79,7 @@ namespace Funcmd.CalendarTimer
         public void LoadSetting(XElement element)
         {
             Name = element.Attribute("Name").Value;
-            Descripting = element.Attribute("Descripting").Value;
+            Description = element.Attribute("Descripting").Value;
             Urgent = bool.Parse(element.Attribute("Urgent").Value);
             Enabled = bool.Parse(element.Attribute("Enabled").Value);
             EventTime = DateTime.Parse(element.Attribute("EventTime").Value, CultureInfo.InvariantCulture);
@@ -96,7 +97,7 @@ namespace Funcmd.CalendarTimer
         public void SaveSetting(XElement element)
         {
             element.Add(new XAttribute("Name", Name));
-            element.Add(new XAttribute("Descripting", Descripting));
+            element.Add(new XAttribute("Descripting", Description));
             element.Add(new XAttribute("Urgent", Urgent.ToString()));
             element.Add(new XAttribute("Enabled", Enabled.ToString()));
             element.Add(new XAttribute("EventTime", EventTime.ToString(CultureInfo.InvariantCulture)));
@@ -119,7 +120,7 @@ namespace Funcmd.CalendarTimer
 
         public DateTime GetDescriptionTime()
         {
-            return DateTime.Now + (EventTime - EventTime.Date);
+            return DateTime.Today + (EventTime - EventTime.Date);
         }
     }
 }

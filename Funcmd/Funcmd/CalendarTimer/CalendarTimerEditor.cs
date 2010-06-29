@@ -26,7 +26,7 @@ namespace Funcmd.CalendarTimer
         {
             this.timer = timer;
             textName.Text = timer.Name;
-            textDescription.Text = timer.Descripting;
+            textDescription.Text = timer.Description;
             checkUrgent.Checked = timer.Urgent;
             checkEnabled.Checked = timer.Enabled;
             plugin.Edit(timer);
@@ -35,7 +35,7 @@ namespace Funcmd.CalendarTimer
         public void Save()
         {
             timer.Name = textName.Text;
-            timer.Descripting = textDescription.Text;
+            timer.Description = textDescription.Text;
             timer.Urgent = checkUrgent.Checked;
             timer.Enabled = checkEnabled.Checked;
             plugin.Save(timer);

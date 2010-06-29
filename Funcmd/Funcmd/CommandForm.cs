@@ -42,6 +42,8 @@ namespace Funcmd
         private TimerCommandHandler timerCommandHandler;
         private ScriptingCommandHandler scriptingCommandHandler;
 
+        private CalendarTimerAlarmForm alarmForm = null;
+
         public CommandForm()
         {
             InitializeComponent();
@@ -251,8 +253,9 @@ namespace Funcmd
                 {
                     text += "     ";
                 }
-                text += timer.GetDescriptionTime().ToShortTimeString() + " ";
-                text += timer.Descripting;
+                text += timer.GetDescriptionTime().ToString("HH:mm:ss") + " ";
+                text += timer.Name + "：";
+                text += timer.Description;
             }
             toolTipInfo.RemoveAll();
             toolTipInfo.SetToolTip(panelCalendar, text);
@@ -374,6 +377,30 @@ namespace Funcmd
                 textBoxCommand.Text = "";
                 systemCallback.RunCommand(command);
             }
+        }
+
+        private void timerAlarm_Tick(object sender, EventArgs e)
+        {
+            DateTime now = DateTime.Now;
+            ICalendarTimer[] activeTimers = timerCommandHandler.Timers.Where(t => t.Enabled && t.TestAndActive()).ToArray();
+            if (activeTimers.Length > 0)
+            {
+                if (alarmForm == null)
+                {
+                    alarmForm = new CalendarTimerAlarmForm();
+                    alarmForm.FormClosed += new FormClosedEventHandler(alarmForm_FormClosed);
+                    alarmForm.Show();
+                }
+                foreach (ICalendarTimer timer in activeTimers)
+                {
+                    alarmForm.AddTimer(now, timer);
+                }
+            }
+        }
+
+        private void alarmForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            alarmForm = null;
         }
     }
 }

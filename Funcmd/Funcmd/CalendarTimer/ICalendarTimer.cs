@@ -8,11 +8,11 @@ namespace Funcmd.CalendarTimer
 {
     public interface ICalendarTimer : IObjectEditorObject
     {
-        string Descripting { get; set; }
+        string Description { get; set; }
         bool Urgent { get; set; }
         bool Enabled { get; set; }
         bool TurnedOff { get; }
-        bool IsActive();
+        bool TestAndActive();
         ICalendarTimer CloneTimer();
         void LoadSetting(XElement element);
         void SaveSetting(XElement element);

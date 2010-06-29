@@ -46,6 +46,7 @@
             this.menuItemNotifyIconNoCalendar = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuItemNotifyIconExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.timerAlarm = new System.Windows.Forms.Timer(this.components);
             this.panelBackground.SuspendLayout();
             this.tableInfo.SuspendLayout();
             this.tableCommand.SuspendLayout();
@@ -208,6 +209,12 @@
             this.menuItemNotifyIconExit.Text = "退出(&X)";
             this.menuItemNotifyIconExit.Click += new System.EventHandler(this.menuItemNotifyIconExit_Click);
             // 
+            // timerAlarm
+            // 
+            this.timerAlarm.Enabled = true;
+            this.timerAlarm.Interval = 500;
+            this.timerAlarm.Tick += new System.EventHandler(this.timerAlarm_Tick);
+            // 
             // CommandForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -249,6 +256,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem menuItemNotifyIconOpenCodeForm;
         private System.Windows.Forms.ToolStripMenuItem menuItemNotifyIconEditCommands;
+        private System.Windows.Forms.Timer timerAlarm;
     }
 }
 
