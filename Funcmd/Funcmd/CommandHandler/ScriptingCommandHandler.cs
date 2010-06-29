@@ -39,9 +39,18 @@ namespace Funcmd.CommandHandler
             {
                 try
                 {
-                    ScriptingValue value = scriptingEnvironment.ParseValue(command);
-                    callback.ShowMessage(value.ToString());
-                    return true;
+                    ScriptingCommand scriptingCommand = commands.Where(c => c.Name == command).FirstOrDefault();
+                    if (scriptingCommand != null)
+                    {
+                        scriptingCommand.ExecuteCommand(callback);
+                        return true;
+                    }
+                    else
+                    {
+                        ScriptingValue value = scriptingEnvironment.ParseValue(command);
+                        callback.ShowMessage(value.ToString());
+                        return true;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -160,5 +169,6 @@ namespace Funcmd.CommandHandler
         public abstract void SaveSetting(XElement element);
         public abstract string CommandType { get; }
         public abstract ScriptingCommand CloneCommand();
+        public abstract void ExecuteCommand(ICommandHandlerCallback callback);
     }
 }
