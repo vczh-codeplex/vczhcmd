@@ -10,7 +10,7 @@ namespace Funcmd.CommandHandler
 {
     public class ScriptingFileCommand : ScriptingCommand
     {
-        public IList<string> Paths { get; private set; }
+        public IList<string> Paths { get; set; }
 
         public ScriptingFileCommand(ScriptingObjectEditorProvider provider)
             : base(provider)

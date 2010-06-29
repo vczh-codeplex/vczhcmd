@@ -72,6 +72,12 @@
     <Compile Include="CommandHandler\ScriptingFileEditor.Designer.cs">
       <DependentUpon>ScriptingFileEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="CommandHandler\ScriptingFileItemPropertyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CommandHandler\ScriptingFileItemPropertyForm.Designer.cs">
+      <DependentUpon>ScriptingFileItemPropertyForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="CommandHandler\ScriptingFileType.cs" />
     <Compile Include="CommandHandler\ScriptingShellExecuteCommand.cs" />
     <Compile Include="CommandHandler\ScriptingShellExecuteEditor.cs">
@@ -109,6 +115,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CommandHandler\ScriptingFileEditor.resx">
       <DependentUpon>ScriptingFileEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CommandHandler\ScriptingFileItemPropertyForm.resx">
+      <DependentUpon>ScriptingFileItemPropertyForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CommandHandler\ScriptingShellExecuteEditor.resx">
       <DependentUpon>ScriptingShellExecuteEditor.cs</DependentUpon>

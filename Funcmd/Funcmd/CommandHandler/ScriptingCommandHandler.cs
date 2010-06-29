@@ -18,7 +18,7 @@ namespace Funcmd.CommandHandler
         public ScriptingCommandHandler(ICommandHandlerCallback callback)
         {
             this.callback = callback;
-            provider = new ScriptingObjectEditorProvider();
+            provider = new ScriptingObjectEditorProvider(callback);
         }
 
         public bool HandleCommand(string command, ref Exception error)
@@ -92,12 +92,12 @@ namespace Funcmd.CommandHandler
         private IObjectEditorType[] types;
         private List<IObjectEditorObject> objects = new List<IObjectEditorObject>();
 
-        public ScriptingObjectEditorProvider()
+        public ScriptingObjectEditorProvider(ICommandHandlerCallback callback)
         {
             types = new IObjectEditorType[]
             {
                 new ScriptingShellExecuteType(this),
-                new ScriptingFileType(this)
+                new ScriptingFileType(this, callback)
             };
         }
 
