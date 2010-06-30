@@ -28,13 +28,13 @@ namespace Funcmd.CommandHandler
         {
             get
             {
-                return new string[] { "command" }.Concat(commands.Select(c => c.Name)).ToArray();
+                return new string[] { "edit command" }.Concat(commands.Select(c => c.Name)).ToArray();
             }
         }
 
         public bool HandleCommand(string command, ref Exception error)
         {
-            if (command == "command")
+            if (command == "edit command")
             {
                 provider.Load(commands);
                 using (ObjectEditorForm form = new ObjectEditorForm(provider, callback))
