@@ -47,6 +47,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuItemNotifyIconExit = new System.Windows.Forms.ToolStripMenuItem();
             this.timerAlarm = new System.Windows.Forms.Timer(this.components);
+            this.menuItemNotifyIconEditEvent = new System.Windows.Forms.ToolStripMenuItem();
             this.panelBackground.SuspendLayout();
             this.tableInfo.SuspendLayout();
             this.tableCommand.SuspendLayout();
@@ -154,11 +155,12 @@
             this.contextMenuNotifyIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemNotifyIconOpenCodeForm,
             this.menuItemNotifyIconEditCommands,
+            this.menuItemNotifyIconEditEvent,
             this.menuItemNotifyIconChangeDisplay,
             this.toolStripSeparator1,
             this.menuItemNotifyIconExit});
             this.contextMenuNotifyIcon.Name = "contextMenuNotifyIcon";
-            this.contextMenuNotifyIcon.Size = new System.Drawing.Size(153, 120);
+            this.contextMenuNotifyIcon.Size = new System.Drawing.Size(153, 142);
             // 
             // menuItemNotifyIconOpenCodeForm
             // 
@@ -186,14 +188,14 @@
             // menuItemNotifyIconMonthCalendar
             // 
             this.menuItemNotifyIconMonthCalendar.Name = "menuItemNotifyIconMonthCalendar";
-            this.menuItemNotifyIconMonthCalendar.Size = new System.Drawing.Size(112, 22);
+            this.menuItemNotifyIconMonthCalendar.Size = new System.Drawing.Size(152, 22);
             this.menuItemNotifyIconMonthCalendar.Text = "月历";
             this.menuItemNotifyIconMonthCalendar.Click += new System.EventHandler(this.menuItemNotifyIconMonthCalendar_Click);
             // 
             // menuItemNotifyIconNoCalendar
             // 
             this.menuItemNotifyIconNoCalendar.Name = "menuItemNotifyIconNoCalendar";
-            this.menuItemNotifyIconNoCalendar.Size = new System.Drawing.Size(112, 22);
+            this.menuItemNotifyIconNoCalendar.Size = new System.Drawing.Size(152, 22);
             this.menuItemNotifyIconNoCalendar.Text = "仅命令";
             this.menuItemNotifyIconNoCalendar.Click += new System.EventHandler(this.menuItemNotifyIconNoCalendar_Click);
             // 
@@ -214,6 +216,13 @@
             this.timerAlarm.Enabled = true;
             this.timerAlarm.Interval = 500;
             this.timerAlarm.Tick += new System.EventHandler(this.timerAlarm_Tick);
+            // 
+            // menuItemNotifyIconEditEvent
+            // 
+            this.menuItemNotifyIconEditEvent.Name = "menuItemNotifyIconEditEvent";
+            this.menuItemNotifyIconEditEvent.Size = new System.Drawing.Size(152, 22);
+            this.menuItemNotifyIconEditEvent.Text = "编辑闹钟";
+            this.menuItemNotifyIconEditEvent.Click += new System.EventHandler(this.menuItemNotifyIconEditEvent_Click);
             // 
             // CommandForm
             // 
@@ -257,6 +266,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuItemNotifyIconOpenCodeForm;
         private System.Windows.Forms.ToolStripMenuItem menuItemNotifyIconEditCommands;
         private System.Windows.Forms.Timer timerAlarm;
+        private System.Windows.Forms.ToolStripMenuItem menuItemNotifyIconEditEvent;
     }
 }
 

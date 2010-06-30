@@ -27,7 +27,7 @@ namespace Funcmd.CommandHandler
         {
             get
             {
-                return new string[] { "event" };
+                return new string[] { "edit event" };
             }
         }
 
@@ -41,7 +41,7 @@ namespace Funcmd.CommandHandler
 
         public bool HandleCommand(string command, ref Exception error)
         {
-            if (command == "event")
+            if (command == "edit event")
             {
                 provider.Load(timers);
                 using (ObjectEditorForm form = new ObjectEditorForm(provider, callback))

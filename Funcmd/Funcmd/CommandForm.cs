@@ -366,7 +366,12 @@ namespace Funcmd
 
         private void menuItemNotifyIconEditCommands_Click(object sender, EventArgs e)
         {
-            systemCallback.RunCommand("command");
+            systemCallback.RunCommand("edit command");
+        }
+
+        private void menuItemNotifyIconEditEvent_Click(object sender, EventArgs e)
+        {
+            systemCallback.RunCommand("edit event");
         }
 
         private void textBoxCommand_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
