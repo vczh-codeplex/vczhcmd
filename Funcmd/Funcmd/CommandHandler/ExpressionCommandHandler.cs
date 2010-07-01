@@ -11,7 +11,7 @@ namespace Funcmd.CommandHandler
 {
     public class ExpressionCommandHandler : ICommandHandler
     {
-        private ScriptingEnvironment scriptingEnvironment = new Scripting.Scripting().Parse(null);
+        private ScriptingEnvironment scriptingEnvironment = new ScriptingEnvironment();
         private ICommandHandlerCallback callback;
 
         public ExpressionCommandHandler(ICommandHandlerCallback callback)
