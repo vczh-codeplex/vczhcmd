@@ -99,7 +99,7 @@ namespace Funcmd
             {
                 try
                 {
-                    env = new Scripting.Scripting().Parse(textCode.Text);
+                    env = new ScriptingEnvironment(textCode.Text, new ScriptingEnvironment());
                     textLaunch.Select();
                 }
                 catch (ScriptingException ex)

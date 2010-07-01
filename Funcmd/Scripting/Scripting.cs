@@ -143,25 +143,25 @@ namespace Funcmd.Scripting
         }
     }
 
-    public class Scripting
-    {
-        internal static ScriptingParser parser = new ScriptingParser();
-
-        public ScriptingEnvironment Parse(string code)
-        {
-            return new ScriptingEnvironment(code == null ? new RuntimeContext() : parser.Parse(code).BuildContext());
-        }
-    }
-
     public class ScriptingEnvironment
     {
-        private RuntimeContext context = new RuntimeContext();
+        private static ScriptingParser parser = new ScriptingParser();
 
-        internal ScriptingEnvironment(RuntimeContext context)
+        private RuntimeContext context = null;
+
+        public ScriptingEnvironment()
         {
-            this.context = context;
-            this.context.PreviousContext = new RuntimeContext();
+            this.context = new RuntimeContext();
             ScriptingLibrary.LoadLibrary(this);
+        }
+
+        public ScriptingEnvironment(string code, ScriptingEnvironment env = null)
+        {
+            this.context = parser.Parse(code).BuildContext();
+            if (env != null)
+            {
+                this.context.PreviousContext = env.context;
+            }
         }
 
         public ScriptingValue this[string index]
@@ -174,18 +174,18 @@ namespace Funcmd.Scripting
 
         public void DefineValue(string name, ScriptingValue value)
         {
-            context.PreviousContext.Values.Add(name, value.ValueWrapper);
+            context.Values.Add(name, value.ValueWrapper);
         }
 
         public bool IsDefined(string name)
         {
-            return context.PreviousContext.Values.ContainsKey(name);
+            return context.Values.ContainsKey(name);
         }
 
         public ScriptingValue ParseValue(string expression)
         {
             string id = "vczh_do_not_want_you_to_use_this_identifier_because_if_you_try_to_do_this_you_will_be_bring_into_a_dead_loop_do_you_understand_question_mark";
-            RuntimeContext tempContext = Scripting.parser.Parse("let " + id + " = " + expression + ";").BuildContext();
+            RuntimeContext tempContext = parser.Parse("let " + id + " = " + expression + ";").BuildContext();
             tempContext.PreviousContext = context;
             return new ScriptingValue(tempContext.Values[id]);
         }

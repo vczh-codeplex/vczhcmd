@@ -22,7 +22,7 @@ namespace Parser.Test
 
         private ScriptingEnvironment Parse(string code)
         {
-            ScriptingEnvironment environment = new Scripting().Parse(code);
+            ScriptingEnvironment environment = new ScriptingEnvironment(code, new ScriptingEnvironment());
             environment.DefineValue("add", ScriptingValue.CreateFunction(Add, 2));
             environment.DefineValue("sub", ScriptingValue.CreateFunction(Sub, 2));
             return environment;
