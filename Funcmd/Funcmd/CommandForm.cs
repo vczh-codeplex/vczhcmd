@@ -38,9 +38,10 @@ namespace Funcmd
         private string settingPath = null;
 
         private SystemCommandHandler systemCommandHandler;
-        private ShellCommandHandler shellCommandHandler;
         private TimerCommandHandler timerCommandHandler;
         private ScriptingCommandHandler scriptingCommandHandler;
+        private ShellCommandHandler shellCommandHandler;
+        private ExpressionCommandHandler expressionCommandHandler;
 
         private CalendarTimerAlarmForm alarmForm = null;
 
@@ -56,16 +57,19 @@ namespace Funcmd
             systemCallback = this;
 
             systemCommandHandler = new SystemCommandHandler(systemCallback);
-            shellCommandHandler = new ShellCommandHandler();
             timerCommandHandler = new TimerCommandHandler(systemCallback);
-            timerCommandHandler.TimersChanged += new EventHandler(timerCommandHandler_TimersChanged);
             scriptingCommandHandler = new ScriptingCommandHandler(systemCallback);
+            shellCommandHandler = new ShellCommandHandler();
+            expressionCommandHandler = new ExpressionCommandHandler(systemCallback);
+
+            timerCommandHandler.TimersChanged += new EventHandler(timerCommandHandler_TimersChanged);
 
             commandHandlerManager = new CommandHandlerManager(systemCallback);
             commandHandlerManager.AddCommandHandler(systemCommandHandler);
-            commandHandlerManager.AddCommandHandler(shellCommandHandler);
             commandHandlerManager.AddCommandHandler(timerCommandHandler);
             commandHandlerManager.AddCommandHandler(scriptingCommandHandler);
+            commandHandlerManager.AddCommandHandler(shellCommandHandler);
+            commandHandlerManager.AddCommandHandler(expressionCommandHandler);
 
             settingPath = Application.ExecutablePath + ".Settings.xml";
             systemCallback.LoadSettings();
