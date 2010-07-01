@@ -11,7 +11,6 @@ namespace Funcmd.CommandHandler
 {
     public class ScriptingCommandHandler : ICommandHandler
     {
-        private ScriptingEnvironment scriptingEnvironment = new Scripting.Scripting().Parse(null);
         private ICommandHandlerCallback callback;
         private ScriptingObjectEditorProvider provider;
         private List<ScriptingCommand> commands = new List<ScriptingCommand>();
@@ -50,24 +49,21 @@ namespace Funcmd.CommandHandler
             }
             else
             {
-                try
+                ScriptingCommand scriptingCommand = commands.Where(c => c.Name == command).FirstOrDefault();
+                if (scriptingCommand != null)
                 {
-                    ScriptingCommand scriptingCommand = commands.Where(c => c.Name == command).FirstOrDefault();
-                    if (scriptingCommand != null)
+                    try
                     {
                         scriptingCommand.ExecuteCommand(callback);
-                        return true;
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        ScriptingValue value = scriptingEnvironment.ParseValue(command);
-                        callback.ShowMessage(value.ToString());
-                        return true;
+                        error = ex;
                     }
+                    return true;
                 }
-                catch (Exception ex)
+                else
                 {
-                    error = ex;
                     return false;
                 }
             }

@@ -51,12 +51,21 @@ namespace Funcmd.CommandHandler
             Exception error = null;
             foreach (ICommandHandler handler in handlers)
             {
-                if (handler.HandleCommand(command, ref error))
+                Exception currentError = null;
+                if (handler.HandleCommand(command, ref currentError))
                 {
-                    return;
+                    error = currentError;
+                    break;
+                }
+                else if (currentError != null)
+                {
+                    error = currentError;
                 }
             }
-            throw error;
+            if (error != null)
+            {
+                throw error;
+            }
         }
 
         public void LoadSetting(XElement root)

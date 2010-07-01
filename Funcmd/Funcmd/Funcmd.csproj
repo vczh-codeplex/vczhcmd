@@ -94,6 +94,7 @@
     <Compile Include="CodeForm.Designer.cs">
       <DependentUpon>CodeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CommandHandler\ExpressionCommandHandler.cs" />
     <Compile Include="ScriptingCommandFramework\ScriptingFileCommand.cs" />
     <Compile Include="ScriptingCommandFramework\ScriptingFileEditor.cs">
       <SubType>UserControl</SubType>
